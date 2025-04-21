@@ -5,62 +5,62 @@ import com.mitrais.cdc.Main;
 import java.util.Scanner;
 
 public class WithdrawScreen implements Screen {
-    private Account account;
+    private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
-    private Double[] arrayWithdrawAmount = {10.0, 50.0, 100.0};
+    private double[] arrayWithdrawAmount = {10.0, 50.0, 100.0};
 
-    public WithdrawScreen(Account anAccount, Scanner aUserInputScanner) {
-        account = anAccount;
+    public WithdrawScreen(WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
+        welcomeScreen = aWelcomeScreen;
         userInputScanner = aUserInputScanner;
     }
 
     @Override
     public Screen display() {
         int i = 1;
-        for (Double amount : arrayWithdrawAmount) {
+        for (double amount : arrayWithdrawAmount) {
             System.out.println(i++ + ". $" + amount);
         }
         System.out.println(i++ + ". Other");
         System.out.println(i++ + ". Back");
         Screen nextScreen = null;
-        Integer menu = validateUserInput();
+        int menu = validateUserInput();
         while (!withdrawAmountIsValid(menu)) {
             menu = validateUserInput();
         }
         switch (menu) {
             case 1: {
-                nextScreen = new WithdrawSummaryScreen(10.0, account, userInputScanner);
+                nextScreen = new WithdrawSummaryScreen(10.0, welcomeScreen, userInputScanner);
                 break;
             }
             case 2: {
-                nextScreen = new WithdrawSummaryScreen(50.0, account, userInputScanner);
+                nextScreen = new WithdrawSummaryScreen(50.0, welcomeScreen, userInputScanner);
                 break;
             }
             case 3: {
-                nextScreen = new WithdrawSummaryScreen(100.0, account, userInputScanner);
+                nextScreen = new WithdrawSummaryScreen(100.0, welcomeScreen, userInputScanner);
                 break;
             }
             case 4: {
-                nextScreen = new OtherWithdrawnScreen(account, userInputScanner);
+                nextScreen = new OtherWithdrawnScreen(welcomeScreen, userInputScanner);
                 break;
             }
             default: {
-                nextScreen = new TransactionScreen(account, userInputScanner);
+                nextScreen = new TransactionScreen(welcomeScreen, userInputScanner);
                 break;
             }
         }
-        return nextScreen != null ? nextScreen.display() : null;
+        return nextScreen != null ? nextScreen : null;
     }
 
-    private Integer validateUserInput() {
+    private int validateUserInput() {
         System.out.print("Please choose option[5] : ");
         String input = userInputScanner.nextLine();
-        Integer menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
+        int menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
         return menu;
     }
 
-    private boolean withdrawAmountIsValid(Integer menu) {
-        Double balance = account.getBalance();
+    private boolean withdrawAmountIsValid(int menu) {
+        Double balance = welcomeScreen.getLoginAccount().getBalance();
         int withdrawAmountIndex = menu - 1;
         if (withdrawAmountIndex >= 0 && withdrawAmountIndex <= arrayWithdrawAmount.length - 1 && balance < arrayWithdrawAmount[withdrawAmountIndex]) {
             System.out.printf("Insufficient balance $%f.0", balance);

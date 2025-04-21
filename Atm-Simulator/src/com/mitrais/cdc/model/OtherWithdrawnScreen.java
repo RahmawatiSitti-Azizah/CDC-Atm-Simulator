@@ -5,25 +5,25 @@ import com.mitrais.cdc.Main;
 import java.util.Scanner;
 
 public class OtherWithdrawnScreen implements Screen {
-    private Account account;
+    private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
 
-    public OtherWithdrawnScreen(Account anAccount, Scanner aUserInputScanner) {
-        account = anAccount;
+    public OtherWithdrawnScreen(WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
+        welcomeScreen = aWelcomeScreen;
         userInputScanner = aUserInputScanner;
     }
 
     @Override
     public Screen display() {
         System.out.println("Other Withdraw");
-        int amount = 0;
+        double amount = 0;
         while (amount == 0) {
             System.out.println("Enter amount to withdraw : ");
             String input = userInputScanner.nextLine();
             boolean isInteger = Main.checkStringIsNumberWithRangeLength(input, 1, 4);
             amount = validatedInputAmount(isInteger, input);
         }
-        return (new WithdrawSummaryScreen((double) amount, account, userInputScanner)).display();
+        return (new WithdrawSummaryScreen(amount, welcomeScreen, userInputScanner)).display();
     }
 
     private int validatedInputAmount(boolean isInteger, String input) {
@@ -36,7 +36,7 @@ public class OtherWithdrawnScreen implements Screen {
             System.out.println("Invalid amount");
             return 0;
         }
-        if (amount > account.getBalance()) {
+        if (amount > welcomeScreen.getLoginAccount().getBalance()) {
             System.out.println("Insufficient balance $" + amount);
             return 0;
         }

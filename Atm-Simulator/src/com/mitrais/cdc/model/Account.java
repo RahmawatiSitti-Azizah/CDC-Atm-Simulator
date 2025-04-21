@@ -1,12 +1,12 @@
 package com.mitrais.cdc.model;
 
 public class Account implements Loginable {
-    private Double balance;
+    private double balance;
     private String name;
     private String accountNumber;
     private String pin;
 
-    public Account(Double aBalance, String aName, String anAccountNumber, String aPin) {
+    public Account(double aBalance, String aName, String anAccountNumber, String aPin) {
         balance = aBalance;
         name = aName;
         accountNumber = anAccountNumber;
@@ -14,7 +14,7 @@ public class Account implements Loginable {
     }
 
     @Override
-    public Boolean login(String aUsername, String aPassword) {
+    public boolean login(String aUsername, String aPassword) {
         if (accountNumber.equals(aUsername)) {
             if (pin.equals(aPassword)) {
                 return true;
@@ -23,7 +23,7 @@ public class Account implements Loginable {
         return false;
     }
 
-    public Double getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -39,7 +39,7 @@ public class Account implements Loginable {
         return pin;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 }

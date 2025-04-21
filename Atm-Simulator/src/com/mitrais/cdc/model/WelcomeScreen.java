@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class WelcomeScreen implements Screen {
     private List<Account> loginListAccount;
     private Scanner userInputScanner;
+    private Account loginAccount;
 
     public WelcomeScreen(List<Account> aLoginListAccount, Scanner aUserInputScanner) {
         loginListAccount = aLoginListAccount;
@@ -24,16 +25,17 @@ public class WelcomeScreen implements Screen {
             if (validatePassword(inputPin)) {
                 for (Account loginAccount : loginListAccount) {
                     if (loginAccount.login(inputAccountNumber, inputPin)) {
-                        return (new TransactionScreen(loginAccount, userInputScanner)).display();
+                        setLoginAccount(loginAccount);
+                        return new TransactionScreen(this, userInputScanner);
                     }
                 }
                 System.out.println("Invalid Account Number/PIN");
             }
         }
-        return display();
+        return this;
     }
 
-    public Boolean validateUser(String username) {
+    public boolean validateUser(String username) {
         int length = username != null ? username.length() : 0;
         if (length > 6 || length < 6) {
             System.out.println("Account Number should have 6 digits length");
@@ -46,7 +48,7 @@ public class WelcomeScreen implements Screen {
         return true;
     }
 
-    public Boolean validatePassword(String password) {
+    public boolean validatePassword(String password) {
         int length = password != null ? password.length() : 0;
         if (length > 6 || length < 6) {
             System.out.println("Pin should have 6 digits length");
@@ -57,5 +59,13 @@ public class WelcomeScreen implements Screen {
             return false;
         }
         return true;
+    }
+
+    public Account getLoginAccount() {
+        return loginAccount;
+    }
+
+    public void setLoginAccount(Account loginAccount) {
+        this.loginAccount = loginAccount;
     }
 }

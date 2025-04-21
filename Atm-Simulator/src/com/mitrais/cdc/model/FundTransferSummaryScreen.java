@@ -2,29 +2,32 @@ package com.mitrais.cdc.model;
 
 import com.mitrais.cdc.Main;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
-public class WithdrawSummaryScreen implements Screen {
+public class FundTransferSummaryScreen implements Screen {
     private double withdrawAmount;
     private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
+    private Account destinationAccount;
+    private String referenceNumber;
 
-    public WithdrawSummaryScreen(double aWithdrawAmount, WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
-        this.withdrawAmount = aWithdrawAmount;
-        this.welcomeScreen = aWelcomeScreen;
-        this.userInputScanner = aUserInputScanner;
+    public FundTransferSummaryScreen(double aWithdrawAmount, WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner, Account aDestinationAccount, String aReferenceNumber) {
+        withdrawAmount = aWithdrawAmount;
+        welcomeScreen = aWelcomeScreen;
+        userInputScanner = aUserInputScanner;
+        destinationAccount = aDestinationAccount;
+        referenceNumber = aReferenceNumber;
     }
 
     @Override
     public Screen display() {
         Account loginAccount = welcomeScreen.getLoginAccount();
-        loginAccount.setBalance((Double) (loginAccount.getBalance() - withdrawAmount));
-        System.out.println("Summary");
-        System.out.println("Date : " + (new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));
-        System.out.printf("Withdraw : $%.0f", Double.valueOf(withdrawAmount));
+        loginAccount.setBalance(Double.valueOf(loginAccount.getBalance() - withdrawAmount));
+        System.out.println("Fund Transfer Summary");
+        System.out.println("Destination Account : " + destinationAccount.getAccountNumber());
+        System.out.printf("Transfer Amount : $%.0f", Double.valueOf(withdrawAmount));
         System.out.println("");
+        System.out.println("Reference Number : " + referenceNumber);
         System.out.printf("Balance : $%.0f", Double.valueOf(loginAccount.getBalance()));
         System.out.println("");
         System.out.println("");
@@ -40,10 +43,10 @@ public class WithdrawSummaryScreen implements Screen {
                 break;
             }
             default: {
-                nextScreen = null;
+                nextScreen = welcomeScreen;
                 break;
             }
         }
-        return nextScreen != null ? nextScreen.display() : null;
+        return nextScreen;
     }
 }

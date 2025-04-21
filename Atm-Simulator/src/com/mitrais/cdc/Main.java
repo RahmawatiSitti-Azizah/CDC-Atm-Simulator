@@ -1,6 +1,7 @@
 package com.mitrais.cdc;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Screen;
 import com.mitrais.cdc.model.WelcomeScreen;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ public class Main {
 
     public static void main(String[] args) {
         List<Account> loginListAccount = getListAccount();
-        WelcomeScreen welcomeScreen = new WelcomeScreen(loginListAccount, new Scanner(System.in));
-        while (true) {
-            welcomeScreen.display();
+        Screen nextScreen = new WelcomeScreen(loginListAccount, new Scanner(System.in));
+        while (nextScreen != null) {
+            nextScreen = nextScreen.display();
         }
     }
 

@@ -5,11 +5,11 @@ import com.mitrais.cdc.Main;
 import java.util.Scanner;
 
 public class TransactionScreen implements Screen {
-    private Account account;
+    private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
 
-    public TransactionScreen(Account anAccount, Scanner aUserInputScanner) {
-        account = anAccount;
+    public TransactionScreen(WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
+        welcomeScreen = aWelcomeScreen;
         userInputScanner = aUserInputScanner;
     }
 
@@ -21,19 +21,20 @@ public class TransactionScreen implements Screen {
         System.out.print("Please choose option[3] : ");
         String input = userInputScanner.nextLine();
         Screen nextScreen = null;
-        Integer menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
+        int menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
         switch (menu) {
             case 1: {
-                nextScreen = new WithdrawScreen(account, userInputScanner);
+                nextScreen = new WithdrawScreen(welcomeScreen, userInputScanner);
                 break;
             }
             case 2: {
-                nextScreen = new FundTransferScreen(account, userInputScanner);
+                nextScreen = new FundTransferScreen(welcomeScreen, userInputScanner);
                 break;
             }
             default:
+                nextScreen = welcomeScreen;
                 break;
         }
-        return nextScreen != null ? nextScreen.display() : null;
+        return nextScreen;
     }
 }
