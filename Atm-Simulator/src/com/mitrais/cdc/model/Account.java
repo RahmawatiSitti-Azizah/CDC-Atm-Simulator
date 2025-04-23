@@ -27,16 +27,8 @@ public class Account implements Loginable {
         return balance;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getAccountNumber() {
         return accountNumber;
-    }
-
-    public String getPin() {
-        return pin;
     }
 
     public void setBalance(double balance) {

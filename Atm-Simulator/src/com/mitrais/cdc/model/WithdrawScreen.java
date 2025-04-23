@@ -18,7 +18,8 @@ public class WithdrawScreen implements Screen {
     public Screen display() {
         int i = 1;
         for (double amount : arrayWithdrawAmount) {
-            System.out.println(i++ + ". $" + amount);
+            System.out.printf(i++ + ". $%.0f", amount);
+            System.out.println("");
         }
         System.out.println(i++ + ". Other");
         System.out.println(i++ + ". Back");
@@ -49,7 +50,7 @@ public class WithdrawScreen implements Screen {
                 break;
             }
         }
-        return nextScreen != null ? nextScreen : null;
+        return nextScreen;
     }
 
     private int validateUserInput() {
@@ -63,7 +64,7 @@ public class WithdrawScreen implements Screen {
         Double balance = welcomeScreen.getLoginAccount().getBalance();
         int withdrawAmountIndex = menu - 1;
         if (withdrawAmountIndex >= 0 && withdrawAmountIndex <= arrayWithdrawAmount.length - 1 && balance < arrayWithdrawAmount[withdrawAmountIndex]) {
-            System.out.printf("Insufficient balance $%f.0", balance);
+            System.out.printf("Insufficient balance $%.0f", balance);
             System.out.println("");
             return false;
         }

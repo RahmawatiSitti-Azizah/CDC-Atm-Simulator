@@ -40,10 +40,10 @@ public class WithdrawSummaryScreen implements Screen {
                 break;
             }
             default: {
-                nextScreen = null;
+                nextScreen = welcomeScreen;
                 break;
             }
         }
-        return nextScreen != null ? nextScreen.display() : null;
+        return nextScreen;
     }
 }

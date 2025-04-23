@@ -68,4 +68,8 @@ public class WelcomeScreen implements Screen {
     public void setLoginAccount(Account loginAccount) {
         this.loginAccount = loginAccount;
     }
+
+    public List<Account> getLoginListAccount() {
+        return loginListAccount;
+    }
 }

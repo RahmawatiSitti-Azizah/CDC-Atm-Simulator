@@ -22,7 +22,6 @@ public class FundTransferSummaryScreen implements Screen {
     @Override
     public Screen display() {
         Account loginAccount = welcomeScreen.getLoginAccount();
-        loginAccount.setBalance(Double.valueOf(loginAccount.getBalance() - withdrawAmount));
         System.out.println("Fund Transfer Summary");
         System.out.println("Destination Account : " + destinationAccount.getAccountNumber());
         System.out.printf("Transfer Amount : $%.0f", Double.valueOf(withdrawAmount));

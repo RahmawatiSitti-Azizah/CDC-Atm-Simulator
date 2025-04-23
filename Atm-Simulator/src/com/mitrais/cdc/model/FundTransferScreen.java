@@ -2,14 +2,13 @@ package com.mitrais.cdc.model;
 
 import com.mitrais.cdc.Main;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class FundTransferScreen implements Screen {
     private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
-    private List<Account> accountList = Main.listLoginAccount;
     private double amount;
     private Account destinationAccount;
     private String referenceNumber;
@@ -33,17 +32,18 @@ public class FundTransferScreen implements Screen {
     }
 
     public Account getDestinationAccountProcess() {
-        while (destinationAccount == null) {
-            System.out.println("Please enter destination account and press enter to continue or press cancel (Esc) " +
+        Account account = null;
+        while (account == null) {
+            System.out.print("Please enter destination account and press enter to continue or press cancel (Esc) " +
                     "to go back to Transaction : ");
             String input = userInputScanner.nextLine();
             if (input != null && (input.equals("Esc") || input.isEmpty())) {
                 return null;
             }
             boolean isInteger = Main.checkStringIsNumberWithLength(input, 6);
-            return validatedInputAccountNumber(isInteger, input);
+            account = validatedInputAccountNumber(isInteger, input);
         }
-        return destinationAccount;
+        return account;
     }
 
     private Account validatedInputAccountNumber(boolean isInteger, String input) {
@@ -51,18 +51,20 @@ public class FundTransferScreen implements Screen {
             System.out.println("Invalid account");
             return null;
         }
-        Account destinationAccount = null;
-        destinationAccount = accountList.stream().filter((Account account) -> account.getAccountNumber().equals(input)).findFirst().get();
-        if (destinationAccount == null) {
+        Account destAccount = null;
+        destAccount = welcomeScreen.getLoginListAccount().stream().filter((Account account) -> account.getAccountNumber().equals(input)).findFirst().get();
+        if (destAccount == null) {
             System.out.println("Invalid account");
+            return null;
         }
-        return destinationAccount;
+        return destAccount;
     }
 
     private double getAmountProcess() {
+        double amount = 0;
         while (amount == 0) {
-            System.out.println("Please enter transfer amount and press enter to continue or press enter to go back " +
-                    "to Transaction");
+            System.out.print("Please enter transfer amount and press enter to continue or press enter to go back " +
+                    "to Transaction : ");
             String input = userInputScanner.nextLine();
             if (input == null || input.isEmpty()) {
                 return 0;
@@ -97,23 +99,27 @@ public class FundTransferScreen implements Screen {
 
     private Screen getReferenceProcess() {
         Random referenceGenerator = new Random();
-        referenceNumber = String.valueOf(referenceGenerator.nextInt(999999));
+        StringBuffer stringBuffer = new StringBuffer(String.valueOf(referenceGenerator.nextInt(999999)));
+        while (stringBuffer.length() < 6) {
+            stringBuffer.append(0);
+        }
+        referenceNumber = stringBuffer.toString();
         boolean repeat = true;
         Screen nextScreen = null;
         while (repeat) {
-            System.out.println("Reference Number: " + referenceNumber +
-                    "press enter to continue or press enter to go back to Transaction: ");
+            System.out.print("Reference Number: " + referenceNumber.toString() +
+                    "\npress enter to continue or press enter to go back to Transaction : ");
             String input = userInputScanner.nextLine();
             if (input == null || input.isEmpty()) {
                 repeat = false;
                 nextScreen = new TransactionScreen(welcomeScreen, userInputScanner);
             } else {
-                boolean isInteger = Main.checkStringIsNumberWithLength(input, 6);
+                boolean isInteger = !input.isEmpty() && !Pattern.compile("\\D").matcher(input).find();
                 if (!isInteger) {
                     System.out.println("Invalid Reference Number");
                 } else if (referenceNumber.equals(input)) {
                     repeat = false;
-                    nextScreen = transferConfirmProcess();11
+                    nextScreen = transferConfirmProcess();
                 } else {
                     System.out.println("Invalid Reference Number");
                 }
@@ -125,7 +131,7 @@ public class FundTransferScreen implements Screen {
     private Screen transferConfirmProcess() {
         System.out.println("Transfer Confirmation");
         System.out.println("Destination Account : " + destinationAccount.getAccountNumber());
-        System.out.printf("Transfer Amount : $%.0f" + amount);
+        System.out.printf("Transfer Amount : $%.0f", amount);
         System.out.println("");
         System.out.println("Reference Number : " + referenceNumber);
         System.out.println("");
@@ -135,9 +141,14 @@ public class FundTransferScreen implements Screen {
         String input = userInputScanner.nextLine();
         if (input.equals("1")) {
             welcomeScreen.getLoginAccount().setBalance(welcomeScreen.getLoginAccount().getBalance() - amount);
+            destinationAccount.setBalance(destinationAccount.getBalance() + amount);
             return new FundTransferSummaryScreen(amount, welcomeScreen, userInputScanner, destinationAccount, referenceNumber);
         } else {
             return new TransactionScreen(welcomeScreen, userInputScanner);
         }
+    }
+
+    private void setDestinationAccount(Account destinationAccount) {
+        this.destinationAccount = destinationAccount;
     }
 }

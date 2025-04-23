@@ -18,7 +18,7 @@ public class OtherWithdrawnScreen implements Screen {
         System.out.println("Other Withdraw");
         double amount = 0;
         while (amount == 0) {
-            System.out.println("Enter amount to withdraw : ");
+            System.out.print("Enter amount to withdraw : ");
             String input = userInputScanner.nextLine();
             boolean isInteger = Main.checkStringIsNumberWithRangeLength(input, 1, 4);
             amount = validatedInputAmount(isInteger, input);
@@ -37,7 +37,8 @@ public class OtherWithdrawnScreen implements Screen {
             return 0;
         }
         if (amount > welcomeScreen.getLoginAccount().getBalance()) {
-            System.out.println("Insufficient balance $" + amount);
+            System.out.printf("Insufficient balance $%.0f", amount);
+            System.out.println("");
             return 0;
         }
         if (amount > 1000) {
