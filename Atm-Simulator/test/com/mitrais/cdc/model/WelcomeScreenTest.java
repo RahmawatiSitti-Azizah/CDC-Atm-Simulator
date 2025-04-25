@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WelcomeScreenTest extends TestCase {
-    public static WelcomeScreen getWelcomScreenTest() {
+    public static WelcomeScreen getWelcomScreenTest(String input) {
+        ByteArrayInputStream userInput = new ByteArrayInputStream(input.getBytes());
+        System.setIn(userInput);
         return new WelcomeScreen(Main.getListAccount(), new Scanner(System.in));
     }
 
     public void testDisplayReturnTransactionScreen() {
-        ByteArrayInputStream userInput = new ByteArrayInputStream("112233\n012108".getBytes());
-        System.setIn(userInput);
-        WelcomeScreen welcomeScreen = new WelcomeScreen(Main.getListAccount(), new Scanner(System.in));
+        WelcomeScreen welcomeScreen = getWelcomScreenTest("112233\n012108");
         assertTrue(welcomeScreen.display() instanceof TransactionScreen);
     }
 
