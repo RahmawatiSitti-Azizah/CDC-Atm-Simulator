@@ -33,7 +33,7 @@ public class WithdrawSummaryScreen implements Screen {
         System.out.print("Please choose option[2] : ");
         String input = userInputScanner.nextLine();
         Screen nextScreen;
-        int menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
+        int menu = Main.checkStringIsNumberWithRangeLength(input, 1, 1) ? Integer.parseInt(input) : 0;
         switch (menu) {
             case 1: {
                 nextScreen = new TransactionScreen(welcomeScreen, userInputScanner);

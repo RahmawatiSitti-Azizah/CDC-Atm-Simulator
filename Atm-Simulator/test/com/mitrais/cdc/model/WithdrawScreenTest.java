@@ -56,6 +56,7 @@ public class WithdrawScreenTest extends TestCase {
         System.setIn(userInput);
         WithdrawScreen withdrawScreen = new WithdrawScreen(welcomeScreen, new Scanner(System.in));
         Screen otherWithdrawnScreen = withdrawScreen.display();
+        assertEquals(100.0, welcomeScreen.getLoginAccount().getBalance());
         assertTrue(otherWithdrawnScreen instanceof OtherWithdrawnScreen);
     }
 
@@ -66,6 +67,7 @@ public class WithdrawScreenTest extends TestCase {
         System.setIn(userInput);
         WithdrawScreen withdrawScreen = new WithdrawScreen(welcomeScreen, new Scanner(System.in));
         Screen transactionScreen = withdrawScreen.display();
+        assertEquals(100.0, welcomeScreen.getLoginAccount().getBalance());
         assertTrue(transactionScreen instanceof TransactionScreen);
     }
 
@@ -76,6 +78,7 @@ public class WithdrawScreenTest extends TestCase {
         System.setIn(userInput);
         WithdrawScreen withdrawScreen = new WithdrawScreen(welcomeScreen, new Scanner(System.in));
         Screen transactionScreen = withdrawScreen.display();
+        assertEquals(100.0, welcomeScreen.getLoginAccount().getBalance());
         assertTrue(transactionScreen instanceof TransactionScreen);
     }
 
@@ -87,6 +90,7 @@ public class WithdrawScreenTest extends TestCase {
         setUpSystemOutCapturer();
         WithdrawScreen withdrawScreen = new WithdrawScreen(welcomeScreen, new Scanner(System.in));
         withdrawScreen.display();
+        assertEquals(30.0, welcomeScreen.getLoginAccount().getBalance());
         assertTrue(outputStreamCaptor.toString().contains("Insufficient balance"));
         closeSystemOutCapturer();
     }

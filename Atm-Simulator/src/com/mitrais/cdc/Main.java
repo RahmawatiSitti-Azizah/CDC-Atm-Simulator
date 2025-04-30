@@ -32,6 +32,6 @@ public class Main {
     }
 
     public static boolean checkStringIsNumberWithRangeLength(String stringData, int minimumLength, int maximumLenght) {
-        return !stringData.isEmpty() && Pattern.compile("\\d{" + minimumLength + "," + maximumLenght + "}").matcher(stringData).find() && !Pattern.compile("\\D").matcher(stringData).find();
+        return Pattern.compile("\\d{" + minimumLength + "," + maximumLenght + "}").matcher(stringData).find() && !Pattern.compile("\\D").matcher(stringData).find();
     }
 }
