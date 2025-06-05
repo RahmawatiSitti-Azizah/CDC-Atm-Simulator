@@ -25,6 +25,10 @@ public class Account implements Loginable {
         return false;
     }
 
+    public boolean login(Account account) {
+        return this.accountNumber.equals(account.accountNumber) && this.pin.equals(account.pin);
+    }
+
     public void increaseBalance(long amount) throws ValidationException {
         if (amount < 0) {
             throw new ValidationException("Invalid amount");
@@ -37,20 +41,16 @@ public class Account implements Loginable {
         if (amount < 0) {
             throw new ValidationException("Invalid amount");
         } else {
-            balance += amount;
+            balance -= amount;
         }
     }
 
-    public double getBalance() {
+    public long getBalance() {
         return balance;
     }
 
     public String getAccountNumber() {
         return accountNumber;
     }
-
-    /*public void setBalance(double balance) {
-        this.balance = balance;
-    }*/
 
 }

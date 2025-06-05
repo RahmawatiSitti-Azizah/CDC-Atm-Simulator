@@ -1,73 +1,55 @@
 package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.Main;
+import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.service.UserInputService;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 
+import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class WithdrawScreen implements Screen {
-    private WelcomeScreen welcomeScreen;
+    private Account userAccount;
     private Scanner userInputScanner;
-    private double[] arrayWithdrawAmount = {10.0, 50.0, 100.0};
+    private long[] arrayWithdrawAmount = {10, 50, 100};
+    private UserInputService userInput;
 
-    public WithdrawScreen(WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
-        welcomeScreen = aWelcomeScreen;
+    public WithdrawScreen(Account account, Scanner aUserInputScanner) {
+        userAccount = account;
         userInputScanner = aUserInputScanner;
+        userInput = ServiceFactory.createUserInputService();
     }
 
     @Override
     public Screen display() {
-        int i = 1;
-        for (double amount : arrayWithdrawAmount) {
-            System.out.printf(i++ + ". $%.0f", amount);
-            System.out.println("");
+        try {
+            int menu = -1;
+            while (menu < 0) {
+                int i = 1;
+                for (long amount : arrayWithdrawAmount) {
+                    System.out.println(i++ + ". $" + amount);
+                }
+                System.out.println(i++ + ". Other");
+                System.out.println(i++ + ". Back");
+                System.out.print("Please choose option[5] : ");
+                String input = userInputScanner.nextLine();
+                menu = userInput.toValidatedMenu(input);
+            }
+            switch (menu) {
+                case 1:
+                case 2:
+                case 3: {
+                    return new WithdrawSummaryScreen(arrayWithdrawAmount[menu - 1], userAccount, userInputScanner);
+                }
+                case 4: {
+                    return new OtherWithdrawnScreen(userAccount, userInputScanner);
+                }
+                default: {
+                    break;
+                }
+            }
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println(i++ + ". Other");
-        System.out.println(i++ + ". Back");
-        Screen nextScreen = null;
-        int menu = validateUserInput();
-        while (!withdrawAmountIsValid(menu)) {
-            menu = validateUserInput();
-        }
-        switch (menu) {
-            case 1: {
-                nextScreen = new WithdrawSummaryScreen(10.0, welcomeScreen, userInputScanner);
-                break;
-            }
-            case 2: {
-                nextScreen = new WithdrawSummaryScreen(50.0, welcomeScreen, userInputScanner);
-                break;
-            }
-            case 3: {
-                nextScreen = new WithdrawSummaryScreen(100.0, welcomeScreen, userInputScanner);
-                break;
-            }
-            case 4: {
-                nextScreen = new OtherWithdrawnScreen(welcomeScreen, userInputScanner);
-                break;
-            }
-            default: {
-                nextScreen = new TransactionScreen(welcomeScreen, userInputScanner);
-                break;
-            }
-        }
-        return nextScreen;
-    }
-
-    private int validateUserInput() {
-        System.out.print("Please choose option[5] : ");
-        String input = userInputScanner.nextLine();
-        int menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
-        return menu;
-    }
-
-    private boolean withdrawAmountIsValid(int menu) {
-        Double balance = welcomeScreen.getLoginAccount().getBalance();
-        int withdrawAmountIndex = menu - 1;
-        if (withdrawAmountIndex >= 0 && withdrawAmountIndex <= arrayWithdrawAmount.length - 1 && balance < arrayWithdrawAmount[withdrawAmountIndex]) {
-            System.out.printf("Insufficient balance $%.0f", balance);
-            System.out.println("");
-            return false;
-        }
-        return true;
+        return new TransactionScreen(userAccount, userInputScanner);
     }
 }

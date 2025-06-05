@@ -1,43 +1,47 @@
 package com.mitrais.cdc.model;
 
-import com.mitrais.cdc.view.*;
+import com.mitrais.cdc.view.FundTransferSummaryScreen;
+import com.mitrais.cdc.view.TransactionScreen;
+import com.mitrais.cdc.view.WelcomeScreen;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
 public class FundTransferSummaryScreenTest extends TestCase {
-
-    public void testDisplayWith1Input() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream(("112244\n10\n550554\n1\n1\n").getBytes());
-        System.setIn(userInput);
-        FundTransferScreen fundTransferScreen = new FundTransferScreen(welcomeScreen, new Scanner(System.in), 1);
-        FundTransferSummaryScreen fundTransferSummaryScreen = (FundTransferSummaryScreen) fundTransferScreen.display();
-        Screen nextScreen = fundTransferSummaryScreen.display();
-        assertTrue(nextScreen instanceof TransactionScreen);
+    private static Account createAccount(String accountNumber, long balance) {
+        Account account = new Account(balance, "Jane Doe", accountNumber, "112233");
+        return account;
     }
 
-    public void testDisplayWith2Input() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream(("112244\n10\n550554\n1\n2\n").getBytes());
+    private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, long amount, String referenceNumber, String menuInput) {
+        ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        FundTransferScreen fundTransferScreen = new FundTransferScreen(welcomeScreen, new Scanner(System.in), 1);
-        FundTransferSummaryScreen fundTransferSummaryScreen = (FundTransferSummaryScreen) fundTransferScreen.display();
-        Screen nextScreen = fundTransferSummaryScreen.display();
-        assertTrue(nextScreen instanceof WelcomeScreen);
+        return new FundTransferSummaryScreen(amount, sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
     }
 
-    public void testDisplayWithOtherInput() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream(("112244\n10\n550554\n1\njahs\n").getBytes());
-        System.setIn(userInput);
-        FundTransferScreen fundTransferScreen = new FundTransferScreen(welcomeScreen, new Scanner(System.in), 1);
-        FundTransferSummaryScreen fundTransferSummaryScreen = (FundTransferSummaryScreen) fundTransferScreen.display();
-        Screen nextScreen = fundTransferSummaryScreen.display();
-        assertTrue(nextScreen instanceof WelcomeScreen);
+    public void testWithMenu1GoToTransactionScreen() {
+        Account sourceAccount = createAccount("112233", 200);
+        Account destinationAccount = createAccount("112244", 50);
+        FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "1\n");
+        assertTrue(fundTransferSummaryScreen.display() instanceof TransactionScreen);
+    }
+
+    public void testWithMenu2GotoWelcomeScreen() {
+        Account sourceAccount = createAccount("112233", 200);
+        Account destinationAccount = createAccount("112244", 50);
+        FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "2\n");
+        assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+    }
+
+    public void testWithOtherInputGoToWelcomeScreen() {
+        Account sourceAccount = createAccount("112233", 200);
+        Account destinationAccount = createAccount("112244", 50);
+        FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "3\n");
+        assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "sqw11\n");
+        assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "\n");
+        assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
     }
 }

@@ -1,17 +1,23 @@
 package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.Main;
+import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.service.UserInputService;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 
+import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class TransactionScreen implements Screen {
-    private WelcomeScreen welcomeScreen;
     private Scanner userInputScanner;
+    private Account userAccount;
+    private UserInputService userInput;
 
-    public TransactionScreen(WelcomeScreen aWelcomeScreen, Scanner aUserInputScanner) {
-        welcomeScreen = aWelcomeScreen;
+    public TransactionScreen(Account account, Scanner aUserInputScanner) {
+        userAccount = account;
         userInputScanner = aUserInputScanner;
+        userInput = ServiceFactory.createUserInputService();
     }
+
 
     @Override
     public Screen display() {
@@ -20,21 +26,22 @@ public class TransactionScreen implements Screen {
         System.out.println("3. Exit");
         System.out.print("Please choose option[3] : ");
         String input = userInputScanner.nextLine();
-        Screen nextScreen = null;
-        int menu = Main.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
-        switch (menu) {
-            case 1: {
-                nextScreen = new WithdrawScreen(welcomeScreen, userInputScanner);
-                break;
+        try {
+            int menu = userInput.toValidatedMenu(input);
+            switch (menu) {
+                case 1: {
+                    return new WithdrawScreen(userAccount, userInputScanner);
+                }
+                case 2: {
+                    return new FundTransferScreen(userAccount, userInputScanner);
+                }
+                default: {
+                    break;
+                }
             }
-            case 2: {
-                nextScreen = new FundTransferScreen(welcomeScreen, userInputScanner);
-                break;
-            }
-            default:
-                nextScreen = welcomeScreen;
-                break;
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
         }
-        return nextScreen;
+        return new WelcomeScreen(userInputScanner);
     }
 }

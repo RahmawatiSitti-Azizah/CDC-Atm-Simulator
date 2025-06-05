@@ -1,76 +1,44 @@
 package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.Main;
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.service.AccountValidationService;
+import com.mitrais.cdc.service.SearchAccountService;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import java.util.List;
+import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class WelcomeScreen implements Screen {
-    private List<Account> loginListAccount;
     private Scanner userInputScanner;
-    private Account loginAccount;
+    private Account userAccount;
+    private AccountValidationService accountValidate;
+    private SearchAccountService searchAccount;
 
-    public WelcomeScreen(List<Account> aLoginListAccount, Scanner aUserInputScanner) {
-        loginListAccount = aLoginListAccount;
+    public WelcomeScreen(Scanner aUserInputScanner) {
+        this(null, aUserInputScanner);
+    }
+
+    public WelcomeScreen(Account account, Scanner aUserInputScanner) {
+        userAccount = account;
         userInputScanner = aUserInputScanner;
+        accountValidate = ServiceFactory.createAccountValidationService();
+        searchAccount = ServiceFactory.createSearchAccountValidationService();
     }
 
     @Override
     public Screen display() {
         System.out.print("Enter Account Number :");
         String inputAccountNumber = userInputScanner.nextLine();
-        if (validateUser(inputAccountNumber)) {
+        try {
+            accountValidate.accountNumber(inputAccountNumber);
             System.out.print("Enter Pin :");
             String inputPin = userInputScanner.nextLine();
-            if (validatePassword(inputPin)) {
-                for (Account loginAccount : loginListAccount) {
-                    if (loginAccount.login(inputAccountNumber, inputPin)) {
-                        setLoginAccount(loginAccount);
-                        return new TransactionScreen(this, userInputScanner);
-                    }
-                }
-                System.out.println("Invalid Account Number/PIN");
-            }
+            accountValidate.pin(inputPin);
+            userAccount = searchAccount.get(inputAccountNumber, inputPin);
+            return new TransactionScreen(userAccount, userInputScanner);
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
+            return this;
         }
-        return this;
-    }
-
-    public boolean validateUser(String username) {
-        int length = username != null ? username.length() : 0;
-        if (length > 6 || length < 6) {
-            System.out.println("Account Number should have 6 digits length");
-            return false;
-        }
-        if (!Main.checkStringIsNumberWithLength(username, 6)) {
-            System.out.println("Account Number should only contains numbers");
-            return false;
-        }
-        return true;
-    }
-
-    public boolean validatePassword(String password) {
-        int length = password != null ? password.length() : 0;
-        if (length > 6 || length < 6) {
-            System.out.println("Pin should have 6 digits length");
-            return false;
-        }
-        if (!Main.checkStringIsNumberWithLength(password, 6)) {
-            System.out.println("Pin should only contains numbers");
-            return false;
-        }
-        return true;
-    }
-
-    public Account getLoginAccount() {
-        return loginAccount;
-    }
-
-    public void setLoginAccount(Account loginAccount) {
-        this.loginAccount = loginAccount;
-    }
-
-    public List<Account> getLoginListAccount() {
-        return loginListAccount;
     }
 }

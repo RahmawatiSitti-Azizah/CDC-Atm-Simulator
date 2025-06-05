@@ -2,8 +2,10 @@ package com.mitrais.cdc.service;
 
 import com.mitrais.cdc.model.Account;
 
-public interface SearchAccountService {
-    public Account getLoginAccount(String accountNumber, String pin) throws RuntimeException;
+import javax.xml.bind.ValidationException;
 
-    public Account findDestinationAccount(String accountNumber) throws RuntimeException;
+public interface SearchAccountService {
+    public Account get(String id, String otherDetail) throws ValidationException;
+
+    public Account getByID(String id) throws ValidationException;
 }

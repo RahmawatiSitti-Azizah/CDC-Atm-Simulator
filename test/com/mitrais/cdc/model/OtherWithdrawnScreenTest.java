@@ -1,7 +1,7 @@
 package com.mitrais.cdc.model;
 
 import com.mitrais.cdc.view.OtherWithdrawnScreen;
-import com.mitrais.cdc.view.WelcomeScreen;
+import com.mitrais.cdc.view.WithdrawScreen;
 import com.mitrais.cdc.view.WithdrawSummaryScreen;
 import junit.framework.TestCase;
 
@@ -22,60 +22,40 @@ public class OtherWithdrawnScreenTest extends TestCase {
         System.setOut(standardOut);
     }
 
-    public void testDisplayValidAmount() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream("40".getBytes());
+    private static Account createAccount(long balance) {
+        Account account = new Account(balance, "Jane Doe", "112255", "112233");
+        return account;
+    }
+
+    private OtherWithdrawnScreen getOtherWithdrawScreen(Account sourceAccount, String menuInput) {
+        ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        OtherWithdrawnScreen otherWithdrawnScreen = new OtherWithdrawnScreen(welcomeScreen, new Scanner(System.in));
+        return new OtherWithdrawnScreen(sourceAccount, new Scanner(System.in));
+    }
+
+    public void testValidWithdrawAmountToWithdrawSummaryScreen() {
+        Account account = createAccount(100);
+        OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "20\n");
         assertTrue(otherWithdrawnScreen.display() instanceof WithdrawSummaryScreen);
     }
 
-    public void testGetAmountNonNumberInput() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream("40m".getBytes());
-        System.setIn(userInput);
-        OtherWithdrawnScreen otherWithdrawnScreen = new OtherWithdrawnScreen(welcomeScreen, new Scanner(System.in));
+    public void testWithdrawWithNonNumericAmountToWithdrawScreenAndGetInvalidAmountErrorMessage() {
+        Account account = createAccount(100);
+        OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "10s\n");
         setUpSystemOutCapturer();
-        assertEquals(0.0, otherWithdrawnScreen.getAmount());
+        assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
+        assertEquals(100, account.getBalance());
         closeSystemOutCapturer();
     }
 
-    public void testGetAmountNotMultipleOf10() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream("35".getBytes());
-        System.setIn(userInput);
-        OtherWithdrawnScreen otherWithdrawnScreen = new OtherWithdrawnScreen(welcomeScreen, new Scanner(System.in));
+    public void testWithdrawWithMinusAmountToWithdrawScreenAndGetInvalidAmountErrorMessage() {
+        Account account = createAccount(100);
+        OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "-10\n");
         setUpSystemOutCapturer();
-        assertEquals(0.0, otherWithdrawnScreen.getAmount());
+        assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        closeSystemOutCapturer();
-    }
-
-    public void testGetAmountInsufficientBalance() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream("110".getBytes());
-        System.setIn(userInput);
-        OtherWithdrawnScreen otherWithdrawnScreen = new OtherWithdrawnScreen(welcomeScreen, new Scanner(System.in));
-        setUpSystemOutCapturer();
-        assertEquals(0.0, otherWithdrawnScreen.getAmount());
-        assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $110"));
-        closeSystemOutCapturer();
-    }
-
-    public void testGetAmountExceedMaximumAmount() {
-        WelcomeScreen welcomeScreen = WelcomeScreenTest.getWelcomScreenTest("112233\n012108");
-        welcomeScreen.display();
-        ByteArrayInputStream userInput = new ByteArrayInputStream("1010".getBytes());
-        System.setIn(userInput);
-        OtherWithdrawnScreen otherWithdrawnScreen = new OtherWithdrawnScreen(welcomeScreen, new Scanner(System.in));
-        setUpSystemOutCapturer();
-        assertEquals(0.0, otherWithdrawnScreen.getAmount());
-        assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
+        assertEquals(100, account.getBalance());
         closeSystemOutCapturer();
     }
 }

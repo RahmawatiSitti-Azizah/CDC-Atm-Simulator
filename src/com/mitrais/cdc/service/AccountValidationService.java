@@ -5,6 +5,9 @@ import com.mitrais.cdc.model.Account;
 import javax.xml.bind.ValidationException;
 
 public interface AccountValidationService {
-    public void validateAccountNumber (String accountNumber) throw ValidationException;
-    public void validateAccount(Account account) throws ValidationException;
+    public void accountNumber(String accountNumber) throws ValidationException;
+
+    public void pin(String pin) throws ValidationException;
+
+    public Account toValidatedAccount(String accountNumber) throws ValidationException;
 }
