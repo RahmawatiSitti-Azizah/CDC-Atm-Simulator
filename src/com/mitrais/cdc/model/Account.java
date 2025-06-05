@@ -25,10 +25,6 @@ public class Account implements Loginable {
         return false;
     }
 
-    public boolean login(Account account) {
-        return this.accountNumber.equals(account.accountNumber) && this.pin.equals(account.pin);
-    }
-
     public void increaseBalance(long amount) throws ValidationException {
         if (amount < 0) {
             throw new ValidationException("Invalid amount");

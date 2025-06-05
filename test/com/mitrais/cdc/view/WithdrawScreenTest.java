@@ -1,6 +1,5 @@
-package com.mitrais.cdc.model;
+package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.view.*;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayOutputStream;

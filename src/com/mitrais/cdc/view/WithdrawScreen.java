@@ -4,7 +4,6 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class WithdrawScreen implements Screen {
@@ -21,34 +20,30 @@ public class WithdrawScreen implements Screen {
 
     @Override
     public Screen display() {
-        try {
-            int menu = -1;
-            while (menu < 0) {
-                int i = 1;
-                for (long amount : arrayWithdrawAmount) {
-                    System.out.println(i++ + ". $" + amount);
-                }
-                System.out.println(i++ + ". Other");
-                System.out.println(i++ + ". Back");
-                System.out.print("Please choose option[5] : ");
-                String input = userInputScanner.nextLine();
-                menu = userInput.toValidatedMenu(input);
+        int menu = -1;
+        while (menu < 0) {
+            int i = 1;
+            for (long amount : arrayWithdrawAmount) {
+                System.out.println(i++ + ". $" + amount);
             }
-            switch (menu) {
-                case 1:
-                case 2:
-                case 3: {
-                    return new WithdrawSummaryScreen(arrayWithdrawAmount[menu - 1], userAccount, userInputScanner);
-                }
-                case 4: {
-                    return new OtherWithdrawnScreen(userAccount, userInputScanner);
-                }
-                default: {
-                    break;
-                }
+            System.out.println(i++ + ". Other");
+            System.out.println(i++ + ". Back");
+            System.out.print("Please choose option[5] : ");
+            String input = userInputScanner.nextLine();
+            menu = userInput.toValidatedMenu(input);
+        }
+        switch (menu) {
+            case 1:
+            case 2:
+            case 3: {
+                return new WithdrawSummaryScreen(arrayWithdrawAmount[menu - 1], userAccount, userInputScanner);
             }
-        } catch (ValidationException e) {
-            System.out.println(e.getMessage());
+            case 4: {
+                return new OtherWithdrawnScreen(userAccount, userInputScanner);
+            }
+            default: {
+                break;
+            }
         }
         return new TransactionScreen(userAccount, userInputScanner);
     }

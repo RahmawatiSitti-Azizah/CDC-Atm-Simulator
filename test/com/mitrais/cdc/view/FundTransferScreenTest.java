@@ -1,10 +1,7 @@
-package com.mitrais.cdc.model;
+package com.mitrais.cdc.view;
 
+import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import com.mitrais.cdc.view.FundTransferScreen;
-import com.mitrais.cdc.view.FundTransferSummaryScreen;
-import com.mitrais.cdc.view.Screen;
-import com.mitrais.cdc.view.TransactionScreen;
 import junit.framework.TestCase;
 
 import javax.xml.bind.ValidationException;
@@ -139,6 +136,13 @@ public class FundTransferScreenTest extends TestCase {
             assertTrue(false);
         }
 
+    }
+
+    public void testInputNonEmptyStringOnReferencePromptSceenAngGotoTransactionScreen() {
+        Account account = createAccount(100);
+        FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\nss\n");
+        Screen nextScreen = fundTransferScreen.display();
+        assertTrue(nextScreen instanceof TransactionScreen);
     }
 
     public void testCancelTrxAtConfirmationScreenGoToTransaction() {

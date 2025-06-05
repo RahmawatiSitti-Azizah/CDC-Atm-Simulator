@@ -47,18 +47,14 @@ public class WithdrawSummaryScreen implements Screen {
         System.out.print("Please choose option[2] : ");
         String input = userInputScanner.nextLine();
         int menu;
-        try {
-            menu = userInput.toValidatedMenu(input);
-            switch (menu) {
-                case 1: {
-                    return new TransactionScreen(userAccount, userInputScanner);
-                }
-                default: {
-                    break;
-                }
+        menu = userInput.toValidatedMenu(input);
+        switch (menu) {
+            case 1: {
+                return new TransactionScreen(userAccount, userInputScanner);
             }
-        } catch (ValidationException e) {
-            System.out.println(e.getMessage());
+            default: {
+                break;
+            }
         }
         return new WelcomeScreen(userInputScanner);
     }

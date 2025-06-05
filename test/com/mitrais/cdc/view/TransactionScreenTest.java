@@ -1,9 +1,5 @@
-package com.mitrais.cdc.model;
+package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.view.FundTransferScreen;
-import com.mitrais.cdc.view.Screen;
-import com.mitrais.cdc.view.WelcomeScreen;
-import com.mitrais.cdc.view.WithdrawScreen;
 import junit.framework.TestCase;
 
 public class TransactionScreenTest extends TestCase {

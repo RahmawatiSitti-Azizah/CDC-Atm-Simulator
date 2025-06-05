@@ -4,7 +4,6 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class TransactionScreen implements Screen {
@@ -26,21 +25,17 @@ public class TransactionScreen implements Screen {
         System.out.println("3. Exit");
         System.out.print("Please choose option[3] : ");
         String input = userInputScanner.nextLine();
-        try {
-            int menu = userInput.toValidatedMenu(input);
-            switch (menu) {
-                case 1: {
-                    return new WithdrawScreen(userAccount, userInputScanner);
-                }
-                case 2: {
-                    return new FundTransferScreen(userAccount, userInputScanner);
-                }
-                default: {
-                    break;
-                }
+        int menu = userInput.toValidatedMenu(input);
+        switch (menu) {
+            case 1: {
+                return new WithdrawScreen(userAccount, userInputScanner);
             }
-        } catch (ValidationException e) {
-            System.out.println(e.getMessage());
+            case 2: {
+                return new FundTransferScreen(userAccount, userInputScanner);
+            }
+            default: {
+                break;
+            }
         }
         return new WelcomeScreen(userInputScanner);
     }

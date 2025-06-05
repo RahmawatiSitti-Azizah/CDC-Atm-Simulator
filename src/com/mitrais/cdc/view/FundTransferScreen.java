@@ -83,20 +83,15 @@ public class FundTransferScreen implements Screen {
         System.out.println("2. Cancel Trx");
         System.out.print("Choose option[2] : ");
         String input = userInputScanner.nextLine();
-        try {
-            int menu = userInput.toValidatedMenu(input);
-            switch (menu) {
-                case 1: {
-                    accountTransactionService.transfer(userAccount, destinationAccount, amount);
-                    return new FundTransferSummaryScreen(amount, userAccount, userInputScanner, destinationAccount, referenceNumber);
-                }
-                default: {
-                    return new TransactionScreen(userAccount, userInputScanner);
-                }
+        int menu = userInput.toValidatedMenu(input);
+        switch (menu) {
+            case 1: {
+                accountTransactionService.transfer(userAccount, destinationAccount, amount);
+                return new FundTransferSummaryScreen(amount, userAccount, userInputScanner, destinationAccount, referenceNumber);
             }
-        } catch (ValidationException e) {
-            System.out.println(e.getMessage());
-            return new FundTransferScreen(userAccount, userInputScanner);
+            default: {
+                return new TransactionScreen(userAccount, userInputScanner);
+            }
         }
     }
 }

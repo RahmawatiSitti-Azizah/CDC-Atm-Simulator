@@ -17,7 +17,7 @@ class UserInputServiceImpl implements UserInputService {
     }
 
     @Override
-    public int toValidatedMenu(String input) throws ValidationException {
+    public int toValidatedMenu(String input) {
         return StringMatcherUtil.checkStringIsNumberWithLength(input, 1) ? Integer.parseInt(input) : 0;
     }
 }

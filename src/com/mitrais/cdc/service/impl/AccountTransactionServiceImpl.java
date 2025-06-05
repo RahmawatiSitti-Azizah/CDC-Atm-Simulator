@@ -8,13 +8,21 @@ import javax.xml.bind.ValidationException;
 class AccountTransactionServiceImpl implements AccountTransactionService {
 
     @Override
-    public void withdraw(Account account, long withdrawAmount) throws ValidationException {
-        account.decreaseBalance(withdrawAmount);
+    public void withdraw(Account account, long withdrawAmount) {
+        try {
+            account.decreaseBalance(withdrawAmount);
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public void transfer(Account sourceAccount, Account destinationAccount, long transferAmount) throws ValidationException {
-        sourceAccount.decreaseBalance(transferAmount);
-        destinationAccount.increaseBalance(transferAmount);
+    public void transfer(Account sourceAccount, Account destinationAccount, long transferAmount) {
+        try {
+            sourceAccount.decreaseBalance(transferAmount);
+            destinationAccount.increaseBalance(transferAmount);
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

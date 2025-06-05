@@ -1,9 +1,6 @@
-package com.mitrais.cdc.model;
+package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.view.Screen;
-import com.mitrais.cdc.view.TransactionScreen;
-import com.mitrais.cdc.view.WelcomeScreen;
-import com.mitrais.cdc.view.WithdrawSummaryScreen;
+import com.mitrais.cdc.model.Account;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
