@@ -1,7 +1,5 @@
 package com.mitrais.cdc.model;
 
-import javax.xml.bind.ValidationException;
-
 public abstract class Money {
 
     /**
@@ -18,15 +16,15 @@ public abstract class Money {
 
     /**
      * @param money
-     * @throws ValidationException
+     * @throws Exception
      */
-    public abstract void addMoney(Money money) throws ValidationException;
+    public abstract void addMoney(Money money) throws Exception;
 
     /**
      * @param money
-     * @throws ValidationException
+     * @throws Exception
      */
-    public abstract void deductMoney(Money money) throws ValidationException;
+    public abstract void deductMoney(Money money) throws Exception;
 
     @Override
     public String toString() {

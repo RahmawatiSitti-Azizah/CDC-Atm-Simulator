@@ -6,7 +6,6 @@ import com.mitrais.cdc.service.TransactionValidationService;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -33,12 +32,12 @@ public class WithdrawSummaryScreen implements Screen {
         try {
             transactionValidate.withdrawAmount(userAccount, withdrawAmount);
             accountTransaction.withdraw(userAccount, withdrawAmount);
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new WithdrawScreen(userAccount, userInputScanner);
         }
         System.out.println("Summary");
-        System.out.println("21Date : " + (new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));
+        System.out.println("Date : " + (new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));
         System.out.println("Withdraw : $" + withdrawAmount);
         System.out.println("Balance : $" + userAccount.getBalance());
         System.out.println("");

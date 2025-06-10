@@ -4,7 +4,6 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class OtherWithdrawnScreen implements Screen {
@@ -27,7 +26,7 @@ public class OtherWithdrawnScreen implements Screen {
         try {
             amount = userInputService.toValidatedAmount(input);
             return new WithdrawSummaryScreen(amount, userAccount, userInputScanner);
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new WithdrawScreen(userAccount, userInputScanner);
         }

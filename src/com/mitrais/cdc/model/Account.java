@@ -1,7 +1,5 @@
 package com.mitrais.cdc.model;
 
-import javax.xml.bind.ValidationException;
-
 public class Account implements Loginable {
     private long balance;
     private String name;
@@ -25,17 +23,17 @@ public class Account implements Loginable {
         return false;
     }
 
-    public void increaseBalance(long amount) throws ValidationException {
+    public void increaseBalance(long amount) throws Exception {
         if (amount < 0) {
-            throw new ValidationException("Invalid amount");
+            throw new Exception("Invalid amount");
         } else {
             balance += amount;
         }
     }
 
-    public void decreaseBalance(long amount) throws ValidationException {
+    public void decreaseBalance(long amount) throws Exception {
         if (amount < 0) {
-            throw new ValidationException("Invalid amount");
+            throw new Exception("Invalid amount");
         } else {
             balance -= amount;
         }

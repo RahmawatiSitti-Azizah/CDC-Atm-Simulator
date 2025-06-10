@@ -2,8 +2,6 @@ package com.mitrais.cdc.service;
 
 import com.mitrais.cdc.model.Account;
 
-import javax.xml.bind.ValidationException;
-
 public interface AccountTransactionService {
     /**
      * Service to withdraw amount from account.
@@ -12,7 +10,7 @@ public interface AccountTransactionService {
      * @param withdrawAmount withdraw amount
      * @throws RuntimeException if there is any issue occur
      */
-    public void withdraw(Account account, long withdrawAmount) throws ValidationException;
+    public void withdraw(Account account, long withdrawAmount) throws Exception;
 
     /**
      * Service to transfer xxx amount from source account to destination account.

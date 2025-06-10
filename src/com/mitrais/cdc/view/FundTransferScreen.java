@@ -7,7 +7,6 @@ import com.mitrais.cdc.service.TransactionValidationService;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -59,7 +58,7 @@ public class FundTransferScreen implements Screen {
             } else {
                 return new TransactionScreen(userAccount, userInputScanner);
             }
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new TransactionScreen(userAccount, userInputScanner);
         }

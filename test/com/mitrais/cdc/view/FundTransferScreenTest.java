@@ -4,7 +4,6 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import junit.framework.TestCase;
 
-import javax.xml.bind.ValidationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -132,7 +131,7 @@ public class FundTransferScreenTest extends TestCase {
             fundTransferScreen.display();
             assertEquals(50, account.getBalance());
             assertEquals(destinationAccountBalance + 50, ServiceFactory.createSearchAccountValidationService().getByID("112244").getBalance());
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             assertTrue(false);
         }
 

@@ -5,7 +5,6 @@ import com.mitrais.cdc.service.AccountValidationService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
-import javax.xml.bind.ValidationException;
 import java.util.Scanner;
 
 public class WelcomeScreen implements Screen {
@@ -36,7 +35,7 @@ public class WelcomeScreen implements Screen {
             accountValidate.pin(inputPin);
             userAccount = searchAccount.get(inputAccountNumber, inputPin);
             return new TransactionScreen(userAccount, userInputScanner);
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return this;
         }

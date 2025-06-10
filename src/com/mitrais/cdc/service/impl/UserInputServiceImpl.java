@@ -3,14 +3,12 @@ package com.mitrais.cdc.service.impl;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.util.StringMatcherUtil;
 
-import javax.xml.bind.ValidationException;
-
 class UserInputServiceImpl implements UserInputService {
 
     @Override
-    public long toValidatedAmount(String input) throws ValidationException {
+    public long toValidatedAmount(String input) throws Exception {
         if (!StringMatcherUtil.checkStringIsNumberOnly(input)) {
-            throw new ValidationException("Invalid amount");
+            throw new Exception("Invalid amount");
         }
         long amount = Long.parseLong(input);
         return amount;
