@@ -32,11 +32,14 @@ public class Account implements Loginable {
     }
 
     public void decreaseBalance(long amount) throws Exception {
+        if (amount > balance) {
+            throw new Exception("Insufficient balance $" + amount);
+        }
         if (amount < 0) {
             throw new Exception("Invalid amount");
-        } else {
-            balance -= amount;
         }
+        balance -= amount;
+
     }
 
     public long getBalance() {

@@ -32,7 +32,7 @@ class AccountValidationServiceImpl implements AccountValidationService {
     }
 
     @Override
-    public Account toValidatedAccount(String accountNumber) throws Exception {
+    public Account searchAccount(String accountNumber) throws Exception {
         if (!StringMatcherUtil.checkStringIsNumberOnly(accountNumber)) {
             throw new Exception("Invalid Account");
         }

@@ -30,7 +30,7 @@ public class WithdrawSummaryScreen implements Screen {
     @Override
     public Screen display() {
         try {
-            transactionValidate.withdrawAmount(userAccount, withdrawAmount);
+            transactionValidate.validateWithdrawAmount(withdrawAmount);
             accountTransaction.withdraw(userAccount, withdrawAmount);
         } catch (Exception e) {
             System.out.println(e.getMessage());

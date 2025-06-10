@@ -40,14 +40,14 @@ public class FundTransferScreen implements Screen {
             if ((input.equals("Esc") || input.isEmpty())) {
                 return new TransactionScreen(userAccount, userInputScanner);
             }
-            destinationAccount = accountService.toValidatedAccount(input);
+            destinationAccount = accountService.searchAccount(input);
             System.out.print("Please enter transfer amount and press enter to continue or press enter to go back " +
                     "to Transaction : ");
             input = userInputScanner.nextLine();
             if (input.isEmpty()) {
                 return new TransactionScreen(userAccount, userInputScanner);
             } else {
-                amount = transactionValidate.transferAmount(userAccount, userInput.toValidatedAmount(input));
+                amount = transactionValidate.validateTransferAmount(userInput.toValidatedAmount(input));
             }
             generateReferenceNumber(new Random());
             System.out.print("Reference Number: " + referenceNumber +
@@ -85,7 +85,12 @@ public class FundTransferScreen implements Screen {
         int menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                accountTransactionService.transfer(userAccount, destinationAccount, amount);
+                try {
+                    accountTransactionService.transfer(userAccount, destinationAccount, amount);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return new TransactionScreen(userAccount, userInputScanner);
+                }
                 return new FundTransferSummaryScreen(amount, userAccount, userInputScanner, destinationAccount, referenceNumber);
             }
             default: {

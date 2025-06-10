@@ -7,5 +7,5 @@ public interface AccountValidationService {
 
     public void pin(String pin) throws Exception;
 
-    public Account toValidatedAccount(String accountNumber) throws Exception;
+    public Account searchAccount(String accountNumber) throws Exception;
 }
