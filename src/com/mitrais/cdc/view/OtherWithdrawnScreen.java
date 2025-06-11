@@ -1,6 +1,7 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
@@ -20,11 +21,11 @@ public class OtherWithdrawnScreen implements Screen {
     @Override
     public Screen display() {
         System.out.println("Other Withdraw");
-        long amount = 0;
+        Money amount;
         System.out.print("Enter amount to withdraw : ");
         String input = userInputScanner.nextLine();
         try {
-            amount = userInputService.toValidatedAmount(input);
+            amount = userInputService.toValidatedMoney(input);
             return new WithdrawSummaryScreen(amount, userAccount, userInputScanner);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -1,6 +1,8 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import junit.framework.TestCase;
 
@@ -22,7 +24,7 @@ public class FundTransferScreenTest extends TestCase {
     }
 
     private static Account createAccount(long balance) {
-        Account account = new Account(balance, "Jane Doe", "112255", "112233");
+        Account account = new Account(new Dollar(balance), "Jane Doe", "112255", "112233");
         return account;
     }
 
@@ -103,16 +105,16 @@ public class FundTransferScreenTest extends TestCase {
         assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         assertTrue(outputStreamCaptor.toString().contains("Minimum amount to transfer is $1"));
         closeSystemOutCapturer();
-    }/*
+    }
 
     public void testWithAmountMoreThanAccountBalanceGetErrorMessageAndGotoTransactionScreen() {
         Account account = createAccount(100);
-        FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n110\n\n");
+        FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n110\n\n1\n");
         setUpSystemOutCapturer();
         assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $110"));
         closeSystemOutCapturer();
-    }*/
+    }
 
     public void testWithMoreThan1000AmountGetErrorMessageAndGotoTransactionScreen() {
         Account account = createAccount(100);
@@ -126,11 +128,12 @@ public class FundTransferScreenTest extends TestCase {
     public void testSuccessTransferCorrectSourceAndDestinationAccountBalance() {
         Account account = createAccount(100);
         try {
-            long destinationAccountBalance = ServiceFactory.createSearchAccountValidationService().getByID("112244").getBalance();
+            Money destinationAccountBalance = ServiceFactory.createSearchAccountService().getByID("112244").getBalance();
+            destinationAccountBalance.add(new Dollar(50));
             FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\n\n1\n");
             fundTransferScreen.display();
-            assertEquals(50, account.getBalance());
-            assertEquals(destinationAccountBalance + 50, ServiceFactory.createSearchAccountValidationService().getByID("112244").getBalance());
+            assertTrue(account.getBalance().isAmountEqual(new Dollar(50)));
+            assertTrue(destinationAccountBalance.isAmountEqual(ServiceFactory.createSearchAccountService().getByID("112244").getBalance()));
         } catch (Exception e) {
             assertTrue(false);
         }

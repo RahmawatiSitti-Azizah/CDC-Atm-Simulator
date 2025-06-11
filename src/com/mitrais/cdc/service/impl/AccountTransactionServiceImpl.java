@@ -1,18 +1,19 @@
 package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.AccountTransactionService;
 
 class AccountTransactionServiceImpl implements AccountTransactionService {
 
     @Override
-    public void withdraw(Account account, long withdrawAmount) throws Exception {
-        account.decreaseBalance(withdrawAmount);
+    public void withdraw(Account account, Money withdrawCurrency) throws Exception {
+        account.decreaseBalance(withdrawCurrency);
     }
 
     @Override
-    public void transfer(Account sourceAccount, Account destinationAccount, long transferAmount) throws Exception {
-        sourceAccount.decreaseBalance(transferAmount);
-        destinationAccount.increaseBalance(transferAmount);
+    public void transfer(Account sourceAccount, Account destinationAccount, Money amount) throws Exception {
+        sourceAccount.decreaseBalance(amount);
+        destinationAccount.increaseBalance(amount);
     }
 }

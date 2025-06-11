@@ -1,6 +1,7 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Dollar;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -8,14 +9,14 @@ import java.util.Scanner;
 
 public class FundTransferSummaryScreenTest extends TestCase {
     private static Account createAccount(String accountNumber, long balance) {
-        Account account = new Account(balance, "Jane Doe", accountNumber, "112233");
+        Account account = new Account(new Dollar(balance), "Jane Doe", accountNumber, "112233");
         return account;
     }
 
     private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, long amount, String referenceNumber, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return new FundTransferSummaryScreen(amount, sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
+        return new FundTransferSummaryScreen(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
     }
 
     public void testWithMenu1GoToTransactionScreen() {

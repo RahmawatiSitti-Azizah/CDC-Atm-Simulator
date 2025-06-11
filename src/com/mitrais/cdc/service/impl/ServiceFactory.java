@@ -4,10 +4,10 @@ import com.mitrais.cdc.service.*;
 
 public class ServiceFactory {
     private static AccountTransactionService accountTransaction;
-    private static AccountValidationService accountValidation;
+    private static AccountValidatorService accountValidator;
     private static SearchAccountService searchAccount;
     private static UserInputService userInput;
-    private static TransactionValidationService transactionValidation;
+    private static TransactionAmountValidatorService transactionAmountValidator;
 
     public static AccountTransactionService createAccountTransactionService() {
         if (accountTransaction == null) {
@@ -16,14 +16,14 @@ public class ServiceFactory {
         return accountTransaction;
     }
 
-    public static AccountValidationService createAccountValidationService() {
-        if (accountValidation == null) {
-            accountValidation = new AccountValidationServiceImpl();
+    public static AccountValidatorService createAccountValidatorService() {
+        if (accountValidator == null) {
+            accountValidator = new AccountValidatorServiceImpl();
         }
-        return accountValidation;
+        return accountValidator;
     }
 
-    public static SearchAccountService createSearchAccountValidationService() {
+    public static SearchAccountService createSearchAccountService() {
         if (searchAccount == null) {
             searchAccount = new SearchAccountServiceImpl();
         }
@@ -37,10 +37,10 @@ public class ServiceFactory {
         return userInput;
     }
 
-    public static TransactionValidationService createTransactionValidationService() {
-        if (transactionValidation == null) {
-            transactionValidation = new TransactionValidationServiceImpl();
+    public static TransactionAmountValidatorService createTransactionAmountValidatorService() {
+        if (transactionAmountValidator == null) {
+            transactionAmountValidator = new TransactionAmountValidatorServiceImpl();
         }
-        return transactionValidation;
+        return transactionAmountValidator;
     }
 }

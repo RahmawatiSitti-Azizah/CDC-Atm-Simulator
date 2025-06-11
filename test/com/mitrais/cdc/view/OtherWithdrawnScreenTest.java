@@ -1,6 +1,7 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Dollar;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -21,7 +22,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
     }
 
     private static Account createAccount(long balance) {
-        Account account = new Account(balance, "Jane Doe", "112255", "112233");
+        Account account = new Account(new Dollar(balance), "Jane Doe", "112255", "112233");
         return account;
     }
 
@@ -43,7 +44,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
         setUpSystemOutCapturer();
         assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        assertEquals(100, account.getBalance());
+        assertTrue(account.getBalance().isAmountEqual(new Dollar(100)));
         closeSystemOutCapturer();
     }
 
@@ -53,7 +54,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
         setUpSystemOutCapturer();
         assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        assertEquals(100, account.getBalance());
+        assertTrue(account.getBalance().isAmountEqual(new Dollar(100)));
         closeSystemOutCapturer();
     }
 }

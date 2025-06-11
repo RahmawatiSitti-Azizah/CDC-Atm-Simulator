@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class AccountTest extends TestCase {
 
     private static Account getAccount() {
-        Account account = new Account(100, "Prince", "112290", "123456");
+        Account account = new Account(new Dollar(100), "Prince", "112290", "123456");
         return account;
     }
 

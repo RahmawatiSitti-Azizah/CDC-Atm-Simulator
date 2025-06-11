@@ -1,6 +1,7 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
@@ -36,7 +37,7 @@ public class WithdrawScreen implements Screen {
             case 1:
             case 2:
             case 3: {
-                return new WithdrawSummaryScreen(arrayWithdrawAmount[menu - 1], userAccount, userInputScanner);
+                return new WithdrawSummaryScreen(new Dollar(arrayWithdrawAmount[menu - 1]), userAccount, userInputScanner);
             }
             case 4: {
                 return new OtherWithdrawnScreen(userAccount, userInputScanner);

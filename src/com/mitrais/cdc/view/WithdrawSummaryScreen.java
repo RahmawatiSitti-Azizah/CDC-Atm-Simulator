@@ -1,8 +1,9 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.AccountTransactionService;
-import com.mitrais.cdc.service.TransactionValidationService;
+import com.mitrais.cdc.service.TransactionAmountValidatorService;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
@@ -11,36 +12,48 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class WithdrawSummaryScreen implements Screen {
-    private long withdrawAmount;
+    private Money amount;
     private Account userAccount;
     private Scanner userInputScanner;
     private UserInputService userInput;
     private AccountTransactionService accountTransaction;
-    private TransactionValidationService transactionValidate;
+    private TransactionAmountValidatorService transactionValidate;
 
-    public WithdrawSummaryScreen(long aWithdrawAmount, Account account, Scanner aUserInputScanner) {
-        this.withdrawAmount = aWithdrawAmount;
+    public WithdrawSummaryScreen(Money amount, Account account, Scanner aUserInputScanner) {
         userAccount = account;
-        this.userInputScanner = aUserInputScanner;
+        userInputScanner = aUserInputScanner;
         userInput = ServiceFactory.createUserInputService();
         accountTransaction = ServiceFactory.createAccountTransactionService();
-        transactionValidate = ServiceFactory.createTransactionValidationService();
+        transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
+        this.amount = amount;
     }
 
     @Override
     public Screen display() {
         try {
-            transactionValidate.validateWithdrawAmount(withdrawAmount);
-            accountTransaction.withdraw(userAccount, withdrawAmount);
+            withdrawProcess();
+            printSummary();
+            return printMenuAndGetScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new WithdrawScreen(userAccount, userInputScanner);
         }
+    }
+
+    private void withdrawProcess() throws Exception {
+        transactionValidate.validateWithdrawAmount(amount);
+        accountTransaction.withdraw(userAccount, amount);
+    }
+
+    private void printSummary() {
         System.out.println("Summary");
         System.out.println("Date : " + (new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));
-        System.out.println("Withdraw : $" + withdrawAmount);
-        System.out.println("Balance : $" + userAccount.getBalance());
+        System.out.println("Withdraw : " + amount.toString());
+        System.out.println("Balance : " + userAccount.getBalance().toString());
         System.out.println("");
+    }
+
+    private Screen printMenuAndGetScreen() {
         System.out.println("1. Transaction");
         System.out.println("2. Exit");
         System.out.print("Please choose option[2] : ");

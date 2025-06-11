@@ -1,16 +1,16 @@
 package com.mitrais.cdc.model;
 
 public class Account implements Loginable {
-    private long balance;
     private String name;
     private String accountNumber;
     private String pin;
+    private Money balance;
 
-    public Account(long aBalance, String aName, String anAccountNumber, String aPin) {
-        balance = aBalance;
+    public Account(Money currency, String aName, String anAccountNumber, String aPin) {
         name = aName;
         accountNumber = anAccountNumber;
         pin = aPin;
+        balance = currency;
     }
 
     @Override
@@ -23,31 +23,30 @@ public class Account implements Loginable {
         return false;
     }
 
-    public void increaseBalance(long amount) throws Exception {
-        if (amount < 0) {
-            throw new Exception("Invalid amount");
-        } else {
-            balance += amount;
-        }
+    public void increaseBalance(Money currencyAmount) throws Exception {
+        validateAmountMoreThanZero(currencyAmount);
+        balance.add(currencyAmount);
     }
 
-    public void decreaseBalance(long amount) throws Exception {
-        if (amount > balance) {
-            throw new Exception("Insufficient balance $" + amount);
+    public void decreaseBalance(Money withdrawCurrency) throws Exception {
+        if (withdrawCurrency.isMoreThan(balance)) {
+            throw new Exception("Insufficient balance " + withdrawCurrency.toString());
         }
-        if (amount < 0) {
-            throw new Exception("Invalid amount");
-        }
-        balance -= amount;
-
+        validateAmountMoreThanZero(withdrawCurrency);
+        balance.subtract(withdrawCurrency);
     }
 
-    public long getBalance() {
-        return balance;
+    private void validateAmountMoreThanZero(Money amount) throws Exception {
+        if ((new Dollar(0)).isMoreThanOrEquals(balance)) {
+            throw new Exception("Invalid amount");
+        }
     }
 
     public String getAccountNumber() {
         return accountNumber;
     }
 
+    public Money getBalance() {
+        return balance;
+    }
 }

@@ -1,10 +1,8 @@
 package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
-import com.mitrais.cdc.service.AccountTransactionService;
-import com.mitrais.cdc.service.AccountValidationService;
-import com.mitrais.cdc.service.TransactionValidationService;
-import com.mitrais.cdc.service.UserInputService;
+import com.mitrais.cdc.model.Money;
+import com.mitrais.cdc.service.*;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 
 import java.util.Random;
@@ -12,56 +10,72 @@ import java.util.Scanner;
 
 public class FundTransferScreen implements Screen {
     private Scanner userInputScanner;
-    private long amount;
+    private Money transferAmount;
     private Account userAccount;
     private Account destinationAccount;
     private String referenceNumber;
     private AccountTransactionService accountTransactionService;
-    private AccountValidationService accountService;
+    private AccountValidatorService accountService;
     private UserInputService userInput;
-    private TransactionValidationService transactionValidate;
+    private TransactionAmountValidatorService transactionValidate;
+    private SearchAccountService searchService;
 
     public FundTransferScreen(Account account, Scanner aUserInputScanner) {
         userAccount = account;
         userInputScanner = aUserInputScanner;
         accountTransactionService = ServiceFactory.createAccountTransactionService();
-        accountService = ServiceFactory.createAccountValidationService();
+        accountService = ServiceFactory.createAccountValidatorService();
         userInput = ServiceFactory.createUserInputService();
-        transactionValidate = ServiceFactory.createTransactionValidationService();
+        transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
+        searchService = ServiceFactory.createSearchAccountService();
         generateReferenceNumber(new Random());
     }
 
     @Override
     public Screen display() {
         try {
-            System.out.print("Please enter destination account and press enter to continue or press cancel (Esc) " +
-                    "to go back to Transaction : ");
-            String input = userInputScanner.nextLine();
-            if ((input.equals("Esc") || input.isEmpty())) {
-                return new TransactionScreen(userAccount, userInputScanner);
-            }
-            destinationAccount = accountService.searchAccount(input);
+            setDestinationAccountFromUserInput();
             System.out.print("Please enter transfer amount and press enter to continue or press enter to go back " +
                     "to Transaction : ");
-            input = userInputScanner.nextLine();
-            if (input.isEmpty()) {
-                return new TransactionScreen(userAccount, userInputScanner);
-            } else {
-                amount = transactionValidate.validateTransferAmount(userInput.toValidatedAmount(input));
-            }
-            generateReferenceNumber(new Random());
-            System.out.print("Reference Number: " + referenceNumber +
-                    "\npress enter to continue or press enter to go back to Transaction : ");
-            input = userInputScanner.nextLine();
-            if (input.isEmpty()) {
-                return transferConfirmProcess();
-            } else {
-                return new TransactionScreen(userAccount, userInputScanner);
-            }
+            setTransferAmountFromUserInput();
+            printReferenceNumberAndProceed();
+            return transferConfirmationProcessAndGetNextScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new TransactionScreen(userAccount, userInputScanner);
         }
+    }
+
+    private void printReferenceNumberAndProceed() throws Exception {
+        String input;
+        System.out.print("Reference Number: " + referenceNumber +
+                "\npress enter to continue or press enter to go back to Transaction : ");
+        input = userInputScanner.nextLine();
+        if (!input.isEmpty()) {
+            throw new Exception("");
+
+        }
+    }
+
+    private void setTransferAmountFromUserInput() throws Exception {
+        String input = userInputScanner.nextLine();
+        if (input.isEmpty()) {
+            throw new Exception("");
+        } else {
+            transferAmount = userInput.toValidatedMoney(input);
+            transactionValidate.validateTransferAmount(transferAmount);
+        }
+    }
+
+    private void setDestinationAccountFromUserInput() throws Exception {
+        System.out.print("Please enter destination account and press enter to continue or press cancel (Esc) " +
+                "to go back to Transaction : ");
+        String input = userInputScanner.nextLine();
+        if ((input.equals("Esc") || input.isEmpty())) {
+            throw new Exception("");
+        }
+        accountService.validateAccountNumber(input, "Invalid Account");
+        destinationAccount = searchService.getByID(input);
     }
 
     private void generateReferenceNumber(Random random) {
@@ -72,10 +86,10 @@ public class FundTransferScreen implements Screen {
         referenceNumber = stringBuffer.toString();
     }
 
-    private Screen transferConfirmProcess() {
+    private Screen transferConfirmationProcessAndGetNextScreen() {
         System.out.println("Transfer Confirmation");
         System.out.println("Destination Account : " + destinationAccount.getAccountNumber());
-        System.out.println("Transfer Amount : $" + amount);
+        System.out.println("Transfer Amount : " + transferAmount.toString());
         System.out.println("Reference Number : " + referenceNumber);
         System.out.println("");
         System.out.println("1. Confirm Trx");
@@ -86,12 +100,12 @@ public class FundTransferScreen implements Screen {
         switch (menu) {
             case 1: {
                 try {
-                    accountTransactionService.transfer(userAccount, destinationAccount, amount);
+                    accountTransactionService.transfer(userAccount, destinationAccount, transferAmount);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     return new TransactionScreen(userAccount, userInputScanner);
                 }
-                return new FundTransferSummaryScreen(amount, userAccount, userInputScanner, destinationAccount, referenceNumber);
+                return new FundTransferSummaryScreen(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
             }
             default: {
                 return new TransactionScreen(userAccount, userInputScanner);
