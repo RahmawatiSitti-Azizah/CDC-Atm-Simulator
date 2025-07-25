@@ -37,7 +37,7 @@ public class Account implements Loginable {
     }
 
     private void validateAmountMoreThanZero(Money amount) throws Exception {
-        if ((new Dollar(0)).isMoreThanOrEquals(balance)) {
+        if ((new Dollar(0)).isMoreThanOrEquals(amount)) {
             throw new Exception("Invalid amount");
         }
     }
@@ -46,7 +46,11 @@ public class Account implements Loginable {
         return accountNumber;
     }
 
-    public Money getBalance() {
+    /*public Money getBalance() {
         return balance;
+    }*/
+
+    public String getStringBalance() {
+        return balance.toString();
     }
 }

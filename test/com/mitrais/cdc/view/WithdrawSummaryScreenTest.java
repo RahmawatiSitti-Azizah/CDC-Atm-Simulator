@@ -64,7 +64,7 @@ public class WithdrawSummaryScreenTest extends TestCase {
         Account account = createAccount(100);
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "jj\n");
         withdrawSummaryScreen.display();
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(80)));
+        assertTrue(account.getStringBalance().equals("$80"));
     }
 
     public void testWithdrawWithNonMultipleOf10Amount() {
@@ -72,7 +72,7 @@ public class WithdrawSummaryScreenTest extends TestCase {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 5, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(100)));
+        assertTrue(account.getStringBalance().equals("$100"));
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         closeSystemOutCapturer();
     }
@@ -82,7 +82,7 @@ public class WithdrawSummaryScreenTest extends TestCase {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 1010, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(10000)));
+        assertTrue(account.getStringBalance().equals("$10000"));
         assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
         closeSystemOutCapturer();
     }
@@ -92,7 +92,7 @@ public class WithdrawSummaryScreenTest extends TestCase {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 80, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(70)));
+        assertTrue(account.getStringBalance().equals("$70"));
         assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $80"));
         closeSystemOutCapturer();
     }

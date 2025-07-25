@@ -2,7 +2,6 @@ package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
-import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import junit.framework.TestCase;
 
@@ -128,12 +127,12 @@ public class FundTransferScreenTest extends TestCase {
     public void testSuccessTransferCorrectSourceAndDestinationAccountBalance() {
         Account account = createAccount(100);
         try {
-            Money destinationAccountBalance = ServiceFactory.createSearchAccountService().getByID("112244").getBalance();
-            destinationAccountBalance.add(new Dollar(50));
+            Account destinationAccount = ServiceFactory.createSearchAccountService().getByID("112244");
+            destinationAccount.increaseBalance(new Dollar(50));
             FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\n\n1\n");
             fundTransferScreen.display();
-            assertTrue(account.getBalance().isAmountEqual(new Dollar(50)));
-            assertTrue(destinationAccountBalance.isAmountEqual(ServiceFactory.createSearchAccountService().getByID("112244").getBalance()));
+            assertTrue(account.getStringBalance().equals("$50"));
+            assertTrue(destinationAccount.getStringBalance().equals(ServiceFactory.createSearchAccountService().getByID("112244").getStringBalance()));
         } catch (Exception e) {
             assertTrue(false);
         }

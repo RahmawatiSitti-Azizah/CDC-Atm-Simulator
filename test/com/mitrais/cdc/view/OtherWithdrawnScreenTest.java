@@ -44,7 +44,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
         setUpSystemOutCapturer();
         assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(100)));
+        assertTrue(account.getStringBalance().equals("$100"));
         closeSystemOutCapturer();
     }
 
@@ -54,7 +54,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
         setUpSystemOutCapturer();
         assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        assertTrue(account.getBalance().isAmountEqual(new Dollar(100)));
+        assertTrue(account.getStringBalance().equals("$100"));
         closeSystemOutCapturer();
     }
 }

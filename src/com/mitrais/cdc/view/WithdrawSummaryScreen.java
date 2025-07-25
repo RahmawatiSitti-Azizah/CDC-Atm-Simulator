@@ -49,7 +49,7 @@ public class WithdrawSummaryScreen implements Screen {
         System.out.println("Summary");
         System.out.println("Date : " + (new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));
         System.out.println("Withdraw : " + amount.toString());
-        System.out.println("Balance : " + userAccount.getBalance().toString());
+        System.out.println("Balance : " + userAccount.getStringBalance());
         System.out.println("");
     }
 

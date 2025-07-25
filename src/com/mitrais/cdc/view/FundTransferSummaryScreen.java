@@ -30,7 +30,7 @@ public class FundTransferSummaryScreen implements Screen {
         System.out.println("Destination Account : " + destinationAccount.getAccountNumber());
         System.out.println("Transfer Amount : " + transferAmount.toString());
         System.out.println("Reference Number : " + referenceNumber);
-        System.out.println("Balance : " + userAccount.getBalance().toString());
+        System.out.println("Balance : " + userAccount.getStringBalance());
         System.out.println("");
         System.out.println("1. Transaction");
         System.out.println("2. Exit");
