@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class WithdrawSummaryScreen implements Screen {
+    private static final WithdrawSummaryScreen INSTANCE = new WithdrawSummaryScreen();
     private Money amount;
     private Account userAccount;
     private Scanner userInputScanner;
@@ -19,7 +20,19 @@ public class WithdrawSummaryScreen implements Screen {
     private AccountTransactionService accountTransaction;
     private TransactionAmountValidatorService transactionValidate;
 
+    public static WithdrawSummaryScreen getInstance() {
+        return INSTANCE;
+    }
+
+    private WithdrawSummaryScreen() {
+        this(null, null, null);
+    }
+
     public WithdrawSummaryScreen(Money amount, Account account, Scanner aUserInputScanner) {
+        resetData(amount, account, aUserInputScanner);
+    }
+
+    public void resetData(Money amount, Account account, Scanner aUserInputScanner) {
         userAccount = account;
         userInputScanner = aUserInputScanner;
         userInput = ServiceFactory.createUserInputService();
@@ -62,12 +75,12 @@ public class WithdrawSummaryScreen implements Screen {
         menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return new TransactionScreen(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner);
             }
             default: {
                 break;
             }
         }
-        return new WelcomeScreen(userInputScanner);
+        return WelcomeScreen.getInstance(null, userInputScanner);
     }
 }

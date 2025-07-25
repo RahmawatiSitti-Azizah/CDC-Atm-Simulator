@@ -7,14 +7,23 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class TransactionScreen implements Screen {
+    private static final TransactionScreen INSTANCE = new TransactionScreen();
     private Scanner userInputScanner;
     private Account userAccount;
     private UserInputService userInput;
 
-    public TransactionScreen(Account account, Scanner aUserInputScanner) {
-        userAccount = account;
-        userInputScanner = aUserInputScanner;
+    private TransactionScreen() {
+        userAccount = null;
+        userInputScanner = null;
         userInput = ServiceFactory.createUserInputService();
+    }
+
+    public static TransactionScreen getInstance(Account userAccount, Scanner userInputScanner) {
+        TransactionScreen transactionScreen = INSTANCE;
+        transactionScreen.userAccount = userAccount;
+        transactionScreen.userInputScanner = userInputScanner;
+        transactionScreen.userInput = ServiceFactory.createUserInputService();
+        return transactionScreen;
     }
 
 
@@ -37,6 +46,6 @@ public class TransactionScreen implements Screen {
                 break;
             }
         }
-        return new WelcomeScreen(userInputScanner);
+        return WelcomeScreen.getInstance(null, userInputScanner);
     }
 }

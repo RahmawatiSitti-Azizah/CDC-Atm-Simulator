@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class FundTransferScreen implements Screen {
+    private static final FundTransferScreen INSTANCE = new FundTransferScreen();
     private Scanner userInputScanner;
     private Money transferAmount;
     private Account userAccount;
@@ -20,7 +21,19 @@ public class FundTransferScreen implements Screen {
     private TransactionAmountValidatorService transactionValidate;
     private SearchAccountService searchService;
 
+    public static FundTransferScreen getInstance() {
+        return INSTANCE;
+    }
+
+    private FundTransferScreen() {
+        this(null, null);
+    }
+
     public FundTransferScreen(Account account, Scanner aUserInputScanner) {
+        resetData(account, aUserInputScanner);
+    }
+
+    public void resetData(Account account, Scanner aUserInputScanner) {
         userAccount = account;
         userInputScanner = aUserInputScanner;
         accountTransactionService = ServiceFactory.createAccountTransactionService();
@@ -42,7 +55,7 @@ public class FundTransferScreen implements Screen {
             return transferConfirmationProcessAndGetNextScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new TransactionScreen(userAccount, userInputScanner);
+            return TransactionScreen.getInstance(userAccount, userInputScanner);
         }
     }
 
@@ -103,13 +116,14 @@ public class FundTransferScreen implements Screen {
                     accountTransactionService.transfer(userAccount, destinationAccount, transferAmount);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
-                    return new TransactionScreen(userAccount, userInputScanner);
+                    return TransactionScreen.getInstance(userAccount, userInputScanner);
                 }
                 return new FundTransferSummaryScreen(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
             }
             default: {
-                return new TransactionScreen(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner);
             }
         }
     }
+
 }

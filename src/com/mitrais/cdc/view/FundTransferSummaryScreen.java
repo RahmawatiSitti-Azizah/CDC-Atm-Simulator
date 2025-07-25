@@ -8,6 +8,7 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class FundTransferSummaryScreen implements Screen {
+    private static final FundTransferSummaryScreen INSTANCE = new FundTransferSummaryScreen();
     private Scanner userInputScanner;
     private Account userAccount;
     private Account destinationAccount;
@@ -15,7 +16,19 @@ public class FundTransferSummaryScreen implements Screen {
     private String referenceNumber;
     private Money transferAmount;
 
+    public static FundTransferSummaryScreen getInstance() {
+        return INSTANCE;
+    }
+
+    private FundTransferSummaryScreen() {
+        this(null, null, null, null, null);
+    }
+
     public FundTransferSummaryScreen(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
+        resetData(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
+    }
+
+    public void resetData(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
         this.userAccount = userAccount;
         this.userInputScanner = userInputScanner;
         this.destinationAccount = destinationAccount;
@@ -39,10 +52,10 @@ public class FundTransferSummaryScreen implements Screen {
         int menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return new TransactionScreen(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner);
             }
             default: {
-                return new WelcomeScreen(userInputScanner);
+                return WelcomeScreen.getInstance(null, userInputScanner);
             }
         }
     }

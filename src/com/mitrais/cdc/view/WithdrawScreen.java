@@ -8,12 +8,25 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class WithdrawScreen implements Screen {
+    private static final WithdrawScreen INSTANCE = new WithdrawScreen();
     private Account userAccount;
     private Scanner userInputScanner;
     private long[] arrayWithdrawAmount = {10, 50, 100};
     private UserInputService userInput;
 
+    public static WithdrawScreen getInstance() {
+        return INSTANCE;
+    }
+
+    private WithdrawScreen() {
+        this(null, null);
+    }
+
     public WithdrawScreen(Account account, Scanner aUserInputScanner) {
+        resetData(account, aUserInputScanner);
+    }
+
+    public void resetData(Account account, Scanner aUserInputScanner) {
         userAccount = account;
         userInputScanner = aUserInputScanner;
         userInput = ServiceFactory.createUserInputService();
@@ -46,6 +59,6 @@ public class WithdrawScreen implements Screen {
                 break;
             }
         }
-        return new TransactionScreen(userAccount, userInputScanner);
+        return TransactionScreen.getInstance(userAccount, userInputScanner);
     }
 }

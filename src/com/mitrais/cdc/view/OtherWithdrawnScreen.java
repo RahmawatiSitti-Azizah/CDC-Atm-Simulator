@@ -8,11 +8,24 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class OtherWithdrawnScreen implements Screen {
+    private static final OtherWithdrawnScreen INSTANCE = new OtherWithdrawnScreen();
     private Account userAccount;
     private Scanner userInputScanner;
     private UserInputService userInputService;
 
+    public static OtherWithdrawnScreen getInstance() {
+        return INSTANCE;
+    }
+
+    private OtherWithdrawnScreen() {
+        this(null, null);
+    }
+
     public OtherWithdrawnScreen(Account account, Scanner aUserInputScanner) {
+        resetData(account, aUserInputScanner);
+    }
+
+    public void resetData(Account account, Scanner aUserInputScanner) {
         userAccount = account;
         userInputScanner = aUserInputScanner;
         userInputService = ServiceFactory.createUserInputService();

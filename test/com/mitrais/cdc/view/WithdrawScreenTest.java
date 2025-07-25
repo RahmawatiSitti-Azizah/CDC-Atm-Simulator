@@ -18,7 +18,7 @@ public class WithdrawScreenTest extends TestCase {
     }
 
     public WithdrawScreen getWithdrawScreen(String input) {
-        WelcomeScreen welcomScreenTest = WelcomeScreenTest.getWelcomScreenTest("112233\n012108\n1\n" + input);
+        WelcomeScreen welcomScreenTest = WelcomeScreenTest.getWelcomeScreenTest("112233\n012108\n1\n" + input);
         Screen transactionScreen = welcomScreenTest.display();
         return (WithdrawScreen) transactionScreen.display();
     }
