@@ -1,5 +1,7 @@
 package com.mitrais.cdc.model;
 
+import java.util.Objects;
+
 public abstract class Money {
     protected long amount;
     protected String currency;
@@ -25,5 +27,16 @@ public abstract class Money {
     @Override
     public String toString() {
         return currency + amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Money money)) return false;
+        return amount == money.amount && currency.equals(money.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, currency);
     }
 }

@@ -1,5 +1,7 @@
 package com.mitrais.cdc.model;
 
+import java.util.Objects;
+
 public class Account implements Loginable {
     private String name;
     private String accountNumber;
@@ -46,11 +48,28 @@ public class Account implements Loginable {
         return accountNumber;
     }
 
-    /*public Money getBalance() {
-        return balance;
-    }*/
-
     public String getStringBalance() {
         return balance.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "name='" + name + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", pin='" + pin + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Account account)) return false;
+        return name.equals(account.name) && accountNumber.equals(account.accountNumber) && pin.equals(account.pin) && Objects.equals(balance, account.balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, accountNumber, pin, balance);
     }
 }

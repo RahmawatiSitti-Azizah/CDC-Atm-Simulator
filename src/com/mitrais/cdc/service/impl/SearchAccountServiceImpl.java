@@ -2,6 +2,7 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.SearchAccountService;
 
 import java.util.ArrayList;
@@ -14,6 +15,22 @@ class SearchAccountServiceImpl implements SearchAccountService {
     public SearchAccountServiceImpl() {
         accounts.add(new Account(new Dollar(100), "John Doe", "112233", "012108"));
         accounts.add(new Account(new Dollar(30), "Jane Doe", "112244", "932012"));
+    }
+
+    public void addAccount(Money initialBalance, String accountHolderName, String accountNumber, String pin) {
+        Account newAccount = new Account(initialBalance, accountHolderName, accountNumber, pin);
+        try {
+            Account account = getByID(accountNumber);
+            if (account != null) {
+                if (!account.equals(newAccount)) {
+                    System.out.println("There can't be 2 different accounts with the same Account Number " + accountNumber);
+                } else {
+                    System.out.println("There can't be duplicated records " + newAccount.toString());
+                }
+            }
+        } catch (Exception e) {
+            accounts.add(newAccount);
+        }
     }
 
     @Override

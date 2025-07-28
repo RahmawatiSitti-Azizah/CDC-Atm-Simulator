@@ -8,6 +8,7 @@ public class ServiceFactory {
     private static SearchAccountService searchAccount;
     private static UserInputService userInput;
     private static TransactionAmountValidatorService transactionAmountValidator;
+    private static FileService fileService;
 
     public static AccountTransactionService createAccountTransactionService() {
         if (accountTransaction == null) {
@@ -42,5 +43,12 @@ public class ServiceFactory {
             transactionAmountValidator = new TransactionAmountValidatorServiceImpl();
         }
         return transactionAmountValidator;
+    }
+
+    public static FileService createFileService() {
+        if (fileService == null) {
+            fileService = new FileServiceImpl();
+        }
+        return fileService;
     }
 }
