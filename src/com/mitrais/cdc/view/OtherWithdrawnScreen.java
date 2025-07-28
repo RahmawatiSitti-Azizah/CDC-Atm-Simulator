@@ -13,21 +13,13 @@ public class OtherWithdrawnScreen implements Screen {
     private Scanner userInputScanner;
     private UserInputService userInputService;
 
-    public static OtherWithdrawnScreen getInstance() {
+    public static OtherWithdrawnScreen getInstance(Account account, Scanner aUserInputScanner) {
+        INSTANCE.userAccount = account;
+        INSTANCE.userInputScanner = aUserInputScanner;
         return INSTANCE;
     }
 
     private OtherWithdrawnScreen() {
-        this(null, null);
-    }
-
-    public OtherWithdrawnScreen(Account account, Scanner aUserInputScanner) {
-        resetData(account, aUserInputScanner);
-    }
-
-    public void resetData(Account account, Scanner aUserInputScanner) {
-        userAccount = account;
-        userInputScanner = aUserInputScanner;
         userInputService = ServiceFactory.createUserInputService();
     }
 
@@ -39,10 +31,10 @@ public class OtherWithdrawnScreen implements Screen {
         String input = userInputScanner.nextLine();
         try {
             amount = userInputService.toValidatedMoney(input);
-            return new WithdrawSummaryScreen(amount, userAccount, userInputScanner);
+            return WithdrawSummaryScreen.getInstance(amount, userAccount, userInputScanner);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new WithdrawScreen(userAccount, userInputScanner);
+            return WithdrawScreen.getInstance(userAccount, userInputScanner);
         }
     }
 }

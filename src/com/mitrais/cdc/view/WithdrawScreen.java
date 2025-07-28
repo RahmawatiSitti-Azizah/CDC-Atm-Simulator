@@ -14,21 +14,13 @@ public class WithdrawScreen implements Screen {
     private long[] arrayWithdrawAmount = {10, 50, 100};
     private UserInputService userInput;
 
-    public static WithdrawScreen getInstance() {
+    public static WithdrawScreen getInstance(Account account, Scanner aUserInputScanner) {
+        INSTANCE.userAccount = account;
+        INSTANCE.userInputScanner = aUserInputScanner;
         return INSTANCE;
     }
 
     private WithdrawScreen() {
-        this(null, null);
-    }
-
-    public WithdrawScreen(Account account, Scanner aUserInputScanner) {
-        resetData(account, aUserInputScanner);
-    }
-
-    public void resetData(Account account, Scanner aUserInputScanner) {
-        userAccount = account;
-        userInputScanner = aUserInputScanner;
         userInput = ServiceFactory.createUserInputService();
     }
 
@@ -50,10 +42,10 @@ public class WithdrawScreen implements Screen {
             case 1:
             case 2:
             case 3: {
-                return new WithdrawSummaryScreen(new Dollar(arrayWithdrawAmount[menu - 1]), userAccount, userInputScanner);
+                return WithdrawSummaryScreen.getInstance(new Dollar(arrayWithdrawAmount[menu - 1]), userAccount, userInputScanner);
             }
             case 4: {
-                return new OtherWithdrawnScreen(userAccount, userInputScanner);
+                return OtherWithdrawnScreen.getInstance(userAccount, userInputScanner);
             }
             default: {
                 break;

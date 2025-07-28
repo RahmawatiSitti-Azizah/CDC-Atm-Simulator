@@ -20,28 +20,20 @@ public class FundTransferScreen implements Screen {
     private UserInputService userInput;
     private TransactionAmountValidatorService transactionValidate;
     private SearchAccountService searchService;
-
-    public static FundTransferScreen getInstance() {
+    
+    public static FundTransferScreen getInstance(Account account, Scanner aUserInputScanner) {
+        INSTANCE.userAccount = account;
+        INSTANCE.userInputScanner = aUserInputScanner;
+        INSTANCE.generateReferenceNumber(new Random());
         return INSTANCE;
     }
 
     private FundTransferScreen() {
-        this(null, null);
-    }
-
-    public FundTransferScreen(Account account, Scanner aUserInputScanner) {
-        resetData(account, aUserInputScanner);
-    }
-
-    public void resetData(Account account, Scanner aUserInputScanner) {
-        userAccount = account;
-        userInputScanner = aUserInputScanner;
         accountTransactionService = ServiceFactory.createAccountTransactionService();
         accountService = ServiceFactory.createAccountValidatorService();
         userInput = ServiceFactory.createUserInputService();
         transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
         searchService = ServiceFactory.createSearchAccountService();
-        generateReferenceNumber(new Random());
     }
 
     @Override
@@ -118,7 +110,7 @@ public class FundTransferScreen implements Screen {
                     System.out.println(e.getMessage());
                     return TransactionScreen.getInstance(userAccount, userInputScanner);
                 }
-                return new FundTransferSummaryScreen(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
+                return FundTransferSummaryScreen.getInstance(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
             }
             default: {
                 return TransactionScreen.getInstance(userAccount, userInputScanner);

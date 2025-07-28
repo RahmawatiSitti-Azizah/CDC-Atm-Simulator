@@ -16,7 +16,7 @@ public class FundTransferSummaryScreenTest extends TestCase {
     private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, long amount, String referenceNumber, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return new FundTransferSummaryScreen(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
+        return FundTransferSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
     }
 
     public void testWithMenu1GoToTransactionScreen() {

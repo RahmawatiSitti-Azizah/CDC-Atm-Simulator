@@ -13,17 +13,13 @@ public class TransactionScreen implements Screen {
     private UserInputService userInput;
 
     private TransactionScreen() {
-        userAccount = null;
-        userInputScanner = null;
         userInput = ServiceFactory.createUserInputService();
     }
 
     public static TransactionScreen getInstance(Account userAccount, Scanner userInputScanner) {
-        TransactionScreen transactionScreen = INSTANCE;
-        transactionScreen.userAccount = userAccount;
-        transactionScreen.userInputScanner = userInputScanner;
-        transactionScreen.userInput = ServiceFactory.createUserInputService();
-        return transactionScreen;
+        INSTANCE.userAccount = userAccount;
+        INSTANCE.userInputScanner = userInputScanner;
+        return INSTANCE;
     }
 
 
@@ -37,10 +33,10 @@ public class TransactionScreen implements Screen {
         int menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return new WithdrawScreen(userAccount, userInputScanner);
+                return WithdrawScreen.getInstance(userAccount, userInputScanner);
             }
             case 2: {
-                return new FundTransferScreen(userAccount, userInputScanner);
+                return FundTransferScreen.getInstance(userAccount, userInputScanner);
             }
             default: {
                 break;

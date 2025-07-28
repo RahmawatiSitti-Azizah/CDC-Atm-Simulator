@@ -29,7 +29,7 @@ public class OtherWithdrawnScreenTest extends TestCase {
     private OtherWithdrawnScreen getOtherWithdrawScreen(Account sourceAccount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return new OtherWithdrawnScreen(sourceAccount, new Scanner(System.in));
+        return OtherWithdrawnScreen.getInstance(sourceAccount, new Scanner(System.in));
     }
 
     public void testValidWithdrawAmountToWithdrawSummaryScreen() {

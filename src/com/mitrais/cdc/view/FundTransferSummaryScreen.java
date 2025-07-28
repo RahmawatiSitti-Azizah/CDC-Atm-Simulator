@@ -16,25 +16,17 @@ public class FundTransferSummaryScreen implements Screen {
     private String referenceNumber;
     private Money transferAmount;
 
-    public static FundTransferSummaryScreen getInstance() {
+    public static FundTransferSummaryScreen getInstance(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
+        INSTANCE.userAccount = userAccount;
+        INSTANCE.userInputScanner = userInputScanner;
+        INSTANCE.destinationAccount = destinationAccount;
+        INSTANCE.referenceNumber = referenceNumber;
+        INSTANCE.transferAmount = transferAmount;
         return INSTANCE;
     }
 
     private FundTransferSummaryScreen() {
-        this(null, null, null, null, null);
-    }
-
-    public FundTransferSummaryScreen(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
-        resetData(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
-    }
-
-    public void resetData(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
-        this.userAccount = userAccount;
-        this.userInputScanner = userInputScanner;
-        this.destinationAccount = destinationAccount;
-        this.referenceNumber = referenceNumber;
-        this.transferAmount = transferAmount;
-        this.userInput = ServiceFactory.createUserInputService();
+        userInput = ServiceFactory.createUserInputService();
     }
 
     @Override

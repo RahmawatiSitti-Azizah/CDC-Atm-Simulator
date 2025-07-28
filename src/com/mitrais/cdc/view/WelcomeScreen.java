@@ -15,18 +15,12 @@ public class WelcomeScreen implements Screen {
     private SearchAccountService searchAccountService;
 
     public static WelcomeScreen getInstance(Account userAccount, Scanner userInputScanner) {
-        WelcomeScreen welcomeScreen = INSTANCE;
-        welcomeScreen.userAccount = userAccount;
-        welcomeScreen.userInputScanner = userInputScanner;
-        welcomeScreen.validatorService = ServiceFactory.createAccountValidatorService();
-        welcomeScreen.searchAccountService = ServiceFactory.createSearchAccountService();
+        INSTANCE.userAccount = userAccount;
+        INSTANCE.userInputScanner = userInputScanner;
         return INSTANCE;
     }
 
     private WelcomeScreen() {
-        Scanner aUserInputScanner = new Scanner(System.in);
-        userAccount = null;
-        userInputScanner = aUserInputScanner;
         validatorService = ServiceFactory.createAccountValidatorService();
         searchAccountService = ServiceFactory.createSearchAccountService();
     }

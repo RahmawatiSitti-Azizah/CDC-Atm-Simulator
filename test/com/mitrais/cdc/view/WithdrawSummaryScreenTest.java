@@ -29,7 +29,7 @@ public class WithdrawSummaryScreenTest extends TestCase {
     private WithdrawSummaryScreen getWithdrawSummaryScreen(Account sourceAccount, long amount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return new WithdrawSummaryScreen(new Dollar(amount), sourceAccount, new Scanner(System.in));
+        return WithdrawSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in));
     }
 
     public void testDisplayWith1InputtoTransactionScreen() {

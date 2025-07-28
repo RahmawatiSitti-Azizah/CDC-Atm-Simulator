@@ -30,7 +30,7 @@ public class FundTransferScreenTest extends TestCase {
     private FundTransferScreen getFundTransferScreen(Account sourceAccount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return new FundTransferScreen(sourceAccount, new Scanner(System.in));
+        return FundTransferScreen.getInstance(sourceAccount, new Scanner(System.in));
     }
 
     public void testDisplayWithValidInputToFundTransferSummaryScreen() {

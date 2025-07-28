@@ -20,25 +20,17 @@ public class WithdrawSummaryScreen implements Screen {
     private AccountTransactionService accountTransaction;
     private TransactionAmountValidatorService transactionValidate;
 
-    public static WithdrawSummaryScreen getInstance() {
+    public static WithdrawSummaryScreen getInstance(Money amount, Account account, Scanner aUserInputScanner) {
+        INSTANCE.userAccount = account;
+        INSTANCE.userInputScanner = aUserInputScanner;
+        INSTANCE.amount = amount;
         return INSTANCE;
     }
 
     private WithdrawSummaryScreen() {
-        this(null, null, null);
-    }
-
-    public WithdrawSummaryScreen(Money amount, Account account, Scanner aUserInputScanner) {
-        resetData(amount, account, aUserInputScanner);
-    }
-
-    public void resetData(Money amount, Account account, Scanner aUserInputScanner) {
-        userAccount = account;
-        userInputScanner = aUserInputScanner;
         userInput = ServiceFactory.createUserInputService();
         accountTransaction = ServiceFactory.createAccountTransactionService();
         transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
-        this.amount = amount;
     }
 
     @Override
@@ -49,7 +41,7 @@ public class WithdrawSummaryScreen implements Screen {
             return printMenuAndGetScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new WithdrawScreen(userAccount, userInputScanner);
+            return WithdrawScreen.getInstance(userAccount, userInputScanner);
         }
     }
 
