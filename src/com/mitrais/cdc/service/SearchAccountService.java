@@ -4,7 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 
 public interface SearchAccountService {
-    public void addAccount(Money initialBalance, String accountHolderName, String accountNumber, String pin) throws Exception;
+    public void addAccount(Money initialBalance, String accountHolderName, String accountNumber, String pin);
 
     public Account get(String id, String otherDetail) throws Exception;
 

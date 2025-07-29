@@ -14,7 +14,12 @@ public class Main {
             return;
         }
         for (String arg : args) {
-            ServiceFactory.createFileService().importDataFromFile(arg);
+            try {
+                ServiceFactory.createFileService().importDataFromFile(arg);
+            } catch (java.io.IOException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
         }
         Screen nextScreen = WelcomeScreen.getInstance(null, new Scanner(System.in));
         while (nextScreen != null) {
