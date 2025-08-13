@@ -20,7 +20,7 @@ public class FundTransferScreen implements Screen {
     private UserInputService userInput;
     private TransactionAmountValidatorService transactionValidate;
     private SearchAccountService searchService;
-    
+
     public static FundTransferScreen getInstance(Account account, Scanner aUserInputScanner) {
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
@@ -84,8 +84,12 @@ public class FundTransferScreen implements Screen {
     }
 
     private void generateReferenceNumber(Random random) {
+        referenceNumberGenerator(random);
+    }
+
+    private void referenceNumberGenerator(Random random) {
         StringBuffer stringBuffer = new StringBuffer(String.valueOf(random.nextInt(999999)));
-        while (stringBuffer.length() < 6) {
+        while (stringBuffer.length() < 7) {
             stringBuffer.append(0);
         }
         referenceNumber = stringBuffer.toString();
@@ -105,7 +109,7 @@ public class FundTransferScreen implements Screen {
         switch (menu) {
             case 1: {
                 try {
-                    accountTransactionService.transfer(userAccount, destinationAccount, transferAmount);
+                    accountTransactionService.transfer(userAccount, destinationAccount, transferAmount, referenceNumber);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     return TransactionScreen.getInstance(userAccount, userInputScanner);

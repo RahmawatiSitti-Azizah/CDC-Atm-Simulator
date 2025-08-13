@@ -27,7 +27,8 @@ public class TransactionScreen implements Screen {
     public Screen display() {
         System.out.println("1. Withdrawn");
         System.out.println("2. Fund Transfer");
-        System.out.println("3. Exit");
+        System.out.println("3. Transaction History");
+        System.out.println("4. Exit");
         System.out.print("Please choose option[3] : ");
         String input = userInputScanner.nextLine();
         int menu = userInput.toValidatedMenu(input);
@@ -37,6 +38,9 @@ public class TransactionScreen implements Screen {
             }
             case 2: {
                 return FundTransferScreen.getInstance(userAccount, userInputScanner);
+            }
+            case 3: {
+                return HistoryTransactionScreen.getInstance(userAccount, userInputScanner);
             }
             default: {
                 break;

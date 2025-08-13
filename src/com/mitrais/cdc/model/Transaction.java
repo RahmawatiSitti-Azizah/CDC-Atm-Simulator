@@ -1,6 +1,7 @@
 package com.mitrais.cdc.model;
 
 public class Transaction {
+    public static final String SPACE = " ";
     private final Account sourceAccount;
     private final Account destinationAccount;
     private final Money amount;
@@ -33,5 +34,13 @@ public class Transaction {
 
     public String getNote() {
         return note;
+    }
+
+    @Override
+    public String toString() {
+        return referenceNumber + SPACE + note + SPACE +
+                (destinationAccount != null ?
+                        ("to " + destinationAccount.getName() + SPACE + amount.toString())
+                        : amount.toString());
     }
 }

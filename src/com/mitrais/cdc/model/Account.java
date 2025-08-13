@@ -52,6 +52,18 @@ public class Account implements Loginable {
         return balance.toString();
     }
 
+    public Money getBalance() {
+        return balance;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
