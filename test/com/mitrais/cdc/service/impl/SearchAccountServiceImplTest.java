@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,15 +26,12 @@ public class SearchAccountServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        mockRepositoryFactory = Mockito.mockStatic(RepositoryFactory.class);
-        mockRepositoryFactory.when(RepositoryFactory::createAccountRepository).thenReturn(repository);
-        serviceInTest = new SearchAccountServiceImpl();
+        serviceInTest = new SearchAccountServiceImpl(repository);
         System.setOut(new PrintStream(outputStreamCaptor));
     }
 
     @After
     public void tearDown() throws Exception {
-        mockRepositoryFactory.close();
         System.setOut(standardOut);
     }
 

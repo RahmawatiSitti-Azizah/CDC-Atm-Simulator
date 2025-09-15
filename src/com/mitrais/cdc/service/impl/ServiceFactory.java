@@ -1,5 +1,6 @@
 package com.mitrais.cdc.service.impl;
 
+import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.*;
 
 public class ServiceFactory {
@@ -13,7 +14,7 @@ public class ServiceFactory {
 
     public static AccountTransactionService createAccountTransactionService() {
         if (accountTransaction == null) {
-            accountTransaction = new AccountTransactionServiceImpl();
+            accountTransaction = new AccountTransactionServiceImpl(RepositoryFactory.createTransactionRepository(), RepositoryFactory.createAccountRepository());
         }
         return accountTransaction;
     }
@@ -27,7 +28,7 @@ public class ServiceFactory {
 
     public static SearchAccountService createSearchAccountService() {
         if (searchAccount == null) {
-            searchAccount = new SearchAccountServiceImpl();
+            searchAccount = new SearchAccountServiceImpl(RepositoryFactory.createAccountRepository());
         }
         return searchAccount;
     }
@@ -46,16 +47,16 @@ public class ServiceFactory {
         return transactionAmountValidator;
     }
 
-    public static FileService createFileService() {
+    public static FileService createFileService(SearchAccountService searchAccountService) {
         if (fileService == null) {
-            fileService = new FileServiceImpl();
+            fileService = new FileServiceImpl(searchAccountService);
         }
         return fileService;
     }
 
     public static TransactionService createTransactionService() {
         if (transactionService == null) {
-            transactionService = new TransactionServiceImpl();
+            transactionService = new TransactionServiceImpl(RepositoryFactory.createTransactionRepository());
         }
         return transactionService;
     }

@@ -11,6 +11,12 @@ import java.io.IOException;
 
 public class FileServiceImpl implements FileService {
 
+    private SearchAccountService searchAccountService;
+
+    public FileServiceImpl(SearchAccountService searchAccountService) {
+        this.searchAccountService = searchAccountService;
+    }
+
     @Override
     public void importDataFromFile(String filePath) throws IOException {
         if (!filePath.contains(".csv")) {
@@ -18,20 +24,25 @@ public class FileServiceImpl implements FileService {
             throw new IOException(ErrorConstant.FILE_FORMAT_NOT_SUPPORTED);
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            reader.readLine();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+            reader.lines().forEach(s -> {
+                String[] parts = s.split(",");
                 if (parts.length < 4) {
-                    throw new IOException("Invalid data format in file " + filePath + " file should contain accountHolderName, pin, balance, accountNumber");
+                    try {
+                        throw new IOException("Invalid data format in file " + filePath + " file should contain accountHolderName, pin, balance, accountNumber");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 String accountHolderName = parts[0].trim();
                 String pin = parts[1].trim();
                 String balance = parts[2].trim();
                 String accountNumber = parts[3].trim();
-                SearchAccountService service = ServiceFactory.createSearchAccountService();
-                service.addAccount(new Dollar(Long.parseLong(balance)), accountHolderName, accountNumber, pin);
-            }
+                try {
+                    searchAccountService.addAccount(new Dollar(Long.parseLong(balance)), accountHolderName, accountNumber, pin);
+                } catch (NumberFormatException exception) {
+                    System.out.println("skip row, no valid balance found -> potentially a header");
+                }
+            });
         } catch (IOException e) {
             throw new IOException("Error reading file: " + e.getMessage(), e);
         }

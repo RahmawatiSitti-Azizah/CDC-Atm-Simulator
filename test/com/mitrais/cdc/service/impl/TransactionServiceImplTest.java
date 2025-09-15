@@ -2,13 +2,9 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.repo.TransactionRepository;
-import com.mitrais.cdc.repo.impl.RepositoryFactory;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.util.List;
 
@@ -19,19 +15,11 @@ import static org.mockito.Mockito.when;
 
 public class TransactionServiceImplTest {
     private TransactionRepository repository = mock();
-    private MockedStatic<RepositoryFactory> mockRepositoryFactory;
     private TransactionServiceImpl serviceInTest;
 
     @Before
     public void setUp() throws Exception {
-        mockRepositoryFactory = Mockito.mockStatic(RepositoryFactory.class);
-        mockRepositoryFactory.when(RepositoryFactory::createTransactionRepository).thenReturn(repository);
-        serviceInTest = new TransactionServiceImpl();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        mockRepositoryFactory.close();
+        serviceInTest = new TransactionServiceImpl(repository);
     }
 
     @Test
@@ -61,5 +49,5 @@ public class TransactionServiceImplTest {
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assert.assertTrue(result.isEmpty());
     }
-    
+
 }

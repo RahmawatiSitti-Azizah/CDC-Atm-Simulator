@@ -70,14 +70,14 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
             }
             String referenceNumber = resultSet.getString("reference_number");
             if (referenceNumber == null) {
-                StringBuffer stringBuffer = new StringBuffer("W");
+                StringBuffer stringBuffer = new StringBuffer("W" + Math.random());
                 while (stringBuffer.length() < 7) {
                     stringBuffer.append(0);
                 }
                 referenceNumber = stringBuffer.toString();
             }
             return new Transaction(sourceAccount, destinationAccount, new Dollar(resultSet.getLong("amount")),
-                    referenceNumber, resultSet.getString("note"));
+                    referenceNumber, resultSet.getString("note"), null);
         }
         return null;
     }
@@ -100,7 +100,7 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                 "  d.account_holder_name AS destination_acount_holder_name " +
                 "FROM transaction t " +
                 "INNER JOIN account s ON s.account_number = t.source_account " +
-                "LEFT JOIN account d ON d.account_number = t.destination_account";
+                "LEFT JOIN account d ON d.account_number = t.destination_account OR t.destination_account = ";
         try {
             List<Transaction> result = queryMultipleData(query);
             return result;
@@ -117,9 +117,9 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                 "FROM transaction t " +
                 "INNER JOIN account s ON s.account_number = t.source_account " +
                 "LEFT JOIN account d ON d.account_number = t.destination_account " +
-                "WHERE t.source_account = ? ";
+                "WHERE t.source_account = ? OR t.destination_account = ?";
         try {
-            List<Transaction> result = queryMultipleData(query, sourceAccountNumber);
+            List<Transaction> result = queryMultipleData(query, sourceAccountNumber, sourceAccountNumber);
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);

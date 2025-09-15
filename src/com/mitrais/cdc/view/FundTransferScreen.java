@@ -4,6 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.*;
 import com.mitrais.cdc.service.impl.ServiceFactory;
+import com.mitrais.cdc.util.ReferenceNumberGenerator;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -24,7 +25,7 @@ public class FundTransferScreen implements Screen {
     public static FundTransferScreen getInstance(Account account, Scanner aUserInputScanner) {
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
-        INSTANCE.generateReferenceNumber(new Random());
+        INSTANCE.referenceNumber = ReferenceNumberGenerator.generateTransferRefnumber(new Random());
         return INSTANCE;
     }
 
@@ -81,18 +82,6 @@ public class FundTransferScreen implements Screen {
         }
         accountService.validateAccountNumber(input, "Invalid Account");
         destinationAccount = searchService.getByID(input);
-    }
-
-    private void generateReferenceNumber(Random random) {
-        referenceNumberGenerator(random);
-    }
-
-    private void referenceNumberGenerator(Random random) {
-        StringBuffer stringBuffer = new StringBuffer(String.valueOf(random.nextInt(999999)));
-        while (stringBuffer.length() < 7) {
-            stringBuffer.append(0);
-        }
-        referenceNumber = stringBuffer.toString();
     }
 
     private Screen transferConfirmationProcessAndGetNextScreen() {

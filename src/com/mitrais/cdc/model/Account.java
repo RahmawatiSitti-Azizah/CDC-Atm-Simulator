@@ -69,7 +69,6 @@ public class Account implements Loginable {
         return "Account{" +
                 "name='" + name + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
-                ", pin='" + pin + '\'' +
                 ", balance=" + balance +
                 '}';
     }

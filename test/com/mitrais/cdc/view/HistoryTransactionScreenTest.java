@@ -34,7 +34,7 @@ public class HistoryTransactionScreenTest {
     public void testDisplayWithTransactionHistoryThenShouldPrintTransactionAndGoToTransactionScreen() {
         HistoryTransactionScreen historyTransactionScreen = setupHistoryTransactionScreenWithInput("");
         RepositoryFactory.createTransactionRepository().saveTransaction(new Transaction(new Account(null, null, "112233", null),
-                null, new Dollar(10), null, "Withdraw"));
+                null, new Dollar(10), null, "Withdraw", null));
         setUpSystemOutCapturer();
         Assert.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();

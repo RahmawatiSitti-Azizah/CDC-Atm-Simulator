@@ -3,14 +3,14 @@ package com.mitrais.cdc.service.impl;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.repo.AccountRepository;
-import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
 
 class SearchAccountServiceImpl implements SearchAccountService {
-    private final AccountRepository accountRepository = RepositoryFactory.createAccountRepository();
+    private final AccountRepository accountRepository;
 
-    public SearchAccountServiceImpl() {
+    public SearchAccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
     public void addAccount(Money initialBalance, String accountHolderName, String accountNumber, String pin) {
