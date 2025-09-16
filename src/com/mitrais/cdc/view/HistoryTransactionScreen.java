@@ -9,16 +9,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HistoryTransactionScreen implements Screen {
-    private static final HistoryTransactionScreen INSTANCE = new HistoryTransactionScreen();
+    private static HistoryTransactionScreen INSTANCE;
     private Account userAccount;
     private Scanner userInputScanner;
     private TransactionService transactionService;
 
-    private HistoryTransactionScreen() {
-        transactionService = ServiceFactory.createTransactionService();
+    private HistoryTransactionScreen(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
-    public static HistoryTransactionScreen getInstance(Account account, Scanner aUserInputScanner) {
+    public static HistoryTransactionScreen getInstance(Account account, Scanner aUserInputScanner, TransactionService transactionService) {
+        if (INSTANCE == null) {
+            INSTANCE = new HistoryTransactionScreen(transactionService);
+        }
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
         return INSTANCE;
@@ -32,9 +35,14 @@ public class HistoryTransactionScreen implements Screen {
             System.out.println("No transaction history found for account: " + userAccount.getAccountNumber());
         } else {
             for (Transaction transaction : transactionList) {
-                System.out.println("- " + transaction);
+                Account destinationAccount = transaction.getDestinationAccount();
+                if (destinationAccount != null && destinationAccount.getAccountNumber().equals(userAccount.getAccountNumber())) {
+                    System.out.println("- " + transaction.printIncomingTransaction());
+                } else {
+                    System.out.println("- " + transaction);
+                }
             }
         }
-        return TransactionScreen.getInstance(userAccount, userInputScanner);
+        return TransactionScreen.getInstance(userAccount, userInputScanner, ServiceFactory.createUserInputService());
     }
 }

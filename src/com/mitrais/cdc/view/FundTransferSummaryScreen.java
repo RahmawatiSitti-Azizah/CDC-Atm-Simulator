@@ -8,7 +8,7 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class FundTransferSummaryScreen implements Screen {
-    private static final FundTransferSummaryScreen INSTANCE = new FundTransferSummaryScreen();
+    private static FundTransferSummaryScreen INSTANCE;
     private Scanner userInputScanner;
     private Account userAccount;
     private Account destinationAccount;
@@ -16,7 +16,10 @@ public class FundTransferSummaryScreen implements Screen {
     private String referenceNumber;
     private Money transferAmount;
 
-    public static FundTransferSummaryScreen getInstance(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber) {
+    public static FundTransferSummaryScreen getInstance(Money transferAmount, Account userAccount, Scanner userInputScanner, Account destinationAccount, String referenceNumber, UserInputService userInputService) {
+        if (INSTANCE == null) {
+            INSTANCE = new FundTransferSummaryScreen(userInputService);
+        }
         INSTANCE.userAccount = userAccount;
         INSTANCE.userInputScanner = userInputScanner;
         INSTANCE.destinationAccount = destinationAccount;
@@ -25,8 +28,8 @@ public class FundTransferSummaryScreen implements Screen {
         return INSTANCE;
     }
 
-    private FundTransferSummaryScreen() {
-        userInput = ServiceFactory.createUserInputService();
+    private FundTransferSummaryScreen(UserInputService userInputService) {
+        userInput = userInputService;
     }
 
     @Override
@@ -44,10 +47,10 @@ public class FundTransferSummaryScreen implements Screen {
         int menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return TransactionScreen.getInstance(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
             }
             default: {
-                return WelcomeScreen.getInstance(null, userInputScanner);
+                return WelcomeScreen.getInstance(null, userInputScanner, ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
             }
         }
     }

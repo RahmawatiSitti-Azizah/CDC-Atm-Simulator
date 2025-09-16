@@ -3,6 +3,7 @@ package com.mitrais.cdc.view;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class WithdrawSummaryScreenTest {
     private WithdrawSummaryScreen getWithdrawSummaryScreen(Account sourceAccount, long amount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return WithdrawSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in));
+        return WithdrawSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in), ServiceFactory.createUserInputService(), ServiceFactory.createAccountTransactionService(), ServiceFactory.createTransactionAmountValidatorService());
     }
 
     @Test

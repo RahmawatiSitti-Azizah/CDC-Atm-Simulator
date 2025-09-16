@@ -4,6 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class HistoryTransactionScreenTest {
         ByteArrayInputStream userInput = new ByteArrayInputStream(input.getBytes());
         System.setIn(userInput);
         Account userAccount = RepositoryFactory.createAccountRepository().getAccountByAccountNumber("112233");
-        return HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in));
+        return HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in), ServiceFactory.createTransactionService());
     }
 
     @Test
@@ -45,7 +46,7 @@ public class HistoryTransactionScreenTest {
     @Test
     public void testDisplayWithNoTransactionHistoryThenShouldPrintNoTransactionMessageAndGoToTransactionScreen() {
         Account userAccount = new Account(new Dollar(100), "Test User", "112255", "012108");
-        HistoryTransactionScreen historyTransactionScreen = HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in));
+        HistoryTransactionScreen historyTransactionScreen = HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in), ServiceFactory.createTransactionService());
         setUpSystemOutCapturer();
         Assert.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();

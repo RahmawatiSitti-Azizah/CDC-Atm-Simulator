@@ -8,21 +8,24 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class WelcomeScreen implements Screen {
-    private static final WelcomeScreen INSTANCE = new WelcomeScreen();
+    private static WelcomeScreen INSTANCE;
     private Scanner userInputScanner;
     private Account userAccount;
     private AccountValidatorService validatorService;
     private SearchAccountService searchAccountService;
 
-    public static WelcomeScreen getInstance(Account userAccount, Scanner userInputScanner) {
+    public static WelcomeScreen getInstance(Account userAccount, Scanner userInputScanner, SearchAccountService searchAccountService, AccountValidatorService accountValidatorService) {
+        if (INSTANCE == null) {
+            INSTANCE = new WelcomeScreen(searchAccountService, accountValidatorService);
+        }
         INSTANCE.userAccount = userAccount;
         INSTANCE.userInputScanner = userInputScanner;
         return INSTANCE;
     }
 
-    private WelcomeScreen() {
-        validatorService = ServiceFactory.createAccountValidatorService();
-        searchAccountService = ServiceFactory.createSearchAccountService();
+    private WelcomeScreen(SearchAccountService searchAccountService, AccountValidatorService accountValidatorService) {
+        validatorService = accountValidatorService;
+        this.searchAccountService = searchAccountService;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class WelcomeScreen implements Screen {
             String accountNumber = getAccountNumberFromUserInput();
             String inputPin = getPinFromUserInput();
             userAccount = searchAccountService.get(accountNumber, inputPin);
-            return TransactionScreen.getInstance(userAccount, userInputScanner);
+            return TransactionScreen.getInstance(userAccount, userInputScanner, ServiceFactory.createUserInputService());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return this;

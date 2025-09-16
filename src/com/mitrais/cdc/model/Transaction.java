@@ -1,6 +1,7 @@
 package com.mitrais.cdc.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     public static final String SPACE = " ";
@@ -42,9 +43,12 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return referenceNumber + SPACE + note + SPACE +
+        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE +
                 (destinationAccount != null ?
-                        ("to " + destinationAccount.getName() + SPACE + amount.toString())
-                        : amount.toString());
+                        ("to " + destinationAccount.getName() + SPACE) : "") + amount.toString();
+    }
+
+    public String printIncomingTransaction() {
+        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE + "from" + SPACE + sourceAccount.getName() + SPACE + amount.toString();
     }
 }

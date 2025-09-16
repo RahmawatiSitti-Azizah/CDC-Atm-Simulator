@@ -3,14 +3,13 @@ package com.mitrais.cdc.view;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.*;
-import com.mitrais.cdc.service.impl.ServiceFactory;
 import com.mitrais.cdc.util.ReferenceNumberGenerator;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class FundTransferScreen implements Screen {
-    private static final FundTransferScreen INSTANCE = new FundTransferScreen();
+    private static FundTransferScreen INSTANCE;
     private Scanner userInputScanner;
     private Money transferAmount;
     private Account userAccount;
@@ -22,19 +21,22 @@ public class FundTransferScreen implements Screen {
     private TransactionAmountValidatorService transactionValidate;
     private SearchAccountService searchService;
 
-    public static FundTransferScreen getInstance(Account account, Scanner aUserInputScanner) {
+    public static FundTransferScreen getInstance(Account account, Scanner aUserInputScanner, AccountTransactionService accountTransactionService, AccountValidatorService accountValidatorService, UserInputService userInputService, TransactionAmountValidatorService transactionAmountValidatorService, SearchAccountService searchAccountService) {
+        if (INSTANCE == null) {
+            INSTANCE = new FundTransferScreen(accountTransactionService, accountValidatorService, userInputService, transactionAmountValidatorService, searchAccountService);
+        }
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
         INSTANCE.referenceNumber = ReferenceNumberGenerator.generateTransferRefnumber(new Random());
         return INSTANCE;
     }
 
-    private FundTransferScreen() {
-        accountTransactionService = ServiceFactory.createAccountTransactionService();
-        accountService = ServiceFactory.createAccountValidatorService();
-        userInput = ServiceFactory.createUserInputService();
-        transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
-        searchService = ServiceFactory.createSearchAccountService();
+    private FundTransferScreen(AccountTransactionService accountTransactionService, AccountValidatorService accountValidatorService, UserInputService userInputService, TransactionAmountValidatorService transactionAmountValidatorService, SearchAccountService searchAccountService) {
+        this.accountTransactionService = accountTransactionService;
+        this.accountService = accountValidatorService;
+        this.userInput = userInputService;
+        this.transactionValidate = transactionAmountValidatorService;
+        this.searchService = searchAccountService;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class FundTransferScreen implements Screen {
             return transferConfirmationProcessAndGetNextScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return TransactionScreen.getInstance(userAccount, userInputScanner);
+            return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
         }
     }
 
@@ -101,12 +103,12 @@ public class FundTransferScreen implements Screen {
                     accountTransactionService.transfer(userAccount, destinationAccount, transferAmount, referenceNumber);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
-                    return TransactionScreen.getInstance(userAccount, userInputScanner);
+                    return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
                 }
-                return FundTransferSummaryScreen.getInstance(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber);
+                return FundTransferSummaryScreen.getInstance(transferAmount, userAccount, userInputScanner, destinationAccount, referenceNumber, userInput);
             }
             default: {
-                return TransactionScreen.getInstance(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
             }
         }
     }

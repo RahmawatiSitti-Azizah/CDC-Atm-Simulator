@@ -8,19 +8,22 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class OtherWithdrawnScreen implements Screen {
-    private static final OtherWithdrawnScreen INSTANCE = new OtherWithdrawnScreen();
+    private static OtherWithdrawnScreen INSTANCE;
     private Account userAccount;
     private Scanner userInputScanner;
     private UserInputService userInputService;
 
-    public static OtherWithdrawnScreen getInstance(Account account, Scanner aUserInputScanner) {
+    public static OtherWithdrawnScreen getInstance(Account account, Scanner aUserInputScanner, UserInputService userInputService) {
+        if (INSTANCE == null) {
+            INSTANCE = new OtherWithdrawnScreen(userInputService);
+        }
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
         return INSTANCE;
     }
 
-    private OtherWithdrawnScreen() {
-        userInputService = ServiceFactory.createUserInputService();
+    private OtherWithdrawnScreen(UserInputService userInputService) {
+        this.userInputService = userInputService;
     }
 
     @Override
@@ -31,10 +34,10 @@ public class OtherWithdrawnScreen implements Screen {
         String input = userInputScanner.nextLine();
         try {
             amount = userInputService.toValidatedMoney(input);
-            return WithdrawSummaryScreen.getInstance(amount, userAccount, userInputScanner);
+            return WithdrawSummaryScreen.getInstance(amount, userAccount, userInputScanner, ServiceFactory.createUserInputService(), ServiceFactory.createAccountTransactionService(), ServiceFactory.createTransactionAmountValidatorService());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return WithdrawScreen.getInstance(userAccount, userInputScanner);
+            return WithdrawScreen.getInstance(userAccount, userInputScanner, userInputService);
         }
     }
 }

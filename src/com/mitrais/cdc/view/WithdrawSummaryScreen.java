@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class WithdrawSummaryScreen implements Screen {
-    private static final WithdrawSummaryScreen INSTANCE = new WithdrawSummaryScreen();
+    private static WithdrawSummaryScreen INSTANCE;
     private Money amount;
     private Account userAccount;
     private Scanner userInputScanner;
@@ -20,17 +20,20 @@ public class WithdrawSummaryScreen implements Screen {
     private AccountTransactionService accountTransaction;
     private TransactionAmountValidatorService transactionValidate;
 
-    public static WithdrawSummaryScreen getInstance(Money amount, Account account, Scanner aUserInputScanner) {
+    public static WithdrawSummaryScreen getInstance(Money amount, Account account, Scanner aUserInputScanner, UserInputService userInputService, AccountTransactionService accountTransactionService, TransactionAmountValidatorService transactionAmountValidatorService) {
+        if (INSTANCE == null) {
+            INSTANCE = new WithdrawSummaryScreen(userInputService, accountTransactionService, transactionAmountValidatorService);
+        }
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
         INSTANCE.amount = amount;
         return INSTANCE;
     }
 
-    private WithdrawSummaryScreen() {
-        userInput = ServiceFactory.createUserInputService();
-        accountTransaction = ServiceFactory.createAccountTransactionService();
-        transactionValidate = ServiceFactory.createTransactionAmountValidatorService();
+    private WithdrawSummaryScreen(UserInputService userInputService, AccountTransactionService accountTransactionService, TransactionAmountValidatorService transactionAmountValidatorService) {
+        userInput = userInputService;
+        accountTransaction = accountTransactionService;
+        transactionValidate = transactionAmountValidatorService;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class WithdrawSummaryScreen implements Screen {
             return printMenuAndGetScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return WithdrawScreen.getInstance(userAccount, userInputScanner);
+            return WithdrawScreen.getInstance(userAccount, userInputScanner, userInput);
         }
     }
 
@@ -67,12 +70,12 @@ public class WithdrawSummaryScreen implements Screen {
         menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return TransactionScreen.getInstance(userAccount, userInputScanner);
+                return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
             }
             default: {
                 break;
             }
         }
-        return WelcomeScreen.getInstance(null, userInputScanner);
+        return WelcomeScreen.getInstance(null, userInputScanner, ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
     }
 }

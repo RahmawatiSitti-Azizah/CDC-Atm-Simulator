@@ -1,5 +1,6 @@
 package com.mitrais.cdc.view;
 
+import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ public class WelcomeScreenTest {
     public static WelcomeScreen getWelcomeScreenTest(String input) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(input.getBytes());
         System.setIn(userInput);
-        return WelcomeScreen.getInstance(null, new Scanner(System.in));
+        return WelcomeScreen.getInstance(null, new Scanner(System.in), ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class FundTransferSummaryScreenTest {
     private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, long amount, String referenceNumber, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return FundTransferSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber);
+        return FundTransferSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber, ServiceFactory.createUserInputService());
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class OtherWithdrawnScreenTest {
     private OtherWithdrawnScreen getOtherWithdrawScreen(Account sourceAccount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return OtherWithdrawnScreen.getInstance(sourceAccount, new Scanner(System.in));
+        return OtherWithdrawnScreen.getInstance(sourceAccount, new Scanner(System.in), ServiceFactory.createUserInputService());
     }
 
     @Test

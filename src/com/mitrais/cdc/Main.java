@@ -26,7 +26,7 @@ public class Main {
                 return;
             }
         }
-        Screen nextScreen = WelcomeScreen.getInstance(null, new Scanner(System.in));
+        Screen nextScreen = WelcomeScreen.getInstance(null, new Scanner(System.in), ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
         while (nextScreen != null) {
             nextScreen = nextScreen.display();
         }

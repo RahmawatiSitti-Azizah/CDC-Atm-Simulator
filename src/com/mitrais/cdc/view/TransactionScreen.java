@@ -7,16 +7,19 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class TransactionScreen implements Screen {
-    private static final TransactionScreen INSTANCE = new TransactionScreen();
+    private static TransactionScreen INSTANCE;
     private Scanner userInputScanner;
     private Account userAccount;
     private UserInputService userInput;
 
-    private TransactionScreen() {
-        userInput = ServiceFactory.createUserInputService();
+    private TransactionScreen(UserInputService userInputService) {
+        userInput = userInputService;
     }
 
-    public static TransactionScreen getInstance(Account userAccount, Scanner userInputScanner) {
+    public static TransactionScreen getInstance(Account userAccount, Scanner userInputScanner, UserInputService userInputService) {
+        if (INSTANCE == null) {
+            INSTANCE = new TransactionScreen(userInputService);
+        }
         INSTANCE.userAccount = userAccount;
         INSTANCE.userInputScanner = userInputScanner;
         return INSTANCE;
@@ -34,18 +37,18 @@ public class TransactionScreen implements Screen {
         int menu = userInput.toValidatedMenu(input);
         switch (menu) {
             case 1: {
-                return WithdrawScreen.getInstance(userAccount, userInputScanner);
+                return WithdrawScreen.getInstance(userAccount, userInputScanner, userInput);
             }
             case 2: {
-                return FundTransferScreen.getInstance(userAccount, userInputScanner);
+                return FundTransferScreen.getInstance(userAccount, userInputScanner, ServiceFactory.createAccountTransactionService(), ServiceFactory.createAccountValidatorService(), userInput, ServiceFactory.createTransactionAmountValidatorService(), ServiceFactory.createSearchAccountService());
             }
             case 3: {
-                return HistoryTransactionScreen.getInstance(userAccount, userInputScanner);
+                return HistoryTransactionScreen.getInstance(userAccount, userInputScanner, ServiceFactory.createTransactionService());
             }
             default: {
                 break;
             }
         }
-        return WelcomeScreen.getInstance(null, userInputScanner);
+        return WelcomeScreen.getInstance(null, userInputScanner, ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
     }
 }

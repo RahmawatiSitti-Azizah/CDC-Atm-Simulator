@@ -39,7 +39,7 @@ public class FundTransferScreenTest {
     private FundTransferScreen getFundTransferScreen(Account sourceAccount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        return FundTransferScreen.getInstance(sourceAccount, new Scanner(System.in));
+        return FundTransferScreen.getInstance(sourceAccount, new Scanner(System.in), ServiceFactory.createAccountTransactionService(), ServiceFactory.createAccountValidatorService(), ServiceFactory.createUserInputService(), ServiceFactory.createTransactionAmountValidatorService(), ServiceFactory.createSearchAccountService());
     }
 
     @Test

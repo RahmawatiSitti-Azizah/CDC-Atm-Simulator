@@ -69,15 +69,8 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                         resultSet.getString("destination_account"), null);
             }
             String referenceNumber = resultSet.getString("reference_number");
-            if (referenceNumber == null) {
-                StringBuffer stringBuffer = new StringBuffer("W" + Math.random());
-                while (stringBuffer.length() < 7) {
-                    stringBuffer.append(0);
-                }
-                referenceNumber = stringBuffer.toString();
-            }
             return new Transaction(sourceAccount, destinationAccount, new Dollar(resultSet.getLong("amount")),
-                    referenceNumber, resultSet.getString("note"), null);
+                    referenceNumber, resultSet.getString("note"), resultSet.getTimestamp("transaction_date").toLocalDateTime());
         }
         return null;
     }
@@ -167,11 +160,11 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                 "FROM transaction t " +
                 "INNER JOIN account s ON s.account_number = t.source_account " +
                 "LEFT JOIN account d ON d.account_number = t.destination_account " +
-                "WHERE t.source_account = ? " +
+                "WHERE t.source_account = ? OR t.destination_account = ? " +
                 "ORDER BY t.transaction_date DESC " +
                 "LIMIT ?";
         try {
-            List<Transaction> result = queryMultipleData(query, sourceAccountNumber, size);
+            List<Transaction> result = queryMultipleData(query, sourceAccountNumber, sourceAccountNumber, size);
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);

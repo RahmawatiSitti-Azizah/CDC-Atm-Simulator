@@ -8,20 +8,23 @@ import com.mitrais.cdc.service.impl.ServiceFactory;
 import java.util.Scanner;
 
 public class WithdrawScreen implements Screen {
-    private static final WithdrawScreen INSTANCE = new WithdrawScreen();
+    private static WithdrawScreen INSTANCE;
     private Account userAccount;
     private Scanner userInputScanner;
     private long[] arrayWithdrawAmount = {10, 50, 100};
     private UserInputService userInput;
 
-    public static WithdrawScreen getInstance(Account account, Scanner aUserInputScanner) {
+    public static WithdrawScreen getInstance(Account account, Scanner aUserInputScanner, UserInputService userInputService) {
+        if (INSTANCE == null) {
+            INSTANCE = new WithdrawScreen(userInputService);
+        }
         INSTANCE.userAccount = account;
         INSTANCE.userInputScanner = aUserInputScanner;
         return INSTANCE;
     }
 
-    private WithdrawScreen() {
-        userInput = ServiceFactory.createUserInputService();
+    private WithdrawScreen(UserInputService userInputService) {
+        userInput = userInputService;
     }
 
     @Override
@@ -42,15 +45,15 @@ public class WithdrawScreen implements Screen {
             case 1:
             case 2:
             case 3: {
-                return WithdrawSummaryScreen.getInstance(new Dollar(arrayWithdrawAmount[menu - 1]), userAccount, userInputScanner);
+                return WithdrawSummaryScreen.getInstance(new Dollar(arrayWithdrawAmount[menu - 1]), userAccount, userInputScanner, ServiceFactory.createUserInputService(), ServiceFactory.createAccountTransactionService(), ServiceFactory.createTransactionAmountValidatorService());
             }
             case 4: {
-                return OtherWithdrawnScreen.getInstance(userAccount, userInputScanner);
+                return OtherWithdrawnScreen.getInstance(userAccount, userInputScanner, userInput);
             }
             default: {
                 break;
             }
         }
-        return TransactionScreen.getInstance(userAccount, userInputScanner);
+        return TransactionScreen.getInstance(userAccount, userInputScanner, userInput);
     }
 }
