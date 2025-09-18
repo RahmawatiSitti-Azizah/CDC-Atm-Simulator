@@ -30,6 +30,9 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
 
     @Override
     public void transfer(Account sourceAccount, Account destinationAccount, Money amount, String referenceNumber) throws Exception {
+        if (sourceAccount.getAccountNumber().equals(destinationAccount.getAccountNumber())) {
+            throw new Exception("invalid transfer: destination account is the same as source account");
+        }
         sourceAccount.decreaseBalance(amount);
         destinationAccount.increaseBalance(amount);
         transactionRepository.saveTransaction(new Transaction(sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", null));

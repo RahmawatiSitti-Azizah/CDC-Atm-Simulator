@@ -41,6 +41,10 @@ public class Transaction {
         return note;
     }
 
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
     @Override
     public String toString() {
         return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE +

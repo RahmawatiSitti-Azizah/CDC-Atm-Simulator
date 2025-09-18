@@ -161,10 +161,10 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                 "INNER JOIN account s ON s.account_number = t.source_account " +
                 "LEFT JOIN account d ON d.account_number = t.destination_account " +
                 "WHERE t.source_account = ? OR t.destination_account = ? " +
-                "ORDER BY t.transaction_date DESC " +
                 "LIMIT ?";
         try {
             List<Transaction> result = queryMultipleData(query, sourceAccountNumber, sourceAccountNumber, size);
+            result = result.stream().sorted((t1, t2) -> t2.getTransactionDate().compareTo(t1.getTransactionDate())).toList();
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
