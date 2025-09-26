@@ -5,6 +5,7 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +17,12 @@ public class WithdrawSummaryScreenTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
+    @BeforeAll
+    public static void setUp() {
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "113377", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "113388", "012109"));
+    }
+
     private void setUpSystemOutCapturer() {
         System.setOut(new PrintStream(outputStreamCaptor));
     }
@@ -25,7 +32,7 @@ public class WithdrawSummaryScreenTest {
     }
 
     private static Account createAccount() {
-        return RepositoryFactory.createAccountRepository().getAccountByAccountNumber("112233");
+        return RepositoryFactory.createAccountRepository().getAccountByAccountNumber("113377");
     }
 
     private WithdrawSummaryScreen getWithdrawSummaryScreen(Account sourceAccount, long amount, String menuInput) {
@@ -69,7 +76,7 @@ public class WithdrawSummaryScreenTest {
     @Test
     public void testWithdrawWithValidAmount() throws Exception {
         Account account = createAccount();
-        Account initialAccount = RepositoryFactory.createAccountRepository().getAccountByAccountNumber("112233");
+        Account initialAccount = RepositoryFactory.createAccountRepository().getAccountByAccountNumber("113377");
         initialAccount.decreaseBalance(new Dollar(20));
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "jj\n");
         withdrawSummaryScreen.display();

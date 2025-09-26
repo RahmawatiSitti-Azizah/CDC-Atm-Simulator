@@ -2,8 +2,10 @@ package com.mitrais.cdc.view;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,6 +17,12 @@ public class OtherWithdrawnScreenTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
+    @BeforeAll
+    public static void setUp() {
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112299", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112200", "012109"));
+    }
+
     private void setUpSystemOutCapturer() {
         System.setOut(new PrintStream(outputStreamCaptor));
     }
@@ -24,7 +32,7 @@ public class OtherWithdrawnScreenTest {
     }
 
     private static Account createAccount(long balance) {
-        Account account = new Account(new Dollar(balance), "Jane Doe", "112255", "112233");
+        Account account = new Account(new Dollar(balance), "Jane Doe", "112299", "112233");
         return account;
     }
 

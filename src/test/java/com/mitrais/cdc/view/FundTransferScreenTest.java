@@ -5,8 +5,8 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ public class FundTransferScreenTest {
         System.setOut(standardOut);
     }
 
-    @BeforeTestClass
+    @BeforeAll
     public static void setUp() {
         RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112233", "012108"));
         RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112244", "012109"));
