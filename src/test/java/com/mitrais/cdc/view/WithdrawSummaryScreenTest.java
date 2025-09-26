@@ -4,8 +4,8 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,7 +39,7 @@ public class WithdrawSummaryScreenTest {
         Account account = createAccount();
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "1\n");
         Screen nextScreen = withdrawSummaryScreen.display();
-        Assert.assertTrue(nextScreen instanceof TransactionScreen);
+        Assertions.assertTrue(nextScreen instanceof TransactionScreen);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class WithdrawSummaryScreenTest {
         Account account = createAccount();
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "2\n");
         Screen nextScreen = withdrawSummaryScreen.display();
-        Assert.assertTrue(nextScreen instanceof WelcomeScreen);
+        Assertions.assertTrue(nextScreen instanceof WelcomeScreen);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class WithdrawSummaryScreenTest {
         Account account = createAccount();
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "as1\n");
         Screen nextScreen = withdrawSummaryScreen.display();
-        Assert.assertTrue(nextScreen instanceof WelcomeScreen);
+        Assertions.assertTrue(nextScreen instanceof WelcomeScreen);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class WithdrawSummaryScreenTest {
         Account account = createAccount();
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "jj\n");
         Screen nextScreen = withdrawSummaryScreen.display();
-        Assert.assertTrue(nextScreen instanceof WelcomeScreen);
+        Assertions.assertTrue(nextScreen instanceof WelcomeScreen);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class WithdrawSummaryScreenTest {
         initialAccount.decreaseBalance(new Dollar(20));
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 20, "jj\n");
         withdrawSummaryScreen.display();
-        Assert.assertTrue(account.getStringBalance().equals(initialAccount.getStringBalance()));
+        Assertions.assertTrue(account.getStringBalance().equals(initialAccount.getStringBalance()));
     }
 
     @Test
@@ -83,8 +83,8 @@ public class WithdrawSummaryScreenTest {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 5, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        Assert.assertTrue(account.getStringBalance().equals(initialBalance));
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
+        Assertions.assertTrue(account.getStringBalance().equals(initialBalance));
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         closeSystemOutCapturer();
     }
 
@@ -95,8 +95,8 @@ public class WithdrawSummaryScreenTest {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 1010, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        Assert.assertTrue(account.getStringBalance().equals(initialBalance));
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
+        Assertions.assertTrue(account.getStringBalance().equals(initialBalance));
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
         closeSystemOutCapturer();
     }
 
@@ -107,8 +107,8 @@ public class WithdrawSummaryScreenTest {
         WithdrawSummaryScreen withdrawSummaryScreen = getWithdrawSummaryScreen(account, 500, "jj\n");
         setUpSystemOutCapturer();
         withdrawSummaryScreen.display();
-        Assert.assertTrue(account.getStringBalance().equals(initialBalance));
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $500"));
+        Assertions.assertTrue(account.getStringBalance().equals(initialBalance));
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $500"));
         closeSystemOutCapturer();
     }
 }

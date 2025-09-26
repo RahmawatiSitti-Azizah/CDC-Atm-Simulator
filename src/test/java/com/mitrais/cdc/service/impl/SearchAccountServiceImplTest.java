@@ -5,10 +5,10 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.AccountRepository;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.util.ErrorConstant;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import java.io.ByteArrayOutputStream;
@@ -24,13 +24,13 @@ public class SearchAccountServiceImplTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         serviceInTest = new SearchAccountServiceImpl(repository);
         System.setOut(new PrintStream(outputStreamCaptor));
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         System.setOut(standardOut);
     }
@@ -53,7 +53,7 @@ public class SearchAccountServiceImplTest {
         serviceInTest.addAccount(new Dollar(10), "Jane Doe", "112233", "123456");
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
         verify(repository, never()).saveAccount(any());
-        Assert.assertTrue(outputStreamCaptor.toString().contains(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER));
+        Assertions.assertTrue(outputStreamCaptor.toString().contains(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class SearchAccountServiceImplTest {
         serviceInTest.addAccount(new Dollar(10), "Jane Doe", "112233", "123456");
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
         verify(repository, never()).saveAccount(any());
-        Assert.assertTrue(outputStreamCaptor.toString().contains(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER));
+        Assertions.assertTrue(outputStreamCaptor.toString().contains(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class SearchAccountServiceImplTest {
         Account account = getAccount(100, "Jane Doe", "112233", "123456");
         when(repository.getAccountByAccountNumber(anyString())).thenReturn(account);
         Account result = serviceInTest.get("112233", "123456");
-        Assert.assertEquals(account, result);
+        Assertions.assertEquals(account, result);
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
     }
 
@@ -78,9 +78,9 @@ public class SearchAccountServiceImplTest {
     public void testGetAccount_whenInvalidPin_thenReturnInvalidAccountNumberPinException() {
         Account account = getAccount(100, "Jane Doe", "112233", "123456");
         when(repository.getAccountByAccountNumber(anyString())).thenReturn(account);
-        Exception exception = Assert.assertThrows(Exception.class, () -> serviceInTest.get("112233", "111111"));
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.get("112233", "111111"));
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
-        Assert.assertEquals("Invalid Account Number/PIN", exception.getMessage());
+        Assertions.assertEquals("Invalid Account Number/PIN", exception.getMessage());
     }
 
     @Test
@@ -88,15 +88,15 @@ public class SearchAccountServiceImplTest {
         Account account = getAccount(100, "Jane Doe", "112233", "123456");
         when(repository.getAccountByAccountNumber(anyString())).thenReturn(account);
         Account result = serviceInTest.getByID("112233");
-        Assert.assertEquals(account, result);
+        Assertions.assertEquals(account, result);
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
     }
 
     @Test
     public void testGetById_whenNotFound_thenReturnInvalidAccountException() throws Exception {
         when(repository.getAccountByAccountNumber(anyString())).thenReturn(null);
-        Exception exception = Assert.assertThrows(Exception.class, () -> serviceInTest.getByID("112233"));
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.getByID("112233"));
         verify(repository, times(1)).getAccountByAccountNumber(anyString());
-        Assert.assertEquals("Invalid Account", exception.getMessage());
+        Assertions.assertEquals("Invalid Account", exception.getMessage());
     }
 }

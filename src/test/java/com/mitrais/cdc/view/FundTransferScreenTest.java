@@ -4,9 +4,9 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ public class FundTransferScreenTest {
         System.setOut(standardOut);
     }
 
-    @BeforeClass
+    @BeforeTestClass
     public static void setUp() {
         RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112233", "012108"));
         RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112244", "012109"));
@@ -47,21 +47,21 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\n\n1\n");
         Screen nextScreen = fundTransferScreen.display();
-        Assert.assertTrue(nextScreen instanceof FundTransferSummaryScreen);
+        Assertions.assertTrue(nextScreen instanceof FundTransferSummaryScreen);
     }
 
     @Test
     public void testDisplayWithEscForAccountNumberInput() {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "Esc\n");
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
     }
 
     @Test
     public void testWithEmptyAccountNumberGotoTransactionScreen() {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "\n");
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
     }
 
     @Test
@@ -69,8 +69,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "dsda\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
         closeSystemOutCapturer();
     }
 
@@ -79,8 +79,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "1231\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Account Number should have 6 digits length"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Account Number should have 6 digits length"));
         closeSystemOutCapturer();
     }
 
@@ -89,8 +89,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "123111\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
         closeSystemOutCapturer();
     }
 
@@ -99,8 +99,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(!outputStreamCaptor.toString().contains("Invalid"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(!outputStreamCaptor.toString().contains("Invalid"));
         closeSystemOutCapturer();
     }
 
@@ -109,8 +109,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\nss\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         closeSystemOutCapturer();
     }
 
@@ -119,8 +119,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n0\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Minimum amount to transfer is $1"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Minimum amount to transfer is $1"));
         closeSystemOutCapturer();
     }
 
@@ -129,8 +129,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n110\n\n1\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $110"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $110"));
         closeSystemOutCapturer();
     }
 
@@ -139,8 +139,8 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n1001\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
         closeSystemOutCapturer();
     }
 
@@ -152,10 +152,10 @@ public class FundTransferScreenTest {
             destinationAccount.increaseBalance(new Dollar(50));
             FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\n\n1\n");
             fundTransferScreen.display();
-            Assert.assertTrue(account.getStringBalance().equals("$50"));
-            Assert.assertTrue(destinationAccount.getStringBalance().equals(ServiceFactory.createSearchAccountService().getByID("112244").getStringBalance()));
+            Assertions.assertTrue(account.getStringBalance().equals("$50"));
+            Assertions.assertTrue(destinationAccount.getStringBalance().equals(ServiceFactory.createSearchAccountService().getByID("112244").getStringBalance()));
         } catch (Exception e) {
-            Assert.assertTrue(false);
+            Assertions.assertTrue(false);
         }
 
     }
@@ -165,7 +165,7 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\nss\n");
         Screen nextScreen = fundTransferScreen.display();
-        Assert.assertTrue(nextScreen instanceof TransactionScreen);
+        Assertions.assertTrue(nextScreen instanceof TransactionScreen);
     }
 
     @Test
@@ -173,7 +173,7 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n10\n\n2\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         closeSystemOutCapturer();
     }
 }

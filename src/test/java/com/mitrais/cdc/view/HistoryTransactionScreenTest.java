@@ -5,8 +5,8 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,9 +37,9 @@ public class HistoryTransactionScreenTest {
         RepositoryFactory.createTransactionRepository().saveTransaction(new Transaction(new Account(null, null, "112233", null),
                 null, new Dollar(10), null, "Withdraw", null));
         setUpSystemOutCapturer();
-        Assert.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();
-        Assert.assertTrue(outputString.contains("Withdraw") || outputString.contains("Transfer"));
+        Assertions.assertTrue(outputString.contains("Withdraw") || outputString.contains("Transfer"));
         closeSystemOutCapturer();
     }
 
@@ -48,9 +48,9 @@ public class HistoryTransactionScreenTest {
         Account userAccount = new Account(new Dollar(100), "Test User", "112255", "012108");
         HistoryTransactionScreen historyTransactionScreen = HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in), ServiceFactory.createTransactionService());
         setUpSystemOutCapturer();
-        Assert.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();
-        Assert.assertTrue(outputString.contains("No transaction history found for account: 112255"));
+        Assertions.assertTrue(outputString.contains("No transaction history found for account: 112255"));
         closeSystemOutCapturer();
     }
 }

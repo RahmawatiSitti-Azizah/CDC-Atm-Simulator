@@ -1,7 +1,7 @@
 package com.mitrais.cdc.view;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,36 +27,36 @@ public class WithdrawScreenTest {
     @Test
     public void testDisplayWithdrawMenu1toWithdrawSummaryScreen() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("1\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
     }
 
     @Test
     public void testDisplayWithdrawMenu2toWithdrawSummaryScreen() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("2\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
     }
 
     @Test
     public void testDisplayWithdrawMenu3toWithdrawSummaryScreen() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("3\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof WithdrawSummaryScreen);
     }
 
     @Test
     public void testDisplayWithdrawMenutoOtherAmountScreen() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("4\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof OtherWithdrawnScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof OtherWithdrawnScreen);
     }
 
     @Test
     public void testDisplayWithdrawMenuExit() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("5\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof TransactionScreen);
     }
 
     @Test
     public void testDisplayWithdrawInvalidMenu() {
         WithdrawScreen withdrawScreen = getWithdrawScreen("s\n");
-        Assert.assertTrue(withdrawScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(withdrawScreen.display() instanceof TransactionScreen);
     }
 }

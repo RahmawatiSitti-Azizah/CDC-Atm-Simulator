@@ -3,8 +3,8 @@ package com.mitrais.cdc.view;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.util.Scanner;
@@ -27,7 +27,7 @@ public class FundTransferSummaryScreenTest {
         Account sourceAccount = createAccount("112233", 200);
         Account destinationAccount = createAccount("112244", 50);
         FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "1\n");
-        Assert.assertTrue(fundTransferSummaryScreen.display() instanceof TransactionScreen);
+        Assertions.assertTrue(fundTransferSummaryScreen.display() instanceof TransactionScreen);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class FundTransferSummaryScreenTest {
         Account sourceAccount = createAccount("112233", 200);
         Account destinationAccount = createAccount("112244", 50);
         FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "2\n");
-        Assert.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        Assertions.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
     }
 
     @Test
@@ -43,10 +43,10 @@ public class FundTransferSummaryScreenTest {
         Account sourceAccount = createAccount("112233", 200);
         Account destinationAccount = createAccount("112244", 50);
         FundTransferSummaryScreen fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "3\n");
-        Assert.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        Assertions.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
         fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "sqw11\n");
-        Assert.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        Assertions.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
         fundTransferSummaryScreen = getFundTransferScreen(sourceAccount, destinationAccount, 70, "012311", "\n");
-        Assert.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
+        Assertions.assertTrue(fundTransferSummaryScreen.display() instanceof WelcomeScreen);
     }
 }

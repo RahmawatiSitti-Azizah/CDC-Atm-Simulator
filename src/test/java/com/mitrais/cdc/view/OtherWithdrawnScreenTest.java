@@ -3,8 +3,8 @@ package com.mitrais.cdc.view;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.service.impl.ServiceFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,7 +38,7 @@ public class OtherWithdrawnScreenTest {
     public void testValidWithdrawAmountToWithdrawSummaryScreen() {
         Account account = createAccount(100);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "20\n");
-        Assert.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawSummaryScreen);
+        Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawSummaryScreen);
     }
 
     @Test
@@ -46,9 +46,9 @@ public class OtherWithdrawnScreenTest {
         Account account = createAccount(100);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "10s\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        Assert.assertTrue(account.getStringBalance().equals("$100"));
+        Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
+        Assertions.assertTrue(account.getStringBalance().equals("$100"));
         closeSystemOutCapturer();
     }
 
@@ -57,9 +57,9 @@ public class OtherWithdrawnScreenTest {
         Account account = createAccount(100);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "-10\n");
         setUpSystemOutCapturer();
-        Assert.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
-        Assert.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
-        Assert.assertTrue(account.getStringBalance().equals("$100"));
+        Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
+        Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
+        Assertions.assertTrue(account.getStringBalance().equals("$100"));
         closeSystemOutCapturer();
     }
 }
