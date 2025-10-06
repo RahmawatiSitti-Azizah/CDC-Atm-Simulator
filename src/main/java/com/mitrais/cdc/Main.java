@@ -1,19 +1,15 @@
 package com.mitrais.cdc;
 
-import com.mitrais.cdc.service.FileService;
-import com.mitrais.cdc.service.impl.ServiceFactory;
-import com.mitrais.cdc.view.Screen;
-import com.mitrais.cdc.view.WelcomeScreen;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Scanner;
-
+@SpringBootApplication
 public class Main {
 
-    private static FileService fileService;
-
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
 
-        if (args.length == 0) {
+        /*if (args.length == 0) {
             System.out.println("No file path provided. Please provide a file path as an argument.");
             return;
         }
@@ -26,9 +22,11 @@ public class Main {
                 return;
             }
         }
-        Screen nextScreen = WelcomeScreen.getInstance(null, new Scanner(System.in), ServiceFactory.createSearchAccountService(), ServiceFactory.createAccountValidatorService());
+        Screen nextScreen = WelcomeScreen.getInstance(null, new Scanner(System.in),
+                ServiceFactory.createSearchAccountService(),
+                ServiceFactory.createAccountValidatorService());
         while (nextScreen != null) {
             nextScreen = nextScreen.display();
-        }
+        }*/
     }
 }
