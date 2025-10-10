@@ -12,17 +12,17 @@ class TransactionAmountValidatorServiceImpl implements TransactionAmountValidato
         if (!money.isMultipleOf(10)) {
             throw new Exception(ErrorConstant.INVALID_AMOUNT);
         }
-        if (money.isMoreThan(new Dollar(1000))) {
+        if (money.isMoreThan(new Dollar(1000.0))) {
             throw new Exception(ErrorConstant.MAXIMUM_TRANSACTION_AMOUNT_EXCEED);
         }
     }
 
     @Override
     public void validateTransferAmount(Money amount) throws Exception {
-        if (!amount.isMoreThanOrEquals(new Dollar(1))) {
+        if (!amount.isMoreThanOrEquals(new Dollar(1.0))) {
             throw new Exception("Minimum amount to transfer is $1");
         }
-        if (amount.isMoreThan(new Dollar(1000))) {
+        if (amount.isMoreThan(new Dollar(1000.0))) {
             throw new Exception(ErrorConstant.MAXIMUM_TRANSACTION_AMOUNT_EXCEED);
         }
     }

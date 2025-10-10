@@ -1,12 +1,25 @@
 package com.mitrais.cdc.model;
 
+import com.mitrais.cdc.model.converter.MoneyConverter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
+@Entity
 public class Account implements Loginable {
-    private String name;
+    @Id
+    @Column(length = 6)
     private String accountNumber;
+    private String name;
     private String pin;
+    @Convert(converter = MoneyConverter.class)
     private Money balance;
+
+    public Account() {
+    }
 
     public Account(Money currency, String aName, String anAccountNumber, String aPin) {
         name = aName;
@@ -39,7 +52,7 @@ public class Account implements Loginable {
     }
 
     private void validateAmountMoreThanZero(Money amount) throws Exception {
-        if ((new Dollar(0)).isMoreThanOrEquals(amount)) {
+        if ((new Dollar(0.0)).isMoreThanOrEquals(amount)) {
             throw new Exception("Invalid amount");
         }
     }

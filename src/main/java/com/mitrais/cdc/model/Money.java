@@ -3,10 +3,10 @@ package com.mitrais.cdc.model;
 import java.util.Objects;
 
 public abstract class Money implements QueryInsertable {
-    protected long amount;
+    protected Double amount;
     protected String currency;
 
-    public Money(long amount) {
+    public Money(Double amount) {
         this.amount = amount;
     }
 

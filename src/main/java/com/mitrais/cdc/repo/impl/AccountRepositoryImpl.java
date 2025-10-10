@@ -55,7 +55,7 @@ class AccountRepositoryImpl extends H2Connection<Account> implements AccountRepo
     @Override
     protected Account getQueryResult(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
-            Money balance = new Dollar(resultSet.getLong("balance"));
+            Money balance = new Dollar(resultSet.getDouble("balance"));
             Account result = new Account(balance, resultSet.getString("account_holder_name"), resultSet.getString("account_number"), resultSet.getString("pin"));
             return result;
         }

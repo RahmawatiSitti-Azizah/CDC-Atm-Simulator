@@ -38,7 +38,7 @@ public class FileServiceImpl implements FileService {
                 String balance = parts[2].trim();
                 String accountNumber = parts[3].trim();
                 try {
-                    searchAccountService.addAccount(new Dollar(Long.parseLong(balance)), accountHolderName, accountNumber, pin);
+                    searchAccountService.addAccount(new Dollar(Double.parseDouble(balance)), accountHolderName, accountNumber, pin);
                 } catch (NumberFormatException exception) {
                     System.out.println("skip row, no valid balance found -> potentially a header");
                 }

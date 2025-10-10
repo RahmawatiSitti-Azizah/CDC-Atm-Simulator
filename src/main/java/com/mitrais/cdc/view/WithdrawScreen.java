@@ -11,7 +11,7 @@ public class WithdrawScreen implements Screen {
     private static WithdrawScreen INSTANCE;
     private Account userAccount;
     private Scanner userInputScanner;
-    private long[] arrayWithdrawAmount = {10, 50, 100};
+    private double[] arrayWithdrawAmount = {10.0, 50.0, 100.0};
     private UserInputService userInput;
 
     public static WithdrawScreen getInstance(Account account, Scanner aUserInputScanner, UserInputService userInputService) {
@@ -32,7 +32,7 @@ public class WithdrawScreen implements Screen {
         int menu = -1;
         while (menu < 0) {
             int i = 1;
-            for (long amount : arrayWithdrawAmount) {
+            for (double amount : arrayWithdrawAmount) {
                 System.out.println(i++ + ". $" + amount);
             }
             System.out.println(i++ + ". Other");

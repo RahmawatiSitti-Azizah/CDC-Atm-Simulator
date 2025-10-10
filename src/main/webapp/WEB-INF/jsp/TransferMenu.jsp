@@ -10,30 +10,22 @@
     <title>Login</title>
     </head>
     <body class="container vh-100">
-      <form action="login" method="post" class="row justify-content-center align-items-center vh-100">
+      <form action="/transfer" method="post" class="row justify-content-center align-items-center vh-100">
           <div class="col-3 bg-primary">
             <div class="row justify-content-center my-2">
-                <div class="col-auto"><h3>ATM SIMULATOR</h3></div>
+                <div class="col-auto"><h3>Provide destination account details</h3></div>
             </div>
             <div class="row justify-content-center my-2">
                 <div class="col-4">
-                    <label>Account:</label>
+                    <label for="accountNumber" class="form-label">Account number:</label>
                 </div>
                 <div class="col-8">
-                    <input class="form-control" type="text"  name="account">
-                </div>
-            </div>
-            <div class="row justify-content-center my-2">
-                <div class="col-4">
-                    <label>Pin:</label>
-                </div>
-                <div class="col-8">
-                    <input class="form-control" type="password" name ="pin"/>
+                    <input class="form-control" type="text"  name="destAccount" id="accountNumber">
                 </div>
             </div>
             <div class="row my-2 justify-content-end">
                 <div class="col-auto">
-                    <input type="submit" class="form-control" value ="login"/>
+                    <input type="submit" class="form-control" value ="transfer"/>
                 </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Dollar extends Money {
 
-    public Dollar(long amount) {
+    public Dollar(Double amount) {
         super(amount);
         currency = "$";
     }
@@ -37,6 +37,6 @@ public class Dollar extends Money {
 
     @Override
     public void insertToPreparedStatement(PreparedStatement ps, int index) throws SQLException {
-        ps.setLong(index, amount);
+        ps.setDouble(index, amount);
     }
 }

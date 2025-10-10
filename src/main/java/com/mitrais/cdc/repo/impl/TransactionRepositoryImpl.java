@@ -69,7 +69,7 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                         resultSet.getString("destination_account"), null);
             }
             String referenceNumber = resultSet.getString("reference_number");
-            return new Transaction(sourceAccount, destinationAccount, new Dollar(resultSet.getLong("amount")),
+            return new Transaction(sourceAccount, destinationAccount, new Dollar(resultSet.getDouble("amount")),
                     referenceNumber, resultSet.getString("note"), resultSet.getTimestamp("transaction_date").toLocalDateTime());
         }
         return null;

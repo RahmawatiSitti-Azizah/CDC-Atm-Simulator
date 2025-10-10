@@ -13,7 +13,7 @@ class UserInputServiceImpl implements UserInputService {
         if (!StringMatcherUtil.checkStringIsNumberOnly(input)) {
             throw new Exception(ErrorConstant.INVALID_AMOUNT);
         }
-        long amount = Long.parseLong(input);
+        Double amount = Double.parseDouble(input);
         return new Dollar(amount);
     }
 
