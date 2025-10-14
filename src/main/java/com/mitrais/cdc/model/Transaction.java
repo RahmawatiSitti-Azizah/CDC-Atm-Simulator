@@ -49,10 +49,10 @@ public class Transaction {
     public String toString() {
         return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE +
                 (destinationAccount != null ?
-                        ("to " + destinationAccount.getName() + SPACE) : "") + amount.toString();
+                        ("to " + destinationAccount.getAccountHolderName() + SPACE) : "") + amount.toString();
     }
 
     public String printIncomingTransaction() {
-        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE + "from" + SPACE + sourceAccount.getName() + SPACE + amount.toString();
+        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE + "from" + SPACE + sourceAccount.getAccountHolderName() + SPACE + amount.toString();
     }
 }

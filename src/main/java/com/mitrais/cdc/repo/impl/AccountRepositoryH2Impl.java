@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-class AccountRepositoryImpl extends H2Connection<Account> implements AccountRepository {
-    AccountRepositoryImpl() {
+class AccountRepositoryH2Impl extends H2Connection<Account> implements AccountRepository {
+    AccountRepositoryH2Impl() {
         super();
     }
 
@@ -99,7 +99,7 @@ class AccountRepositoryImpl extends H2Connection<Account> implements AccountRepo
         String query = "INSERT INTO account (account_number, account_holder_name, pin, balance) VALUES (?, ?, ?, ?)";
         System.out.println(account.toString());
         try {
-            executeQuery(query, account.getAccountNumber(), account.getName(), account.getPin(), account.getBalance());
+            executeQuery(query, account.getAccountNumber(), account.getAccountHolderName(), account.getPin(), account.getBalance());
         } catch (SQLException e) {
             System.out.println(e.getStackTrace());
             throw new RuntimeException(e);
@@ -117,7 +117,7 @@ class AccountRepositoryImpl extends H2Connection<Account> implements AccountRepo
                 "WHERE account_number = ?";
         System.out.println(account.toString());
         try {
-            executeQuery(query, account.getName(), account.getPin(), account.getBalance(), account.getAccountNumber());
+            executeQuery(query, account.getAccountHolderName(), account.getPin(), account.getBalance(), account.getAccountNumber());
         } catch (SQLException e) {
             System.out.println(e.getStackTrace());
             throw new RuntimeException(e);

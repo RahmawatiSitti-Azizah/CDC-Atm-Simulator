@@ -1,0 +1,3 @@
+MERGE INTO account (account_number, account_holder_name, pin, balance) KEY(account_number) VALUES ('112233', 'Rahmawati Sitti Azizah', '223311', 500);
+MERGE INTO account (account_number, account_holder_name, pin, balance) KEY(account_number) VALUES ('223311', 'Jane Doe', '123111', 1000);
+MERGE INTO account (account_number, account_holder_name, pin, balance) KEY(account_number) VALUES ('223211', 'John Doe', '313121', 700);

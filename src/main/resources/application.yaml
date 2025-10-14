@@ -6,8 +6,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    defer-datasource-initialization: true
+    show-sql: true
   datasource:
     url: jdbc:h2:file:./src/main/resources/db-data;DB_CLOSE_ON_EXIT=FALSE
     username: test
     password: test
     driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: ALWAYS

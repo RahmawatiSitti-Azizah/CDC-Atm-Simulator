@@ -2,10 +2,12 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
-import com.mitrais.cdc.repo.AccountRepository;
+import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
+import org.springframework.stereotype.Service;
 
+@Service
 class SearchAccountServiceImpl implements SearchAccountService {
     private final AccountRepository accountRepository;
 
@@ -25,13 +27,14 @@ class SearchAccountServiceImpl implements SearchAccountService {
                 }
             }
         } catch (Exception e) {
-            accountRepository.saveAccount(newAccount);
+            accountRepository.save(newAccount);
         }
     }
 
     @Override
     public Account get(String accountNumber, String pin) throws Exception {
-        Account searchResult = accountRepository.getAccountByAccountNumber(accountNumber);
+
+        Account searchResult = accountRepository.findAccountByAccountNumber(accountNumber);
         if (searchResult == null || !searchResult.login(accountNumber, pin)) {
             throw new Exception("Invalid Account Number/PIN");
         }
@@ -40,7 +43,7 @@ class SearchAccountServiceImpl implements SearchAccountService {
 
     @Override
     public Account getByID(String accountNumber) throws Exception {
-        Account searchResult = accountRepository.getAccountByAccountNumber(accountNumber);
+        Account searchResult = accountRepository.findAccountByAccountNumber(accountNumber);
         if (searchResult == null) {
             throw new Exception("Invalid Account");
         }

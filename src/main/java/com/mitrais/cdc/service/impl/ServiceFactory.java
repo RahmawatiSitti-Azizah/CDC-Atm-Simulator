@@ -27,9 +27,6 @@ public class ServiceFactory {
     }
 
     public static SearchAccountService createSearchAccountService() {
-        if (searchAccount == null) {
-            searchAccount = new SearchAccountServiceImpl(RepositoryFactory.createAccountRepository());
-        }
         return searchAccount;
     }
 

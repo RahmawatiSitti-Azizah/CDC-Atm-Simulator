@@ -12,20 +12,19 @@ import java.util.Random;
 
 class AccountTransactionServiceImpl implements AccountTransactionService {
 
-
     private TransactionRepository transactionRepository;
-    private AccountRepository accountRepository;
+    private AccountRepository accountRepositoryH2;
 
-    public AccountTransactionServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    public AccountTransactionServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepositoryH2) {
         this.transactionRepository = transactionRepository;
-        this.accountRepository = accountRepository;
+        this.accountRepositoryH2 = accountRepositoryH2;
     }
 
     @Override
     public void withdraw(Account account, Money amount) throws Exception {
         account.decreaseBalance(amount);
         transactionRepository.saveTransaction(new Transaction(account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", null));
-        accountRepository.updateAccount(account);
+        accountRepositoryH2.updateAccount(account);
     }
 
     @Override
@@ -36,7 +35,7 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
         sourceAccount.decreaseBalance(amount);
         destinationAccount.increaseBalance(amount);
         transactionRepository.saveTransaction(new Transaction(sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", null));
-        accountRepository.updateAccount(sourceAccount);
-        accountRepository.updateAccount(destinationAccount);
+        accountRepositoryH2.updateAccount(sourceAccount);
+        accountRepositoryH2.updateAccount(destinationAccount);
     }
 }

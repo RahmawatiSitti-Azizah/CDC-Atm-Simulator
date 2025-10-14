@@ -14,11 +14,16 @@
   <div class="row justify-content-center align-items-center vh-100">
     <div class="col-4 bg-primary">
       <div class="row justify-content-center">
-        <div class="col-auto"><label>Hello <c:out value = "${account.name}"/></label></div>
+        <div class="col-auto"><label>Hello <c:out value = "${account.accountHolderName}"/></label></div>
       </div>
       <div class="row justify-content-center">
         <div class="col-auto"><label>Select amount</label></div>
       </div>
+      <c:if test="${errorMessage != null}">
+        <div class="row justify-content-center">
+          <div class="col-auto"><label><c:out value="${error}"/></label></div>
+        </div>
+      </c:if>
       <div class="row justify-content-center">
         <div class="col-6">
           <form action="/withdraw" method="post">

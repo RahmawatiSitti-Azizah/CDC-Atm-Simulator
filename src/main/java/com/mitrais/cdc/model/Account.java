@@ -13,7 +13,7 @@ public class Account implements Loginable {
     @Id
     @Column(length = 6)
     private String accountNumber;
-    private String name;
+    private String accountHolderName;
     private String pin;
     @Convert(converter = MoneyConverter.class)
     private Money balance;
@@ -21,11 +21,11 @@ public class Account implements Loginable {
     public Account() {
     }
 
-    public Account(Money currency, String aName, String anAccountNumber, String aPin) {
-        name = aName;
-        accountNumber = anAccountNumber;
-        pin = aPin;
-        balance = currency;
+    public Account(Money balance, String accountHolderName, String accountNumber, String pin) {
+        this.accountHolderName = accountHolderName;
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.balance = balance;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class Account implements Loginable {
         return balance;
     }
 
-    public String getName() {
-        return name;
+    public String getAccountHolderName() {
+        return accountHolderName;
     }
 
     public String getPin() {
@@ -80,7 +80,7 @@ public class Account implements Loginable {
     @Override
     public String toString() {
         return "Account{" +
-                "name='" + name + '\'' +
+                "name='" + accountHolderName + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", balance=" + balance +
                 '}';
@@ -89,11 +89,11 @@ public class Account implements Loginable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Account account)) return false;
-        return name.equals(account.name) && accountNumber.equals(account.accountNumber) && pin.equals(account.pin) && Objects.equals(balance, account.balance);
+        return accountHolderName.equals(account.accountHolderName) && accountNumber.equals(account.accountNumber) && pin.equals(account.pin) && Objects.equals(balance, account.balance);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, accountNumber, pin, balance);
+        return Objects.hash(accountHolderName, accountNumber, pin, balance);
     }
 }

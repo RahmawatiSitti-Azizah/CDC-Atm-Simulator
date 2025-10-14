@@ -15,6 +15,11 @@
             <div class="row justify-content-center my-2">
                 <div class="col-auto"><h3>ATM SIMULATOR</h3></div>
             </div>
+            <c:if test="${errorMessage != null}">
+              <div class="row justify-content-center">
+                <div class="col-auto"><label><c:out value="${errorMessage}"/></label></div>
+              </div>
+            </c:if>
             <div class="row justify-content-center my-2">
                 <div class="col-4">
                     <label>Account:</label>

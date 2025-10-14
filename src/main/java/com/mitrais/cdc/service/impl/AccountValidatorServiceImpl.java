@@ -2,7 +2,9 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.util.StringMatcherUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 class AccountValidatorServiceImpl implements AccountValidatorService {
 
     @Override
