@@ -8,10 +8,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TransactionScreenTest {
+
+    private static final double BALANCE_AMOUNT = 100.0;
+
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "113311", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "113322", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST01", "113311", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST02", "113322", "012109"));
     }
 
     @Test

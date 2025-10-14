@@ -14,13 +14,14 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class OtherWithdrawnScreenTest {
+    private static final double BALANCE_AMOUNT = 100.0;
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112299", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112200", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST01", "112299", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST02", "112200", "012109"));
     }
 
     private void setUpSystemOutCapturer() {
@@ -31,7 +32,7 @@ public class OtherWithdrawnScreenTest {
         System.setOut(standardOut);
     }
 
-    private static Account createAccount(long balance) {
+    private static Account createAccount(double balance) {
         Account account = new Account(new Dollar(balance), "Jane Doe", "112299", "112233");
         return account;
     }
@@ -44,14 +45,14 @@ public class OtherWithdrawnScreenTest {
 
     @Test
     public void testValidWithdrawAmountToWithdrawSummaryScreen() {
-        Account account = createAccount(100);
+        Account account = createAccount(BALANCE_AMOUNT);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "20\n");
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawSummaryScreen);
     }
 
     @Test
     public void testWithdrawWithNonNumericAmountToWithdrawScreenAndGetInvalidAmountErrorMessage() {
-        Account account = createAccount(100);
+        Account account = createAccount(BALANCE_AMOUNT);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "10s\n");
         setUpSystemOutCapturer();
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
@@ -62,7 +63,7 @@ public class OtherWithdrawnScreenTest {
 
     @Test
     public void testWithdrawWithMinusAmountToWithdrawScreenAndGetInvalidAmountErrorMessage() {
-        Account account = createAccount(100);
+        Account account = createAccount(BALANCE_AMOUNT);
         OtherWithdrawnScreen otherWithdrawnScreen = getOtherWithdrawScreen(account, "-10\n");
         setUpSystemOutCapturer();
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);

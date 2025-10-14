@@ -11,13 +11,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 public class WithdrawScreenTest {
+    private static final double BALANCE_ACCOUNT = 100.0;
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "113355", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "113366", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_ACCOUNT), "TEST01", "113355", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_ACCOUNT), "TEST02", "113366", "012109"));
     }
 
     private void setUpSystemOutCapturer() {

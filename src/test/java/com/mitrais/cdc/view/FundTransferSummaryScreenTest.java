@@ -15,16 +15,16 @@ public class FundTransferSummaryScreenTest {
 
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112255", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112266", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100.0), "TEST01", "112255", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100.0), "TEST02", "112266", "012109"));
     }
 
-    private static Account createAccount(String accountNumber, long balance) {
+    private static Account createAccount(String accountNumber, double balance) {
         Account account = new Account(new Dollar(balance), "Jane Doe", accountNumber, "112233");
         return account;
     }
 
-    private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, long amount, String referenceNumber, String menuInput) {
+    private FundTransferSummaryScreen getFundTransferScreen(Account sourceAccount, Account destinationAccount, double amount, String referenceNumber, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
         return FundTransferSummaryScreen.getInstance(new Dollar(amount), sourceAccount, new Scanner(System.in), destinationAccount, referenceNumber, ServiceFactory.createUserInputService());

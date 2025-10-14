@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class AccountTest {
 
     private static Account getAccount() {
-        Account account = new Account(new Dollar(100), "Prince", "112290", "123456");
+        Account account = new Account(new Dollar(100.0), "Prince", "112290", "123456");
         return account;
     }
 

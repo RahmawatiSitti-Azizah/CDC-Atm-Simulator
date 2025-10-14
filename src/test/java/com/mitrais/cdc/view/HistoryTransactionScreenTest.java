@@ -14,13 +14,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 public class HistoryTransactionScreenTest {
+    private static final double BALANCE_AMOUNT = 100.0;
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112277", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112288", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST01", "112277", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST02", "112288", "012109"));
     }
 
     private void setUpSystemOutCapturer() {
@@ -42,7 +43,7 @@ public class HistoryTransactionScreenTest {
     public void testDisplayWithTransactionHistoryThenShouldPrintTransactionAndGoToTransactionScreen() {
         HistoryTransactionScreen historyTransactionScreen = setupHistoryTransactionScreenWithInput("");
         RepositoryFactory.createTransactionRepository().saveTransaction(new Transaction(new Account(null, null, "112277", null),
-                null, new Dollar(10), null, "Withdraw", null));
+                null, new Dollar(10.0), null, "Withdraw", null));
         setUpSystemOutCapturer();
         Assertions.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();
@@ -52,7 +53,7 @@ public class HistoryTransactionScreenTest {
 
     @Test
     public void testDisplayWithNoTransactionHistoryThenShouldPrintNoTransactionMessageAndGoToTransactionScreen() {
-        Account userAccount = new Account(new Dollar(100), "Test User", "112288", "012108");
+        Account userAccount = new Account(new Dollar(BALANCE_AMOUNT), "Test User", "112288", "012108");
         HistoryTransactionScreen historyTransactionScreen = HistoryTransactionScreen.getInstance(userAccount, new java.util.Scanner(System.in), ServiceFactory.createTransactionService());
         setUpSystemOutCapturer();
         Assertions.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);

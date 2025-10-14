@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class FundTransferScreenTest {
+    private static final double BALANCE_AMOUNT = 100.0;
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
@@ -27,11 +28,11 @@ public class FundTransferScreenTest {
 
     @BeforeAll
     public static void setUp() {
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST01", "112233", "012108"));
-        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(100), "TEST02", "112244", "012109"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST01", "112233", "012108"));
+        RepositoryFactory.createAccountRepository().saveAccount(new Account(new Dollar(BALANCE_AMOUNT), "TEST02", "112244", "012109"));
     }
 
-    private static Account createAccount(long balance) {
+    private static Account createAccount(double balance) {
         Account account = new Account(new Dollar(balance), "Jane Doe", "112255", "112233");
         return account;
     }
@@ -149,7 +150,7 @@ public class FundTransferScreenTest {
         Account account = createAccount(100);
         try {
             Account destinationAccount = ServiceFactory.createSearchAccountService().getByID("112244");
-            destinationAccount.increaseBalance(new Dollar(50));
+            destinationAccount.increaseBalance(new Dollar(50.0));
             FundTransferScreen fundTransferScreen = getFundTransferScreen(account, "112244\n50\n\n1\n");
             fundTransferScreen.display();
             Assertions.assertTrue(account.getStringBalance().equals("$50"));
