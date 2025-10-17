@@ -5,6 +5,9 @@ import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +21,7 @@ class SearchAccountServiceImpl implements SearchAccountService {
     public void addAccount(Money initialBalance, String accountHolderName, String accountNumber, String pin) {
         Account newAccount = new Account(initialBalance, accountHolderName, accountNumber, pin);
         try {
-            Account account = getByID(accountNumber);
+            Account account = get(accountNumber);
             if (account != null) {
                 if (!account.equals(newAccount)) {
                     System.out.println(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER + accountNumber);
@@ -42,11 +45,21 @@ class SearchAccountServiceImpl implements SearchAccountService {
     }
 
     @Override
-    public Account getByID(String accountNumber) throws Exception {
+    public Account get(String accountNumber) throws Exception {
         Account searchResult = accountRepository.findAccountByAccountNumber(accountNumber);
         if (searchResult == null) {
             throw new Exception("Invalid Account");
         }
         return searchResult;
+    }
+
+    @Override
+    public Account get(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            throw new EntityNotFoundException(ErrorConstant.ACCOUNT_NOT_FOUND);
+        }
+        return get(sessionAccount.getAccountNumber());
     }
 }

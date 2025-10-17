@@ -4,7 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.model.QueryInsertable;
-import com.mitrais.cdc.repo.AccountRepository;
+import com.mitrais.cdc.repo.AccountRepositoryH2;
 import com.mitrais.cdc.repo.H2Connection;
 
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-class AccountRepositoryH2Impl extends H2Connection<Account> implements AccountRepository {
+class AccountRepositoryH2Impl extends H2Connection<Account> implements AccountRepositoryH2 {
     AccountRepositoryH2Impl() {
         super();
     }

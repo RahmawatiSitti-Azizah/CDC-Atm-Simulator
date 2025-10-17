@@ -1,6 +1,12 @@
 package com.mitrais.cdc.controller;
 
+import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.service.AccountTransactionService;
+import com.mitrais.cdc.service.SearchAccountService;
+import com.mitrais.cdc.service.TransactionAmountValidatorService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/withdraw")
 public class WithdrawController {
+    private AccountTransactionService accountTransactionService;
+    private TransactionAmountValidatorService amountValidatorService;
+    private SearchAccountService searchAccountService;
+
+    @Autowired
+    public WithdrawController(AccountTransactionService accountTransactionService, TransactionAmountValidatorService amountValidatorService, SearchAccountService searchAccountService) {
+        this.accountTransactionService = accountTransactionService;
+        this.amountValidatorService = amountValidatorService;
+        this.searchAccountService = searchAccountService;
+    }
 
     @GetMapping("")
     public String getWithdrawMenu(Model model) {
@@ -17,10 +33,14 @@ public class WithdrawController {
     }
 
     @PostMapping("")
-    public String WithdrawMenu(HttpServletRequest request, Model model) {
-        int amount = Integer.parseInt(request.getParameter("amount"));
+    public String WithdrawMenu(HttpServletRequest request, Model model) throws Exception {
+        Account userAccount = searchAccountService.get(request);
+        Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
+        Dollar withdrawAmount = new Dollar(amount);
+        amountValidatorService.validateWithdrawAmount(withdrawAmount);
+        accountTransactionService.withdraw(userAccount, withdrawAmount);
         model.addAttribute("withdraw", amount);
-        model.addAttribute("balance", "$350");
+        model.addAttribute("balance", userAccount.getStringBalance());
         return "WithdrawSummary";
     }
 }

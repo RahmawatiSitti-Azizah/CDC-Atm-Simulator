@@ -5,7 +5,8 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.QueryInsertable;
 import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.repo.H2Connection;
-import com.mitrais.cdc.repo.TransactionRepository;
+import com.mitrais.cdc.repo.TransactionRepositoryH2;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +15,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-class TransactionRepositoryImpl extends H2Connection<Transaction> implements TransactionRepository {
+@Repository
+class TransactionRepositoryImpl extends H2Connection<Transaction> implements TransactionRepositoryH2 {
 
     TransactionRepositoryImpl() {
         super();
@@ -69,7 +71,7 @@ class TransactionRepositoryImpl extends H2Connection<Transaction> implements Tra
                         resultSet.getString("destination_account"), null);
             }
             String referenceNumber = resultSet.getString("reference_number");
-            return new Transaction(sourceAccount, destinationAccount, new Dollar(resultSet.getDouble("amount")),
+            return new Transaction(null, sourceAccount, destinationAccount, new Dollar(resultSet.getDouble("amount")),
                     referenceNumber, resultSet.getString("note"), resultSet.getTimestamp("transaction_date").toLocalDateTime());
         }
         return null;

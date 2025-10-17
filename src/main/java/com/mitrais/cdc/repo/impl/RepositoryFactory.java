@@ -1,23 +1,23 @@
 package com.mitrais.cdc.repo.impl;
 
-import com.mitrais.cdc.repo.AccountRepository;
-import com.mitrais.cdc.repo.TransactionRepository;
+import com.mitrais.cdc.repo.AccountRepositoryH2;
+import com.mitrais.cdc.repo.TransactionRepositoryH2;
 
 public class RepositoryFactory {
-    private static AccountRepository accountRepositoryH2;
-    private static TransactionRepository transactionRepository;
+    private static AccountRepositoryH2 accountRepositoryH2;
+    private static TransactionRepositoryH2 transactionRepositoryH2;
 
-    public static AccountRepository createAccountRepository() {
+    public static AccountRepositoryH2 createAccountRepository() {
         if (accountRepositoryH2 == null) {
             accountRepositoryH2 = new AccountRepositoryH2Impl();
         }
         return accountRepositoryH2;
     }
 
-    public static TransactionRepository createTransactionRepository() {
-        if (transactionRepository == null) {
-            transactionRepository = new TransactionRepositoryImpl();
+    public static TransactionRepositoryH2 createTransactionRepository() {
+        if (transactionRepositoryH2 == null) {
+            transactionRepositoryH2 = new TransactionRepositoryImpl();
         }
-        return transactionRepository;
+        return transactionRepositoryH2;
     }
 }

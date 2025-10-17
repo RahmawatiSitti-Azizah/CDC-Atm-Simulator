@@ -1,18 +1,34 @@
 package com.mitrais.cdc.model;
 
+import com.mitrais.cdc.model.converter.MoneyConverter;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Transaction {
     public static final String SPACE = " ";
-    private final Account sourceAccount;
-    private final Account destinationAccount;
-    private final Money amount;
-    private final String referenceNumber;
-    private final String note;
-    private final LocalDateTime transactionDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @OneToOne
+    @JoinColumn(name = "source_account", referencedColumnName = "accountNumber", nullable = true)
+    private Account sourceAccount;
+    @OneToOne
+    @JoinColumn(name = "destination_account", referencedColumnName = "accountNumber", nullable = true)
+    private Account destinationAccount;
+    @Convert(converter = MoneyConverter.class)
+    private Money amount;
+    private String referenceNumber;
+    private String note;
+    private LocalDateTime transactionDate;
 
-    public Transaction(Account sourceAccountNumber, Account destinationAccountNumber, Money amount, String referenceNumber, String note, LocalDateTime transactionDate) {
+    public Transaction() {
+    }
+
+    public Transaction(Integer id, Account sourceAccountNumber, Account destinationAccountNumber, Money amount, String referenceNumber, String note, LocalDateTime transactionDate) {
+        this.id = id;
         this.sourceAccount = sourceAccountNumber;
         this.destinationAccount = destinationAccountNumber;
         this.amount = amount;
@@ -45,14 +61,26 @@ public class Transaction {
         return transactionDate;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setTransactionDate(LocalDateTime transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
     @Override
     public String toString() {
-        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE +
+        return printTransactionDate() + SPACE + referenceNumber + SPACE + note + SPACE +
                 (destinationAccount != null ?
                         ("to " + destinationAccount.getAccountHolderName() + SPACE) : "") + amount.toString();
     }
 
+    private String printTransactionDate() {
+        return (transactionDate != null ? transactionDate : LocalDateTime.now()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
     public String printIncomingTransaction() {
-        return transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + SPACE + referenceNumber + SPACE + note + SPACE + "from" + SPACE + sourceAccount.getAccountHolderName() + SPACE + amount.toString();
+        return printTransactionDate() + SPACE + referenceNumber + SPACE + note + SPACE + "from" + SPACE + sourceAccount.getAccountHolderName() + SPACE + amount.toString();
     }
 }

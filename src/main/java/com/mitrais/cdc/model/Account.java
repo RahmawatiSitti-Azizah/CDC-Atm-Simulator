@@ -89,11 +89,11 @@ public class Account implements Loginable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Account account)) return false;
-        return accountHolderName.equals(account.accountHolderName) && accountNumber.equals(account.accountNumber) && pin.equals(account.pin) && Objects.equals(balance, account.balance);
+        return accountNumber.equals(account.accountNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountHolderName, accountNumber, pin, balance);
+        return Objects.hash(accountNumber);
     }
 }

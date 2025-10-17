@@ -14,7 +14,7 @@
   <div class="row justify-content-center align-items-center vh-100">
     <div class="col-4 bg-primary">
       <div class="row justify-content-center">
-        <div class="col-auto">Hello <c:out value = "${account.name}"/></div>
+        <div class="col-auto">Hello <c:out value = "${account.accountHolderName}"/></div>
       </div>
       <div class="row justify-content-center">
         <div class="col-auto"><label>How many latest transaction</label></div>

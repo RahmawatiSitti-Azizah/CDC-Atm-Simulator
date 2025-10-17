@@ -4,7 +4,9 @@ import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.service.TransactionAmountValidatorService;
 import com.mitrais.cdc.util.ErrorConstant;
+import org.springframework.stereotype.Service;
 
+@Service
 class TransactionAmountValidatorServiceImpl implements TransactionAmountValidatorService {
 
     @Override

@@ -15,9 +15,9 @@
           <div class="row justify-content-center">
             <div class="col-auto">
               <h3><c:out value="Transaction Summary"/></h3>
-              <h4><%out.println("Date: "+(new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));%>
-              <h4><c:out value="Withdraw: ${withdraw}"/></h4>
-              <h4><c:out value="Balance: ${balance}"/></h4>
+              <h4><%out.println("Date : "+(new SimpleDateFormat("yyyy-MM-dd hh:mm a")).format(new Date()));%>
+              <h4><c:out value="Transfer Amount : ${amount}"/></h4>
+              <h4><c:out value="Balance : ${balance}"/></h4>
             </div>
           </div>
           <div class="row justify-content-center">

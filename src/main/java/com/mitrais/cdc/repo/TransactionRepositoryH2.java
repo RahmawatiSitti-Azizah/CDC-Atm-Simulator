@@ -4,7 +4,7 @@ import com.mitrais.cdc.model.Transaction;
 
 import java.util.List;
 
-public interface TransactionRepository {
+public interface TransactionRepositoryH2 {
 
     public List<Transaction> findAllTransaction();
 

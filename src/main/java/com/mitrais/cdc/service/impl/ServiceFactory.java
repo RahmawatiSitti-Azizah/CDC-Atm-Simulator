@@ -1,6 +1,5 @@
 package com.mitrais.cdc.service.impl;
 
-import com.mitrais.cdc.repo.impl.RepositoryFactory;
 import com.mitrais.cdc.service.*;
 
 public class ServiceFactory {
@@ -13,9 +12,6 @@ public class ServiceFactory {
     private static TransactionService transactionService;
 
     public static AccountTransactionService createAccountTransactionService() {
-        if (accountTransaction == null) {
-            accountTransaction = new AccountTransactionServiceImpl(RepositoryFactory.createTransactionRepository(), RepositoryFactory.createAccountRepository());
-        }
         return accountTransaction;
     }
 
@@ -52,9 +48,6 @@ public class ServiceFactory {
     }
 
     public static TransactionService createTransactionService() {
-        if (transactionService == null) {
-            transactionService = new TransactionServiceImpl(RepositoryFactory.createTransactionRepository());
-        }
         return transactionService;
     }
 }

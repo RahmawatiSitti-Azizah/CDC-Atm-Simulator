@@ -3,28 +3,32 @@ package com.mitrais.cdc.service.impl;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.model.Transaction;
-import com.mitrais.cdc.repo.AccountRepository;
-import com.mitrais.cdc.repo.TransactionRepository;
+import com.mitrais.cdc.repository.AccountRepository;
+import com.mitrais.cdc.repository.TransactionRepository;
 import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.util.ReferenceNumberGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
+@Service
 class AccountTransactionServiceImpl implements AccountTransactionService {
-
     private TransactionRepository transactionRepository;
-    private AccountRepository accountRepositoryH2;
+    private AccountRepository accountRepository;
 
-    public AccountTransactionServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepositoryH2) {
+    @Autowired
+    public AccountTransactionServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
-        this.accountRepositoryH2 = accountRepositoryH2;
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public void withdraw(Account account, Money amount) throws Exception {
         account.decreaseBalance(amount);
-        transactionRepository.saveTransaction(new Transaction(account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", null));
-        accountRepositoryH2.updateAccount(account);
+        transactionRepository.save(new Transaction(null, account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", LocalDateTime.now()));
+        accountRepository.save(account);
     }
 
     @Override
@@ -34,8 +38,8 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
         }
         sourceAccount.decreaseBalance(amount);
         destinationAccount.increaseBalance(amount);
-        transactionRepository.saveTransaction(new Transaction(sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", null));
-        accountRepositoryH2.updateAccount(sourceAccount);
-        accountRepositoryH2.updateAccount(destinationAccount);
+        transactionRepository.save(new Transaction(null, sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", null));
+        accountRepository.save(sourceAccount);
+        accountRepository.save(destinationAccount);
     }
 }

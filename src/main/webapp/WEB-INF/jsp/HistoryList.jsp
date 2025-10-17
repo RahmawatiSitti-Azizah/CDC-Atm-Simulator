@@ -15,7 +15,14 @@
           <c:forEach var="trx" items="${transaction}">
             <div class="row justify-content-center">
                 <div class="col-auto">
-                  <c:out value ="${trx}"/>
+                  <c:choose>
+                    <c:when test="${trx.sourceAccount.accountNumber == account.accountNumber}">
+                      <c:out value ="${trx}"/>
+                    </c:when>
+                    <c:otherwise>
+                      <c:out value ="${trx.printIncomingTransaction()}"/>
+                    </c:otherwise>
+                  </c:choose>
                 </div>
             </div>
           </c:forEach>

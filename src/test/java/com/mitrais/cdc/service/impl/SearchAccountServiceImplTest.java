@@ -84,18 +84,18 @@ public class SearchAccountServiceImplTest {
     }
 
     @Test
-    public void testGetById_whenValidAndFound_thenReturnAccount() throws Exception {
+    public void testGet_whenValidAndFound_thenReturnAccount() throws Exception {
         Account account = getAccount(100.0, "Jane Doe", "112233", "123456");
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
-        Account result = serviceInTest.getByID("112233");
+        Account result = serviceInTest.get("112233");
         Assertions.assertEquals(account, result);
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
     }
 
     @Test
-    public void testGetById_whenNotFound_thenReturnInvalidAccountException() throws Exception {
+    public void testGet_whenNotFound_thenReturnInvalidAccountException() throws Exception {
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(null);
-        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.getByID("112233"));
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.get("112233"));
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
         Assertions.assertEquals("Invalid Account", exception.getMessage());
     }

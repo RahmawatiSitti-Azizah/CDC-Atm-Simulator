@@ -8,4 +8,6 @@ public class ErrorConstant {
     public static final String MAXIMUM_TRANSACTION_AMOUNT_EXCEED = "Maximum amount to transfer is $1000";
     public static final String INVALID_ACCOUNT_PASSWORD = "Invalid Account/Pin";
     public static final String ACCOUNT_NUMBER_SHOULD_ONLY_CONTAINS_NUMBERS = "Account Number should only contains numbers";
+    public static final String ACCOUNT_NOT_FOUND = "Account not found";
+    public static final String INVALID_ACCOUNT = "Invalid Account";
 }

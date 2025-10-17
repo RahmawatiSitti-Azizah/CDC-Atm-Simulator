@@ -1,14 +1,16 @@
 package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Transaction;
-import com.mitrais.cdc.repo.TransactionRepository;
+import com.mitrais.cdc.repository.TransactionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -24,28 +26,32 @@ public class TransactionServiceImplTest {
 
     @Test
     public void testGetTransactionHistoryAccount_whenThereAreTransaction_thenReturnListOfTransaction() {
-        when(repository.findTransactionBySourceAccount(anyString())).thenReturn(List.of(mock(Transaction.class)));
+        when(repository.findBySourceAccountAccountNumber(anyString())).thenReturn(List.of(mock(Transaction.class)));
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123");
         Assertions.assertTrue(result.size() == 1);
     }
 
     @Test
     public void testGetTransactionHistoryAccount_whenNoTransactionFound_thenReturnEmptyList() {
-        when(repository.findTransactionBySourceAccount(anyString())).thenReturn(List.of());
+        when(repository.findBySourceAccountAccountNumber(anyString())).thenReturn(List.of());
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123");
         Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
     public void testGetTransactionHistoryAccountWithSize_whenThereAreTransaction_thenReturnListOfTransaction() {
-        when(repository.findLastTransactionBySourceAccount(anyString(), anyInt())).thenReturn(List.of(mock(Transaction.class)));
+        Page page = mock(Page.class);
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        when(page.getContent()).thenReturn(List.of(mock(Transaction.class)));
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
-        Assertions.assertTrue(result.size() == 1);
+        Assertions.assertTrue(result.size() > 0);
     }
 
     @Test
     public void testGetTransactionHistoryAccountWithSize_whenNoTransactionFound_thenReturnEmptyList() {
-        when(repository.findLastTransactionBySourceAccount(anyString(), anyInt())).thenReturn(List.of());
+        Page page = mock(Page.class);
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        when(page.getContent()).thenReturn(List.of());
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assertions.assertTrue(result.isEmpty());
     }

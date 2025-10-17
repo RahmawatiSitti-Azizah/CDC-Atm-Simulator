@@ -83,7 +83,7 @@ public class FundTransferScreen implements Screen {
             throw new Exception("");
         }
         accountService.validateAccountNumber(input, "Invalid Account");
-        destinationAccount = searchService.getByID(input);
+        destinationAccount = searchService.get(input);
     }
 
     private Screen transferConfirmationProcessAndGetNextScreen() {

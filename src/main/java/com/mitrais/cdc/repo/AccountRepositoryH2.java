@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountRepository {
+public interface AccountRepositoryH2 {
     public List<Account> getAllAccount();
 
     public Account getAccountByAccountNumber(String accountNumber);
