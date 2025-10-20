@@ -7,7 +7,7 @@
         <link href='<c:url value="bootstrap.css"/>' rel="stylesheet" type="text/css"/>
         <link href='<c:url value="bootstrap.js"/>' rel="stylesheet" type="text/javascript"/>
         <meta charset="UTF-8">
-        <title>Withdraw Summary</title>
+        <title>History List</title>
     </head>
     <body class="container vh-100">
       <div class="row justify-content-center align-items-center vh-100">

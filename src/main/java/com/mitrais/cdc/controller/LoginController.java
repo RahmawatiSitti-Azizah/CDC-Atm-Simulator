@@ -27,7 +27,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
         HttpSession session = request.getSession();
-        if (isSessionValid(session)) {
+        if (service.isAuthenticated(request)) {
             return "TransactionMenu";
         }
         try {

@@ -8,6 +8,7 @@ import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionAmountValidatorService;
 import com.mitrais.cdc.util.ErrorConstant;
+import com.mitrais.cdc.util.ReferenceNumberGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Random;
 
 @Controller
 @RequestMapping("/transfer")
@@ -40,21 +43,24 @@ public class TransferController {
     public String processTransfer(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             Account sourceAccount = searchAccountService.get(request);
+            try {
+                String destinationAccountNumber = request.getParameter("destAccount");
+                accountValidatorService.validateAccountNumber(destinationAccountNumber, ErrorConstant.INVALID_ACCOUNT);
+                Account destinationAccount = searchAccountService.get(destinationAccountNumber);
 
-            String destinationAccountNumber = request.getParameter("destAccount");
-            accountValidatorService.validateAccountNumber(destinationAccountNumber, ErrorConstant.INVALID_ACCOUNT);
-            Account destinationAccount = searchAccountService.get(destinationAccountNumber);
-
-            Double amount = Double.parseDouble(request.getParameter("amount"));
-            Money transferAmount = new Dollar(amount);
-            amountValidatorService.validateTransferAmount(transferAmount);
-
-            transactionService.transfer(sourceAccount, destinationAccount, transferAmount, "");
-            model.addAttribute("amount", transferAmount);
-            model.addAttribute("balance", sourceAccount.getStringBalance());
-            return "TransferSummary";
+                Double amount = Double.parseDouble(request.getParameter("amount"));
+                Money transferAmount = new Dollar(amount);
+                amountValidatorService.validateTransferAmount(transferAmount);
+                transactionService.transfer(sourceAccount, destinationAccount, transferAmount, ReferenceNumberGenerator.generateTransferRefnumber(new Random()));
+                model.addAttribute("amount", transferAmount);
+                model.addAttribute("balance", sourceAccount.getStringBalance());
+                return "TransferSummary";
+            } catch (Exception exception) {
+                model.addAttribute("errorMessage", exception.getMessage());
+                return "TransferMenu";
+            }
         } catch (Exception e) {
-
+            model.addAttribute("errorMessage", e.getMessage());
             return "Login";
         }
     }

@@ -5,6 +5,8 @@ import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.LoginService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,13 @@ public class LoginServiceImpl implements LoginService {
         }
         validatorService.validateAccountNumber(account, ErrorConstant.ACCOUNT_NUMBER_SHOULD_ONLY_CONTAINS_NUMBERS);
         validatorService.validatePin(pin);
-        return searchAccountService.get(account, pin);
+        Account result = searchAccountService.get(account, pin);
+        return new Account(null, result.getAccountHolderName(), result.getAccountNumber(), null);
+    }
+
+    @Override
+    public boolean isAuthenticated(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return session.getAttribute("account") != null;
     }
 }

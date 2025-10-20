@@ -21,7 +21,7 @@
       </div>
       <c:if test="${errorMessage != null}">
         <div class="row justify-content-center">
-          <div class="col-auto"><label><c:out value="${error}"/></label></div>
+          <div class="col-auto"><label class="text-danger"><c:out value="${errorMessage}"/></label></div>
         </div>
       </c:if>
       <div class="row justify-content-center">
@@ -40,6 +40,11 @@
           <form action="/withdraw" method="post">
             <input type="hidden" name="amount" value="100"/>
             <input type="submit" class="btn btn-primary" value="100"/>
+          </form>
+        </div>
+        <div class="col-6">
+          <form action="/withdraw/other">
+            <input type="submit" class="btn btn-primary" value="Other"/>
           </form>
         </div>
         <div class="col-6">

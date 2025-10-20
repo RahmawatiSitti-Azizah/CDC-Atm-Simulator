@@ -30,11 +30,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (session.getAttribute("account") != null)
             filterChain.doFilter(request, response);
         else {
-            try {
-                session.setAttribute("account", service.login(request.getParameter("account"), request.getParameter("pin")));
+            if (req.getRequestURI().equals("/login")) {
                 filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } else {
                 HttpServletResponse resp = (HttpServletResponse) response;
                 resp.sendRedirect("");
             }

@@ -8,7 +8,7 @@
     <link href='<c:url value="bootstrap.css"/>' rel="stylesheet" type="text/css"/>
     <link href='<c:url value="bootstrap.js"/>' rel="stylesheet" type="text/javascript"/>
     <meta charset="UTF-8">
-    <title>Menu</title>
+    <title>History Menu</title>
 </head>
 <body class="container vh-100">
   <div class="row justify-content-center align-items-center vh-100">

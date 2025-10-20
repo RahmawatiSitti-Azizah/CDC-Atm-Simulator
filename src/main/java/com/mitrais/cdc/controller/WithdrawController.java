@@ -33,14 +33,29 @@ public class WithdrawController {
     }
 
     @PostMapping("")
-    public String WithdrawMenu(HttpServletRequest request, Model model) throws Exception {
-        Account userAccount = searchAccountService.get(request);
-        Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
-        Dollar withdrawAmount = new Dollar(amount);
-        amountValidatorService.validateWithdrawAmount(withdrawAmount);
-        accountTransactionService.withdraw(userAccount, withdrawAmount);
-        model.addAttribute("withdraw", amount);
-        model.addAttribute("balance", userAccount.getStringBalance());
-        return "WithdrawSummary";
+    public String WithdrawMenu(HttpServletRequest request, Model model) {
+        try {
+            Account userAccount = searchAccountService.get(request);
+            Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
+            Dollar withdrawAmount = new Dollar(amount);
+            try {
+                amountValidatorService.validateWithdrawAmount(withdrawAmount);
+                accountTransactionService.withdraw(userAccount, withdrawAmount);
+                model.addAttribute("withdraw", amount);
+                model.addAttribute("balance", userAccount.getStringBalance());
+                return "WithdrawSummary";
+            } catch (Exception exception) {
+                model.addAttribute("errorMessage", exception.getMessage());
+                return "WithdrawMenu";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "Login";
+        }
+    }
+
+    @GetMapping("/other")
+    public String getOtherWithdrawMenu() {
+        return "OtherWithdrawMenu";
     }
 }

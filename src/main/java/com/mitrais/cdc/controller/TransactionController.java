@@ -2,10 +2,10 @@ package com.mitrais.cdc.controller;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +19,11 @@ import java.util.List;
 @RequestMapping("/transaction")
 public class TransactionController {
     private TransactionService transactionService;
+    private SearchAccountService searchAccountService;
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(SearchAccountService searchAccountService, TransactionService transactionService) {
+        this.searchAccountService = searchAccountService;
         this.transactionService = transactionService;
     }
 
@@ -32,11 +34,16 @@ public class TransactionController {
 
     @PostMapping("")
     public String processTransactionScreen(HttpServletRequest request, HttpServletResponse response, Model model) {
-        int maxTransaction = Integer.parseInt(request.getParameter("max"));
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        List<Transaction> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
-        model.addAttribute("transaction", transactions);
-        return "HistoryList";
+        try {
+            Account account = searchAccountService.get(request);
+            String inputMax = request.getParameter("max");
+            int maxTransaction = Integer.parseInt(inputMax != null ? inputMax : "0");
+            List<Transaction> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
+            model.addAttribute("transaction", transactions);
+            return "HistoryList";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "Login";
+        }
     }
 }
