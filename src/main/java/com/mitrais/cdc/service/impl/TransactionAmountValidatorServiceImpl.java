@@ -22,7 +22,7 @@ class TransactionAmountValidatorServiceImpl implements TransactionAmountValidato
     @Override
     public void validateTransferAmount(Money amount) throws Exception {
         if (!amount.isMoreThanOrEquals(new Dollar(1.0))) {
-            throw new Exception("Minimum amount to transfer is $1");
+            throw new Exception(ErrorConstant.MINIMUM_AMOUNT_ERROR_MESSAGE);
         }
         if (amount.isMoreThan(new Dollar(1000.0))) {
             throw new Exception(ErrorConstant.MAXIMUM_TRANSACTION_AMOUNT_EXCEED);

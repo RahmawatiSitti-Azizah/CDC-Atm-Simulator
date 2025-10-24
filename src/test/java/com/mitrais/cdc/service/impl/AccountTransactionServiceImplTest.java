@@ -25,7 +25,7 @@ public class AccountTransactionServiceImplTest {
         Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
         serviceInTest.withdraw(account, new Dollar(20.0));
         Assertions.assertEquals(account.getStringBalance(), "$80");
-        Mockito.verify(transactionRepo, Mockito.times(1)).saveTransaction(Mockito.any());
+        Mockito.verify(transactionRepo, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.times(1)).save(Mockito.any());
     }
 
@@ -35,7 +35,7 @@ public class AccountTransactionServiceImplTest {
         Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.withdraw(account, new Dollar(110.0)));
         Assertions.assertEquals("Insufficient balance $110", exception.getMessage());
         Assertions.assertEquals(account.getStringBalance(), "$100");
-        Mockito.verify(transactionRepo, Mockito.never()).saveTransaction(Mockito.any());
+        Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
     }
 
@@ -46,7 +46,7 @@ public class AccountTransactionServiceImplTest {
         serviceInTest.transfer(sourceAccount, destinationAccount, new Dollar(20.0), "REF123");
         Assertions.assertEquals(sourceAccount.getStringBalance(), "$80");
         Assertions.assertEquals(destinationAccount.getStringBalance(), "$70");
-        Mockito.verify(transactionRepo, Mockito.times(1)).saveTransaction(Mockito.any());
+        Mockito.verify(transactionRepo, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.times(2)).save(Mockito.any());
     }
 
@@ -58,7 +58,7 @@ public class AccountTransactionServiceImplTest {
         Assertions.assertEquals("Insufficient balance $110", exception.getMessage());
         Assertions.assertEquals(sourceAccount.getStringBalance(), "$100");
         Assertions.assertEquals(destinationAccount.getStringBalance(), "$50");
-        Mockito.verify(transactionRepo, Mockito.never()).saveTransaction(Mockito.any());
+        Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
     }
 }

@@ -2,6 +2,7 @@ package com.mitrais.cdc.controller;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionAmountValidatorService;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/withdraw")
@@ -28,25 +31,26 @@ public class WithdrawController {
     }
 
     @GetMapping("")
-    public String getWithdrawMenu(Model model) {
+    public String withdrawMenu(Model model) {
         return "WithdrawMenu";
     }
 
     @PostMapping("")
-    public String WithdrawMenu(HttpServletRequest request, Model model) {
+    public String processWithdraw(HttpServletRequest request, Model model) {
         try {
             Account userAccount = searchAccountService.get(request);
-            Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
-            Dollar withdrawAmount = new Dollar(amount);
             try {
+                Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
+                Dollar withdrawAmount = new Dollar(amount);
                 amountValidatorService.validateWithdrawAmount(withdrawAmount);
-                accountTransactionService.withdraw(userAccount, withdrawAmount);
-                model.addAttribute("withdraw", amount);
+                Transaction transaction = accountTransactionService.withdraw(userAccount, withdrawAmount);
+                model.addAttribute("withdraw", transaction.getAmount());
                 model.addAttribute("balance", userAccount.getStringBalance());
+                model.addAttribute("transactionDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                 return "WithdrawSummary";
             } catch (Exception exception) {
                 model.addAttribute("errorMessage", exception.getMessage());
-                return "WithdrawMenu";
+                return request.getParameter("other") != null ? "OtherWithdrawMenu" : "WithdrawMenu";
             }
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -55,7 +59,7 @@ public class WithdrawController {
     }
 
     @GetMapping("/other")
-    public String getOtherWithdrawMenu() {
+    public String otherWithdrawMenu() {
         return "OtherWithdrawMenu";
     }
 }

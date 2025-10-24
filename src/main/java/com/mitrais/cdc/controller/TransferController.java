@@ -3,6 +3,7 @@ package com.mitrais.cdc.controller;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Money;
+import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.SearchAccountService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 @Controller
@@ -35,7 +37,7 @@ public class TransferController {
     }
 
     @GetMapping("")
-    public String getTransferMenu() {
+    public String transferMenu() {
         return "TransferMenu";
     }
 
@@ -51,9 +53,10 @@ public class TransferController {
                 Double amount = Double.parseDouble(request.getParameter("amount"));
                 Money transferAmount = new Dollar(amount);
                 amountValidatorService.validateTransferAmount(transferAmount);
-                transactionService.transfer(sourceAccount, destinationAccount, transferAmount, ReferenceNumberGenerator.generateTransferRefnumber(new Random()));
-                model.addAttribute("amount", transferAmount);
+                Transaction transaction = transactionService.transfer(sourceAccount, destinationAccount, transferAmount, ReferenceNumberGenerator.generateTransferRefnumber(new Random()));
+                model.addAttribute("amount", transaction.getAmount());
                 model.addAttribute("balance", sourceAccount.getStringBalance());
+                model.addAttribute("transactionDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                 return "TransferSummary";
             } catch (Exception exception) {
                 model.addAttribute("errorMessage", exception.getMessage());

@@ -14,13 +14,13 @@
   <div class="row justify-content-center align-items-center vh-100">
     <div class="col-4 bg-primary">
       <div class="row justify-content-center">
-        <div class="col-auto">Hello <c:out value = "${account.accountHolderName}"/></div>
+        <div class="col-auto text-white">Hello <c:out value = "${account.accountHolderName}"/></div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-6"><form action="/withdraw"><input type="submit" class="form-control btn btn-primary" value="Withdrawn"/></form></div>
-        <div class="col-6"><form action="/transfer"><input type="submit" class="form-control btn btn-primary" value="Fund Transfer"/></form></div>
-        <div class="col-6"><form action="/transaction"><input type="submit" class="form-control btn btn-primary" value="Transaction History"/></form></div>
-        <div class="col-6"><form action="/logout"><input type="submit" class="form-control btn btn-primary" value="Exit"/></form></div>
+        <div class="col-6"><form action="/withdraw"><input type="submit" class="form-control btn btn-primary text-start" value="Withdrawn"/></form></div>
+        <div class="col-6"><form action="/transfer"><input type="submit" class="form-control btn btn-primary text-end" value="Fund Transfer"/></form></div>
+        <div class="col-6"><form action="/transaction"><input type="submit" class="form-control btn btn-primary text-start" value="Transaction History"/></form></div>
+        <div class="col-6"><form action="/logout"><input type="submit" class="form-control btn btn-primary text-end" value="Exit"/></form></div>
       </div>
     </div>
   </div>

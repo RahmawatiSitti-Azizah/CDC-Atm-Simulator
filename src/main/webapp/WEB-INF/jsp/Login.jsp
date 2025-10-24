@@ -21,7 +21,7 @@
               </div>
             </c:if>
             <div class="row justify-content-center my-2">
-                <div class="col-4">
+                <div class="col-4 text-end">
                     <label>Account:</label>
                 </div>
                 <div class="col-8">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="row justify-content-center my-2">
-                <div class="col-4">
+                <div class="col-4 text-end">
                     <label>Pin:</label>
                 </div>
                 <div class="col-8">
@@ -38,7 +38,7 @@
             </div>
             <div class="row my-2 justify-content-end">
                 <div class="col-auto">
-                    <input type="submit" class="form-control" value ="login"/>
+                    <input type="submit" class="form-control text-end" value ="login"/>
                 </div>
             </div>
           </div>

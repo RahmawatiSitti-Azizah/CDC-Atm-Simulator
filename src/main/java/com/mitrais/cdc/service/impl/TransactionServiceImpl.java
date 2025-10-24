@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,12 @@ class TransactionServiceImpl implements TransactionService {
     public List<Transaction> getTransactionHistoryAccount(String accountNumber, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "transactionDate");
         Pageable pageable = PageRequest.of(0, size, sort);
-        Page<Transaction> page = transactionRepository.findAll(pageable);
+        Specification<Transaction> spec = Specification.anyOf(
+                (root, query, criteriaBuilder) ->
+                        criteriaBuilder.equal(root.get("sourceAccount").get("accountNumber"), accountNumber),
+                (root, query, criteriaBuilder) ->
+                        criteriaBuilder.equal(root.get("destinationAccount").get("accountNumber"), accountNumber));
+        Page<Transaction> page = transactionRepository.findAll(spec, pageable);
         return page.getContent();
     }
 }

@@ -16,7 +16,7 @@ public interface TransactionService {
     public List<Transaction> getTransactionHistoryAccount(String accountNumber);
 
     /**
-     * Service to get an limited size of last transaction history of an account.
+     * Service to get a limited size of last transaction history of an account.
      *
      * @param accountNumber the account number to get the transaction history
      *                      (not null, must be 6 characters long)

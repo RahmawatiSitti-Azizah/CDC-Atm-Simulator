@@ -1,6 +1,7 @@
 package com.mitrais.cdc.model;
 
 import com.mitrais.cdc.model.converter.MoneyConverter;
+import com.mitrais.cdc.util.ErrorConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -45,7 +46,7 @@ public class Account implements Loginable {
 
     public void decreaseBalance(Money withdrawCurrency) throws Exception {
         if (withdrawCurrency.isMoreThan(balance)) {
-            throw new Exception("Insufficient balance " + withdrawCurrency.toString());
+            throw new Exception(ErrorConstant.getInsufficientBalanceErrorMessage(withdrawCurrency));
         }
         validateAmountMoreThanZero(withdrawCurrency);
         balance.subtract(withdrawCurrency);

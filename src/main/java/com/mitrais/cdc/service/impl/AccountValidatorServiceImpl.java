@@ -1,6 +1,7 @@
 package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.service.AccountValidatorService;
+import com.mitrais.cdc.util.ErrorConstant;
 import com.mitrais.cdc.util.StringMatcherUtil;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ class AccountValidatorServiceImpl implements AccountValidatorService {
         if (!StringMatcherUtil.checkStringIsNumberOnly(accountNumber)) {
             throw new Exception(errorMessage);
         }
-        validateLength(accountNumber, 6, "Account Number should have 6 digits length");
+        validateLength(accountNumber, 6, ErrorConstant.ACCOUNT_NUMBER_SHOULD_HAVE_6_DIGITS_LENGTH);
     }
 
     @Override

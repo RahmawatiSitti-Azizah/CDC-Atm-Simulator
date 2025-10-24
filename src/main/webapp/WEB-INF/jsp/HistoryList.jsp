@@ -12,6 +12,11 @@
     <body class="container vh-100">
       <div class="row justify-content-center align-items-center vh-100">
         <div class="col-4 bg-primary">
+          <c:if test="${transaction.isEmpty()}">
+            <div class="row justify-content-center">
+              <div class="col-auto"><c:out value = "No Transaction Found"/></div>
+            </div>
+          </c:if>
           <c:forEach var="trx" items="${transaction}">
             <div class="row justify-content-center">
                 <div class="col-auto">
@@ -32,7 +37,7 @@
                 <input type="submit" class="btn btn-primary" value="Back"/>
               </form>
             </div>
-            <div class="col-6">
+            <div class="col-6 text-end">
               <form action="/login" method="post">
                 <input type="submit" class="btn btn-primary" value="Main Menu"/>
               </form>

@@ -48,7 +48,7 @@ class SearchAccountServiceImpl implements SearchAccountService {
     public Account get(String accountNumber) throws Exception {
         Account searchResult = accountRepository.findAccountByAccountNumber(accountNumber);
         if (searchResult == null) {
-            throw new Exception("Invalid Account");
+            throw new Exception(ErrorConstant.INVALID_ACCOUNT);
         }
         return searchResult;
     }

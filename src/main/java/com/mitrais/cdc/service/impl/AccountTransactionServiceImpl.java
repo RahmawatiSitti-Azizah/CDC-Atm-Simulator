@@ -6,6 +6,7 @@ import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.repository.TransactionRepository;
 import com.mitrais.cdc.service.AccountTransactionService;
+import com.mitrais.cdc.util.ErrorConstant;
 import com.mitrais.cdc.util.ReferenceNumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,23 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
     }
 
     @Override
-    public void withdraw(Account account, Money amount) throws Exception {
+    public Transaction withdraw(Account account, Money amount) throws Exception {
         account.decreaseBalance(amount);
-        transactionRepository.save(new Transaction(null, account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", LocalDateTime.now()));
+        Transaction transaction = transactionRepository.save(new Transaction(null, account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", LocalDateTime.now()));
         accountRepository.save(account);
+        return transaction;
     }
 
     @Override
-    public void transfer(Account sourceAccount, Account destinationAccount, Money amount, String referenceNumber) throws Exception {
+    public Transaction transfer(Account sourceAccount, Account destinationAccount, Money amount, String referenceNumber) throws Exception {
         if (sourceAccount.getAccountNumber().equals(destinationAccount.getAccountNumber())) {
-            throw new Exception("invalid transfer: destination account is the same as source account");
+            throw new Exception(ErrorConstant.DESTINATION_ACCOUNT_IS_THE_SAME_AS_SOURCE_ACCOUNT);
         }
         sourceAccount.decreaseBalance(amount);
         destinationAccount.increaseBalance(amount);
-        transactionRepository.save(new Transaction(null, sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", null));
+        Transaction transaction = transactionRepository.save(new Transaction(null, sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", LocalDateTime.now()));
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
+        return transaction;
     }
 }

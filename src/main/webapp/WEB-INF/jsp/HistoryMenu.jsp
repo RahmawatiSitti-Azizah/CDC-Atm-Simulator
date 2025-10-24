@@ -23,25 +23,25 @@
         <div class="col-6">
           <form action="/transaction" method="post">
             <input type="hidden" name="max" value="10"/>
-            <input type="submit" class="form-control btn btn-primary" value="10"/>
+            <input type="submit" class="form-control btn btn-primary text-start" value="10"/>
           </form>
         </div>
         <div class="col-6">
           <form action="/transaction" method="post">
             <input type="hidden" name="max" value="25"/>
-            <input type="submit" class="form-control btn btn-primary" value="25"/>
+            <input type="submit" class="form-control btn btn-primary text-end" value="25"/>
           </form>
         </div>
         <div class="col-6">
           <form action="/transaction" method="post">
             <input type="hidden" name="max" value="50"/>
-            <input type="submit" class="form-control btn btn-primary" value="50"/>
+            <input type="submit" class="form-control btn btn-primary text-start" value="50"/>
           </form>
         </div>
         <div class="col-6">
           <form action="/transaction" method="post">
             <input type="hidden" name="max" value="100"/>
-            <input type="submit" class="form-control btn btn-primary" value="100"/>
+            <input type="submit" class="form-control btn btn-primary text-end" value="100"/>
           </form>
         </div>
       </div>
