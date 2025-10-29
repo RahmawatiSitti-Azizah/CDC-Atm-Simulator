@@ -4,6 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Transaction;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionService;
+import com.mitrais.cdc.util.ErrorConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,24 @@ public class TransactionController {
     }
 
     @GetMapping("")
-    public String getTransactionScreen() {
+    public String historyMenu() {
         return "HistoryMenu";
     }
 
     @PostMapping("")
-    public String processTransactionScreen(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String processTransaction(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             Account account = searchAccountService.get(request);
-            String inputMax = request.getParameter("max");
-            int maxTransaction = Integer.parseInt(inputMax != null ? inputMax : "0");
-            List<Transaction> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
-            model.addAttribute("transaction", transactions);
-            return "HistoryList";
+            try {
+                String inputMax = request.getParameter("max");
+                int maxTransaction = Integer.parseInt(inputMax != null ? inputMax : "0");
+                List<Transaction> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
+                model.addAttribute("transaction", transactions);
+                return "HistoryList";
+            } catch (Exception exception) {
+                model.addAttribute("errorMessage", ErrorConstant.INVALID_MAX_TRANSACTION_SHOWN);
+                return "HistoryMenu";
+            }
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "Login";

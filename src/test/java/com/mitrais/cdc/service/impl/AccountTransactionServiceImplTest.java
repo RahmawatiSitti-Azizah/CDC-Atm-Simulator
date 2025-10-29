@@ -24,7 +24,7 @@ public class AccountTransactionServiceImplTest {
     public void testWithdraw_transactionValid_thenBalanceDeducted() throws Exception {
         Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
         serviceInTest.withdraw(account, new Dollar(20.0));
-        Assertions.assertEquals(account.getStringBalance(), "$80");
+        Assertions.assertEquals(account.getStringBalance(), "$80.0");
         Mockito.verify(transactionRepo, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.times(1)).save(Mockito.any());
     }
@@ -33,8 +33,8 @@ public class AccountTransactionServiceImplTest {
     public void testWithdraw_transactionAmountExceedAccountBalance_thenThrowException() throws Exception {
         Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
         Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.withdraw(account, new Dollar(110.0)));
-        Assertions.assertEquals("Insufficient balance $110", exception.getMessage());
-        Assertions.assertEquals(account.getStringBalance(), "$100");
+        Assertions.assertEquals("Insufficient balance $110.0", exception.getMessage());
+        Assertions.assertEquals(account.getStringBalance(), "$100.0");
         Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
     }
@@ -44,8 +44,8 @@ public class AccountTransactionServiceImplTest {
         Account sourceAccount = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
         Account destinationAccount = new Account(new Dollar(50.0), "John", "223344", "334422");
         serviceInTest.transfer(sourceAccount, destinationAccount, new Dollar(20.0), "REF123");
-        Assertions.assertEquals(sourceAccount.getStringBalance(), "$80");
-        Assertions.assertEquals(destinationAccount.getStringBalance(), "$70");
+        Assertions.assertEquals(sourceAccount.getStringBalance(), "$80.0");
+        Assertions.assertEquals(destinationAccount.getStringBalance(), "$70.0");
         Mockito.verify(transactionRepo, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.times(2)).save(Mockito.any());
     }
@@ -55,9 +55,9 @@ public class AccountTransactionServiceImplTest {
         Account sourceAccount = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
         Account destinationAccount = new Account(new Dollar(50.0), "John", "223344", "334422");
         Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.transfer(sourceAccount, destinationAccount, new Dollar(110.0), "REF123"));
-        Assertions.assertEquals("Insufficient balance $110", exception.getMessage());
-        Assertions.assertEquals(sourceAccount.getStringBalance(), "$100");
-        Assertions.assertEquals(destinationAccount.getStringBalance(), "$50");
+        Assertions.assertEquals("Insufficient balance $110.0", exception.getMessage());
+        Assertions.assertEquals(sourceAccount.getStringBalance(), "$100.0");
+        Assertions.assertEquals(destinationAccount.getStringBalance(), "$50.0");
         Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
     }

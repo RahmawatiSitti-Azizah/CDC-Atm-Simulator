@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class TransactionServiceImplTest {
     @Test
     public void testGetTransactionHistoryAccountWithSize_whenThereAreTransaction_thenReturnListOfTransaction() {
         Page page = mock(Page.class);
-        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(page.getContent()).thenReturn(List.of(mock(Transaction.class)));
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assertions.assertTrue(result.size() > 0);
@@ -50,7 +51,7 @@ public class TransactionServiceImplTest {
     @Test
     public void testGetTransactionHistoryAccountWithSize_whenNoTransactionFound_thenReturnEmptyList() {
         Page page = mock(Page.class);
-        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(page.getContent()).thenReturn(List.of());
         List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assertions.assertTrue(result.isEmpty());

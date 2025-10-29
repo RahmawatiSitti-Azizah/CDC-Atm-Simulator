@@ -19,6 +19,11 @@
       <div class="row justify-content-center">
         <div class="col-auto"><label>How many latest transaction</label></div>
       </div>
+      <c:if test="${errorMessage != null}">
+        <div class="row justify-content-center">
+          <div class="col-auto"><label class="text-danger"><c:out value="${errorMessage}"/></label></div>
+        </div>
+      </c:if>
       <div class="row justify-content-center">
         <div class="col-6">
           <form action="/transaction" method="post">

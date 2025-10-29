@@ -16,6 +16,9 @@ public class ErrorConstant {
     private static final String INSUFFICIENT_BALANCE = "Insufficient balance ";
     public static final String ACCOUNT_NUMBER_SHOULD_HAVE_6_DIGITS_LENGTH = "Account Number should have 6 digits length";
     public static final String MINIMUM_AMOUNT_ERROR_MESSAGE = "Minimum amount to transfer is $1";
+    public static final String INVALID_MAX_TRANSACTION_SHOWN = "Invalid parameter : max transaction shown should be number";
+    public static final String PIN_SHOULD_HAVE_6_DIGITS_LENGTH = "Pin should have 6 digits length";
+    public static final String PIN_SHOULD_ONLY_CONTAINS_NUMBERS = "Pin should only contains numbers";
 
     public static String getInsufficientBalanceErrorMessage(Money withdrawCurrency) {
         return INSUFFICIENT_BALANCE + withdrawCurrency.toString();

@@ -18,9 +18,9 @@ class AccountValidatorServiceImpl implements AccountValidatorService {
 
     @Override
     public void validatePin(String pin) throws Exception {
-        validateLength(pin, 6, "Pin should have 6 digits length");
+        validateLength(pin, 6, ErrorConstant.PIN_SHOULD_HAVE_6_DIGITS_LENGTH);
         if (!StringMatcherUtil.checkStringIsNumberWithLength(pin, 6)) {
-            throw new Exception("Pin should only contains numbers");
+            throw new Exception(ErrorConstant.PIN_SHOULD_ONLY_CONTAINS_NUMBERS);
         }
     }
 

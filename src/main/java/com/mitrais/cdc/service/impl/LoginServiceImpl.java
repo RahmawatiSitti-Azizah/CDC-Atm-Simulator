@@ -25,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Account login(String account, String pin) throws Exception {
-        if (account == null && pin == null) {
+        if (account == null || pin == null) {
             throw new CredentialNotFoundException(ErrorConstant.INVALID_ACCOUNT_PASSWORD);
         }
         validatorService.validateAccountNumber(account, ErrorConstant.ACCOUNT_NUMBER_SHOULD_ONLY_CONTAINS_NUMBERS);

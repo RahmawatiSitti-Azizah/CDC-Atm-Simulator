@@ -45,8 +45,4 @@ public class LoginController {
         session.removeAttribute("account");
         return "Login";
     }
-
-    private static boolean isSessionValid(HttpSession session) {
-        return session.getAttribute("account") != null;
-    }
 }

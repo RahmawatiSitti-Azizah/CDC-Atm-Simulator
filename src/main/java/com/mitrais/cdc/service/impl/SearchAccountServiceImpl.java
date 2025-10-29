@@ -23,7 +23,7 @@ class SearchAccountServiceImpl implements SearchAccountService {
         try {
             Account account = get(accountNumber);
             if (account != null) {
-                if (!account.equals(newAccount)) {
+                if (!account.toString().equals(newAccount.toString())) {
                     System.out.println(ErrorConstant.DUPLICATE_ACCOUNT_NUMBER + accountNumber);
                 } else {
                     System.out.println(ErrorConstant.DUPLICATE_RECORDS + newAccount.toString());
@@ -39,7 +39,7 @@ class SearchAccountServiceImpl implements SearchAccountService {
 
         Account searchResult = accountRepository.findAccountByAccountNumber(accountNumber);
         if (searchResult == null || !searchResult.login(accountNumber, pin)) {
-            throw new Exception("Invalid Account Number/PIN");
+            throw new Exception(ErrorConstant.INVALID_ACCOUNT_PASSWORD);
         }
         return searchResult;
     }
