@@ -1,8 +1,5 @@
 package com.mitrais.cdc.model;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class Dollar extends Money {
 
     public Dollar(Double amount) {
@@ -33,10 +30,5 @@ public class Dollar extends Money {
     @Override
     public void add(Money currency) {
         amount += currency.amount;
-    }
-
-    @Override
-    public void insertToPreparedStatement(PreparedStatement ps, int index) throws SQLException {
-        ps.setDouble(index, amount);
     }
 }

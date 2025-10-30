@@ -2,7 +2,7 @@ package com.mitrais.cdc.model;
 
 import java.util.Objects;
 
-public abstract class Money implements QueryInsertable {
+public abstract class Money {
     protected Double amount;
     protected String currency;
 

@@ -4,6 +4,8 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.util.ErrorConstant;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,6 +84,15 @@ public class SearchAccountServiceImplTest {
     }
 
     @Test
+    public void testGetAccount_whenAccountNotFound_thenReturnInvalidAccountNumberPinException() {
+        Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
+        when(repository.findAccountByAccountNumber(anyString())).thenReturn(null);
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.get(ACCOUNT_NUMBER, "111111"));
+        verify(repository, times(1)).findAccountByAccountNumber(anyString());
+        Assertions.assertEquals(ErrorConstant.INVALID_ACCOUNT_PASSWORD, exception.getMessage());
+    }
+
+    @Test
     public void testGet_whenValidAndFound_thenReturnAccount() throws Exception {
         Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
@@ -98,4 +109,35 @@ public class SearchAccountServiceImplTest {
         Assertions.assertEquals("Invalid Account", exception.getMessage());
     }
 
+    @Test
+    public void testGetHttpServletRequest_whenParameterValid_thenReturnAccount() throws Exception {
+        Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpSession session = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("account")).thenReturn(account);
+        when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
+
+        Account result = serviceInTest.get(request);
+
+        Assertions.assertEquals(account.getAccountHolderName(), result.getAccountHolderName());
+        Assertions.assertEquals(account.getAccountNumber(), result.getAccountNumber());
+        Assertions.assertEquals(account.getPin(), result.getPin());
+        Assertions.assertEquals(account.getStringBalance(), result.getStringBalance());
+        verify(repository, times(1)).findAccountByAccountNumber(anyString());
+    }
+
+    @Test
+    public void testGetHttpServletRequest_whenSessionAccountNotFound_thenReturnAccount() throws Exception {
+        Account account = getAccount(null, "Jane Doe", ACCOUNT_NUMBER, null);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpSession session = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("account")).thenReturn(null);
+
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.get(request));
+
+        Assertions.assertEquals(ErrorConstant.ACCOUNT_NOT_FOUND, exception.getMessage());
+        verify(repository, never()).findAccountByAccountNumber(anyString());
+    }
 }

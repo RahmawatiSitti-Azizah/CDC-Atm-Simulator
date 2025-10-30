@@ -47,4 +47,35 @@ public class TransactionAmountValidatorServiceImplTest {
         verify(money, times(1)).isMultipleOf(anyInt());
         verify(money, times(1)).isMoreThan(any());
     }
+
+    @Test
+    public void testValidateTransferAmount_whenAmountValid_thenNoExceptionThrow() throws Exception {
+        Money money = mock(Money.class);
+        when(money.isMoreThanOrEquals(any())).thenReturn(true);
+        when(money.isMoreThan(any())).thenReturn(false);
+        serviceInTest.validateTransferAmount(money);
+        verify(money, times(1)).isMoreThanOrEquals(any());
+        verify(money, times(1)).isMoreThan(any());
+    }
+
+    @Test
+    public void testValidateTransferAmount_whenAmountLessThanOne_thenThrowMinimumAmountException() throws Exception {
+        Money money = mock(Money.class);
+        when(money.isMoreThanOrEquals(any())).thenReturn(false);
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.validateTransferAmount(money));
+        Assertions.assertEquals(ErrorConstant.MINIMUM_AMOUNT_ERROR_MESSAGE, exception.getMessage());
+        verify(money, times(1)).isMoreThanOrEquals(any());
+        verify(money, never()).isMoreThan(any());
+    }
+
+    @Test
+    public void testValidateTransferAmount_whenAmountExceed1000_thenThrowMaximumExceedException() throws Exception {
+        Money money = mock(Money.class);
+        when(money.isMoreThanOrEquals(any())).thenReturn(true);
+        when(money.isMoreThan(any())).thenReturn(true);
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.validateTransferAmount(money));
+        Assertions.assertEquals(ErrorConstant.MAXIMUM_TRANSACTION_AMOUNT_EXCEED, exception.getMessage());
+        verify(money, times(1)).isMoreThanOrEquals(any());
+        verify(money, times(1)).isMoreThan(any());
+    }
 }

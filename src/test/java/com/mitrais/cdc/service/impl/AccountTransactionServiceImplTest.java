@@ -4,6 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.repository.TransactionRepository;
+import com.mitrais.cdc.util.ErrorConstant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,16 @@ public class AccountTransactionServiceImplTest {
         Assertions.assertEquals("Insufficient balance $110.0", exception.getMessage());
         Assertions.assertEquals(sourceAccount.getStringBalance(), "$100.0");
         Assertions.assertEquals(destinationAccount.getStringBalance(), "$50.0");
+        Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
+        Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
+    public void testTransfer_whenSourceAndDestinationAccountSame_thenThrowDestinationAccountSameAsSourceException() throws Exception {
+        Account sourceAccount = new Account(new Dollar(BALANCE_AMOUNT), "Jane", "112233", "112211");
+        Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.transfer(sourceAccount, sourceAccount, new Dollar(20.0), "REF123"));
+        Assertions.assertEquals(ErrorConstant.DESTINATION_ACCOUNT_IS_THE_SAME_AS_SOURCE_ACCOUNT, exception.getMessage());
+        Assertions.assertEquals((new Dollar(BALANCE_AMOUNT)).toString(), sourceAccount.getStringBalance());
         Mockito.verify(transactionRepo, Mockito.never()).save(Mockito.any());
         Mockito.verify(accountRepo, Mockito.never()).save(Mockito.any());
     }
