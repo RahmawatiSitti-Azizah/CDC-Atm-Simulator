@@ -13,7 +13,7 @@
       <div class="row justify-content-center align-items-center vh-100">
           <div class="col-3 bg-primary">
             <div class="row justify-content-center my-2">
-                <div class="col-auto"><h3>Provide destination account details</h3></div>
+                <div class="col-auto text-white text-center"><h3>Destination account details</h3></div>
             </div>
             <c:if test="${errorMessage != null}">
               <div class="row justify-content-center">
@@ -23,7 +23,7 @@
             <form action="/transfer" method="post">
                 <div class="row justify-content-center my-2">
                     <div class="col-6 text-end">
-                        <label for="accountNumber" class="form-label">Account number:</label>
+                        <label for="accountNumber" class="form-label text-white">Account number:</label>
                     </div>
                     <div class="col-6">
                         <input class="form-control" type="number"  name="destAccount" id="accountNumber">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="row justify-content-center my-2">
                     <div class="col-6 text-end">
-                        <label for="amount" class="form-label">Transfer amount:</label>
+                        <label for="amount" class="form-label text-white">Transfer amount:</label>
                     </div>
                     <div class="col-6">
                         <input class="form-control" type="number" name="amount" id="amount">

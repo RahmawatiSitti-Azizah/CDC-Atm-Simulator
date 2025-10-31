@@ -17,7 +17,7 @@
         <div class="col-auto text-white"><label>Hello <c:out value = "${account.accountHolderName}"/></label></div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-auto"><label>Select amount</label></div>
+        <div class="col-auto text-white"><label>Select amount</label></div>
       </div>
       <c:if test="${errorMessage != null}">
         <div class="row justify-content-center">

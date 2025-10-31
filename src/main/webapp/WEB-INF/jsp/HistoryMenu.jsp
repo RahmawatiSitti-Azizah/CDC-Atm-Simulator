@@ -14,10 +14,10 @@
   <div class="row justify-content-center align-items-center vh-100">
     <div class="col-4 bg-primary">
       <div class="row justify-content-center">
-        <div class="col-auto">Hello <c:out value = "${account.accountHolderName}"/></div>
+        <div class="col-auto text-white">Hello <c:out value = "${account.accountHolderName}"/></div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-auto"><label>How many latest transaction</label></div>
+        <div class="col-auto text-white"><label>How many latest transaction</label></div>
       </div>
       <c:if test="${errorMessage != null}">
         <div class="row justify-content-center">

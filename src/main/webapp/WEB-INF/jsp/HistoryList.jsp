@@ -18,17 +18,19 @@
             </div>
           </c:if>
           <c:forEach var="trx" items="${transaction}">
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                  <c:choose>
-                    <c:when test="${trx.sourceAccount.accountNumber == account.accountNumber}">
+            <div class="row">
+              <c:choose>
+                <c:when test="${trx.sourceAccount.accountNumber == account.accountNumber}">
+                    <div class="col-auto fw-bold text-warning">
                       <c:out value ="${trx}"/>
-                    </c:when>
-                    <c:otherwise>
+                    </div>
+                </c:when>
+                 <c:otherwise>
+                    <div class="col-auto fw-bold text-white">
                       <c:out value ="${trx.printIncomingTransaction()}"/>
-                    </c:otherwise>
-                  </c:choose>
-                </div>
+                    </div>
+                 </c:otherwise>
+              </c:choose>
             </div>
           </c:forEach>
           <div class="row justify-content-center">

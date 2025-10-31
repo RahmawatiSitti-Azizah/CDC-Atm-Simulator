@@ -13,7 +13,7 @@
       <div class="row justify-content-center align-items-center vh-100">
         <div class="col-4 bg-primary">
           <div class="row justify-content-center">
-            <div class="col-auto">
+            <div class="col-auto text-white">
               <h3><c:out value="Transaction Summary"/></h3>
               <h4><c:out value="Date : ${transactionDate}"/></h4>
               <h4><c:out value="Withdraw: ${withdraw}"/></h4>
