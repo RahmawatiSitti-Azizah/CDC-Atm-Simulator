@@ -2,6 +2,7 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
@@ -31,15 +32,14 @@ class LoginServiceImplTest {
 
     @Test
     public void testLogin_whenAllParameterValid_theReturnAccount() throws Exception {
-        Account account = new Account(ACCOUNT_BALANCE, "Jane Doe", ACCOUNT_NUMBER, PIN);
+        AccountDto account = new AccountDto("Jane Doe", ACCOUNT_NUMBER, ACCOUNT_BALANCE);
         Mockito.when(searchAccountService.get(ACCOUNT_NUMBER, PIN)).thenReturn(account);
 
-        Account result = serviceInTest.login(ACCOUNT_NUMBER, PIN);
+        AccountDto result = serviceInTest.login(ACCOUNT_NUMBER, PIN);
 
         Assertions.assertEquals(account.getAccountNumber(), result.getAccountNumber());
         Assertions.assertEquals(account.getAccountHolderName(), result.getAccountHolderName());
-        Assertions.assertNull(result.getPin());
-        Assertions.assertNull(result.getBalance());
+        Assertions.assertEquals(account.getBalance().toString(), result.getBalance().toString());
         Mockito.verify(validatorService, Mockito.times(1)).validateAccountNumber(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(validatorService, Mockito.times(1)).validatePin(Mockito.anyString());
         Mockito.verify(searchAccountService, Mockito.times(1)).get(Mockito.anyString(), Mockito.anyString());
@@ -81,7 +81,6 @@ class LoginServiceImplTest {
 
     @Test
     public void testLogin_whenAccountNotFound_thenThrowException() throws Exception {
-        Account account = new Account(ACCOUNT_BALANCE, "Jane Doe", ACCOUNT_NUMBER, PIN);
         Mockito.when(searchAccountService.get(ACCOUNT_NUMBER, PIN)).thenThrow(new Exception(ErrorConstant.INVALID_ACCOUNT_PASSWORD));
 
         Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.login(ACCOUNT_NUMBER, PIN));
@@ -96,7 +95,7 @@ class LoginServiceImplTest {
     public void testIsAuthenticated_ifSessionAccountFound_thenReturnTrue() {
         HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
         HttpSession mockSession = Mockito.mock(HttpSession.class);
-        Account account = new Account(ACCOUNT_BALANCE, "Jane Doe", ACCOUNT_NUMBER, PIN);
+        Account account = new Account(ACCOUNT_NUMBER, "Jane Doe", PIN, ACCOUNT_BALANCE);
         Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
         Mockito.when(mockSession.getAttribute("account")).thenReturn(account);
 

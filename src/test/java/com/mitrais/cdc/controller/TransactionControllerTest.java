@@ -3,6 +3,10 @@ package com.mitrais.cdc.controller;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
+import com.mitrais.cdc.model.mapper.AccountMapper;
+import com.mitrais.cdc.model.mapper.TransactionMapper;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionService;
 import com.mitrais.cdc.util.ErrorConstant;
@@ -52,12 +56,12 @@ class TransactionControllerTest {
 
     @Test
     public void testProcessTransaction_whenAllParameterValid_thenReturnHistoryListPage() throws Exception {
-        Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane Doe", "111111", null);
+        AccountDto account = new AccountDto("Jane Doe", "111111", new Dollar(BALANCE_AMOUNT));
         Mockito.when(searchAccountService.get(Mockito.any(HttpServletRequest.class))).thenReturn(account);
-        Account destination = new Account(new Dollar(250.0), "John Doe", "111111", null);
-        Transaction transferTransaction = new Transaction(null, account, destination, TRANSFER_AMOUNT, "123sads", "Transfer", TRANSACTION_DATE);
-        Transaction withdrawTransaction = new Transaction(null, account, null, TRANSFER_AMOUNT, "", "Withdraw", TRANSACTION_DATE);
-        List<Transaction> listTransaction = List.of(withdrawTransaction, transferTransaction);
+        Account destination = new Account("111111", "John Doe", null, new Dollar(250.0));
+        Transaction transferTransaction = new Transaction(null, AccountMapper.toEntity(account), destination, TRANSFER_AMOUNT, "123sads", "Transfer", TRANSACTION_DATE);
+        Transaction withdrawTransaction = new Transaction(null, AccountMapper.toEntity(account), null, TRANSFER_AMOUNT, "", "Withdraw", TRANSACTION_DATE);
+        List<TransactionDto> listTransaction = List.of(TransactionMapper.toTransactionDto(withdrawTransaction), TransactionMapper.toTransactionDto(transferTransaction));
         Mockito.when(transactionService.getTransactionHistoryAccount(Mockito.any(String.class), Mockito.any(Integer.class))).thenReturn(listTransaction);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/transaction")
@@ -71,12 +75,12 @@ class TransactionControllerTest {
 
     @Test
     public void testProcessTransaction_whenInvalidParameter_thenReturnHistoryMenuPageWithErrorMessage() throws Exception {
-        Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane Doe", "111111", null);
+        AccountDto account = new AccountDto("Jane Doe", "111111", new Dollar(BALANCE_AMOUNT));
         Mockito.when(searchAccountService.get(Mockito.any(HttpServletRequest.class))).thenReturn(account);
-        Account destination = new Account(new Dollar(250.0), "John Doe", "111111", null);
-        Transaction transferTransaction = new Transaction(null, account, destination, TRANSFER_AMOUNT, "123sads", "Transfer", TRANSACTION_DATE);
-        Transaction withdrawTransaction = new Transaction(null, account, null, TRANSFER_AMOUNT, "", "Withdraw", TRANSACTION_DATE);
-        List<Transaction> listTransaction = List.of(withdrawTransaction, transferTransaction);
+        Account destination = new Account("111111", "John Doe", null, new Dollar(250.0));
+        Transaction transferTransaction = new Transaction(null, AccountMapper.toEntity(account), destination, TRANSFER_AMOUNT, "123sads", "Transfer", TRANSACTION_DATE);
+        Transaction withdrawTransaction = new Transaction(null, AccountMapper.toEntity(account), null, TRANSFER_AMOUNT, "", "Withdraw", TRANSACTION_DATE);
+        List<TransactionDto> listTransaction = List.of(TransactionMapper.toTransactionDto(withdrawTransaction), TransactionMapper.toTransactionDto(transferTransaction));
         Mockito.when(transactionService.getTransactionHistoryAccount(Mockito.any(String.class), Mockito.any(Integer.class))).thenReturn(listTransaction);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/transaction")
@@ -90,7 +94,6 @@ class TransactionControllerTest {
 
     @Test
     public void testProcessTransaction_whenInvalidSessionAccount_thenReturnLoginPageAndErrorMessage() throws Exception {
-        Account account = new Account(new Dollar(BALANCE_AMOUNT), "Jane Doe", "111111", null);
         Mockito.when(searchAccountService.get(Mockito.any(HttpServletRequest.class))).thenThrow(new EntityNotFoundException(ErrorConstant.ACCOUNT_NOT_FOUND));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/transaction")

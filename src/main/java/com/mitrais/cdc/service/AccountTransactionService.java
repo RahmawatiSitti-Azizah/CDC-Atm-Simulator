@@ -1,8 +1,8 @@
 package com.mitrais.cdc.service;
 
-import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
-import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
 
 public interface AccountTransactionService {
     /**
@@ -13,7 +13,7 @@ public interface AccountTransactionService {
      * @return
      * @throws Exception if there is any issue occur
      */
-    public Transaction withdraw(Account account, Money amount) throws Exception;
+    public TransactionDto withdraw(AccountDto account, Money amount) throws Exception;
 
     /**
      * Service to transfer xxx amount from source account to destination account.
@@ -25,5 +25,5 @@ public interface AccountTransactionService {
      * @return
      * @throws Exception if there is any issue occur
      */
-    public Transaction transfer(Account sourceAccount, Account destinationAccount, Money amount, String referenceNumber) throws Exception;
+    public TransactionDto transfer(AccountDto sourceAccount, AccountDto destinationAccount, Money amount, String referenceNumber) throws Exception;
 }

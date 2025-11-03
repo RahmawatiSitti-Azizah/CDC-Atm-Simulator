@@ -1,6 +1,6 @@
 package com.mitrais.cdc.service;
 
-import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.dto.AccountDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface LoginService {
@@ -12,7 +12,7 @@ public interface LoginService {
      * @return Account that contain information that will
      * @throws Exception
      */
-    public Account login(String account, String pin) throws Exception;
+    public AccountDto login(String account, String pin) throws Exception;
 
     public boolean isAuthenticated(HttpServletRequest request);
 }

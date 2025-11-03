@@ -1,6 +1,7 @@
 package com.mitrais.cdc.service;
 
 import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.TransactionDto;
 
 import java.util.List;
 
@@ -26,5 +27,5 @@ public interface TransactionService {
      * @return a list of transactions associated with the account
      * (not null, may be empty if no transactions found)
      */
-    public List<Transaction> getTransactionHistoryAccount(String accountNumber, int size);
+    public List<TransactionDto> getTransactionHistoryAccount(String accountNumber, int size);
 }

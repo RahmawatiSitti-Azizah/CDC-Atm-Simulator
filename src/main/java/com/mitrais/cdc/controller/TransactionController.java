@@ -1,7 +1,7 @@
 package com.mitrais.cdc.controller;
 
-import com.mitrais.cdc.model.Account;
-import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionService;
 import com.mitrais.cdc.util.ErrorConstant;
@@ -36,11 +36,11 @@ public class TransactionController {
     @PostMapping("")
     public String processTransaction(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
-            Account account = searchAccountService.get(request);
+            AccountDto account = searchAccountService.get(request);
             try {
                 String inputMax = request.getParameter("max");
                 int maxTransaction = Integer.parseInt(inputMax != null ? inputMax : "0");
-                List<Transaction> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
+                List<TransactionDto> transactions = transactionService.getTransactionHistoryAccount(account.getAccountNumber(), maxTransaction);
                 model.addAttribute("transaction", transactions);
                 return "HistoryList";
             } catch (Exception exception) {

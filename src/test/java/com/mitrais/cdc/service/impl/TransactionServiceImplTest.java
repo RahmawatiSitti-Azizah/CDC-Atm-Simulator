@@ -1,6 +1,7 @@
 package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.repository.TransactionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ public class TransactionServiceImplTest {
         Page page = mock(Page.class);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(page.getContent()).thenReturn(List.of(mock(Transaction.class)));
-        List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
+        List<TransactionDto> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assertions.assertTrue(result.size() > 0);
     }
 
@@ -53,7 +54,7 @@ public class TransactionServiceImplTest {
         Page page = mock(Page.class);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(page.getContent()).thenReturn(List.of());
-        List<Transaction> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
+        List<TransactionDto> result = serviceInTest.getTransactionHistoryAccount("123123", 5);
         Assertions.assertTrue(result.isEmpty());
     }
 

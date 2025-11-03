@@ -1,6 +1,6 @@
 package com.mitrais.cdc.service.impl;
 
-import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.LoginService;
 import com.mitrais.cdc.service.SearchAccountService;
@@ -24,14 +24,14 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Account login(String account, String pin) throws Exception {
+    public AccountDto login(String account, String pin) throws Exception {
         if (account == null || pin == null) {
             throw new CredentialNotFoundException(ErrorConstant.INVALID_ACCOUNT_PASSWORD);
         }
         validatorService.validateAccountNumber(account, ErrorConstant.ACCOUNT_NUMBER_SHOULD_ONLY_CONTAINS_NUMBERS);
         validatorService.validatePin(pin);
-        Account result = searchAccountService.get(account, pin);
-        return new Account(null, result.getAccountHolderName(), result.getAccountNumber(), null);
+        AccountDto result = searchAccountService.get(account, pin);
+        return result;
     }
 
     @Override

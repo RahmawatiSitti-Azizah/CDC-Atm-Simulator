@@ -1,9 +1,9 @@
 package com.mitrais.cdc.controller;
 
-import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Money;
-import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.service.SearchAccountService;
@@ -44,18 +44,18 @@ public class TransferController {
     @PostMapping("")
     public String processTransfer(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
-            Account sourceAccount = searchAccountService.get(request);
+            AccountDto sourceAccount = searchAccountService.get(request);
             try {
                 String destinationAccountNumber = request.getParameter("destAccount");
                 accountValidatorService.validateAccountNumber(destinationAccountNumber, ErrorConstant.INVALID_ACCOUNT);
-                Account destinationAccount = searchAccountService.get(destinationAccountNumber);
+                AccountDto destinationAccount = searchAccountService.get(destinationAccountNumber);
 
                 Double amount = Double.parseDouble(request.getParameter("amount"));
                 Money transferAmount = new Dollar(amount);
                 amountValidatorService.validateTransferAmount(transferAmount);
-                Transaction transaction = transactionService.transfer(sourceAccount, destinationAccount, transferAmount, ReferenceNumberGenerator.generateTransferRefnumber(new Random()));
+                TransactionDto transaction = transactionService.transfer(sourceAccount, destinationAccount, transferAmount, ReferenceNumberGenerator.generateTransferRefnumber(new Random()));
                 model.addAttribute("amount", transaction.getAmount());
-                model.addAttribute("balance", sourceAccount.getStringBalance());
+                model.addAttribute("balance", sourceAccount.getBalance().toString());
                 model.addAttribute("transactionDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                 return "TransferSummary";
             } catch (Exception exception) {

@@ -2,6 +2,7 @@ package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
+import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.util.ErrorConstant;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ public class SearchAccountServiceImplTest {
     }
 
     public Account getAccount(Double balance, String name, String accountNo, String pin) {
-        return new Account(new Dollar(balance), name, accountNo, pin);
+        return new Account(accountNo, name, pin, new Dollar(balance));
     }
 
     @Test
@@ -69,8 +70,8 @@ public class SearchAccountServiceImplTest {
     public void testGetAccount_whenValidAndAccountNumberFound_thenReturnAccount() throws Exception {
         Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
-        Account result = serviceInTest.get(ACCOUNT_NUMBER, "123456");
-        Assertions.assertEquals(account, result);
+        AccountDto result = serviceInTest.get(ACCOUNT_NUMBER, "123456");
+        Assertions.assertEquals(account.toString(), result.toString());
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
     }
 
@@ -85,7 +86,6 @@ public class SearchAccountServiceImplTest {
 
     @Test
     public void testGetAccount_whenAccountNotFound_thenReturnInvalidAccountNumberPinException() {
-        Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(null);
         Exception exception = Assertions.assertThrows(Exception.class, () -> serviceInTest.get(ACCOUNT_NUMBER, "111111"));
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
@@ -96,8 +96,8 @@ public class SearchAccountServiceImplTest {
     public void testGet_whenValidAndFound_thenReturnAccount() throws Exception {
         Account account = getAccount(100.0, "Jane Doe", ACCOUNT_NUMBER, "123456");
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
-        Account result = serviceInTest.get(ACCOUNT_NUMBER);
-        Assertions.assertEquals(account, result);
+        AccountDto result = serviceInTest.get(ACCOUNT_NUMBER);
+        Assertions.assertEquals(account.toString(), result.toString());
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
     }
 
@@ -118,12 +118,11 @@ public class SearchAccountServiceImplTest {
         when(session.getAttribute("account")).thenReturn(account);
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
 
-        Account result = serviceInTest.get(request);
+        AccountDto result = serviceInTest.get(request);
 
         Assertions.assertEquals(account.getAccountHolderName(), result.getAccountHolderName());
         Assertions.assertEquals(account.getAccountNumber(), result.getAccountNumber());
-        Assertions.assertEquals(account.getPin(), result.getPin());
-        Assertions.assertEquals(account.getStringBalance(), result.getStringBalance());
+        Assertions.assertEquals(account.getStringBalance(), result.getBalance().toString());
         verify(repository, times(1)).findAccountByAccountNumber(anyString());
     }
 

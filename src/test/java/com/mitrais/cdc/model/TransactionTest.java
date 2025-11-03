@@ -9,8 +9,8 @@ class TransactionTest {
     private static final double BALANCE_AMOUNT = 200.0;
     private static final Dollar TRANSFER_AMOUNT = new Dollar(10.0);
     private static final LocalDateTime TRANSACTION_DATE = LocalDateTime.now();
-    private static final Account SOURCE_ACCOUNT = new Account(new Dollar(BALANCE_AMOUNT), "Jane Doe", "111111", null);
-    private static final Account DESTINATION_ACCOUNT = new Account(new Dollar(250.0), "John Doe", "111111", null);
+    private static final Account SOURCE_ACCOUNT = new Account("111111", "Jane Doe", null, new Dollar(BALANCE_AMOUNT));
+    private static final Account DESTINATION_ACCOUNT = new Account("111111", "John Doe", null, new Dollar(250.0));
     private static final String TRANSFER_NOTE = "Transfer";
     private static final String WITHDRAW_NOTE = "withdraw";
 

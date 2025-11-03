@@ -20,7 +20,7 @@
           <c:forEach var="trx" items="${transaction}">
             <div class="row">
               <c:choose>
-                <c:when test="${trx.sourceAccount.accountNumber == account.accountNumber}">
+                <c:when test="${trx.sourceAccountNumber == account.accountNumber}">
                     <div class="col-auto fw-bold text-warning">
                       <c:out value ="${trx}"/>
                     </div>

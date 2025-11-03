@@ -3,6 +3,9 @@ package com.mitrais.cdc.service.impl;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
+import com.mitrais.cdc.model.mapper.TransactionMapper;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.repository.TransactionRepository;
 import com.mitrais.cdc.service.AccountTransactionService;
@@ -26,16 +29,20 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
     }
 
     @Override
-    public Transaction withdraw(Account account, Money amount) throws Exception {
-        account.decreaseBalance(amount);
-        Transaction transaction = transactionRepository.save(new Transaction(null, account, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", LocalDateTime.now()));
-        accountRepository.save(account);
-        return transaction;
+    public TransactionDto withdraw(AccountDto account, Money amount) throws Exception {
+        Account sourceAccount = accountRepository.findAccountByAccountNumber(account.getAccountNumber());
+        sourceAccount.decreaseBalance(amount);
+        Transaction transaction = transactionRepository.save(new Transaction(null, sourceAccount, null, amount, ReferenceNumberGenerator.generateWithdrawRefnumber(new Random()), "Withdraw", LocalDateTime.now()));
+        accountRepository.save(sourceAccount);
+        account.setBalance(sourceAccount.getBalance());
+        return TransactionMapper.toTransactionDto(transaction);
     }
 
     @Override
-    public Transaction transfer(Account sourceAccount, Account destinationAccount, Money amount, String referenceNumber) throws Exception {
-        if (sourceAccount.getAccountNumber().equals(destinationAccount.getAccountNumber())) {
+    public TransactionDto transfer(AccountDto source, AccountDto destination, Money amount, String referenceNumber) throws Exception {
+        Account sourceAccount = accountRepository.findAccountByAccountNumber(source.getAccountNumber());
+        Account destinationAccount = accountRepository.findAccountByAccountNumber(destination.getAccountNumber());
+        if (source.getAccountNumber().equals(destination.getAccountNumber())) {
             throw new Exception(ErrorConstant.DESTINATION_ACCOUNT_IS_THE_SAME_AS_SOURCE_ACCOUNT);
         }
         sourceAccount.decreaseBalance(amount);
@@ -43,6 +50,6 @@ class AccountTransactionServiceImpl implements AccountTransactionService {
         Transaction transaction = transactionRepository.save(new Transaction(null, sourceAccount, destinationAccount, amount, referenceNumber, "Transfer", LocalDateTime.now()));
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
-        return transaction;
+        return TransactionMapper.toTransactionDto(transaction);
     }
 }

@@ -1,6 +1,6 @@
 package com.mitrais.cdc.controller;
 
-import com.mitrais.cdc.model.Account;
+import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.service.LoginService;
 import com.mitrais.cdc.util.ErrorConstant;
 import org.junit.jupiter.api.Assertions;
@@ -39,7 +39,7 @@ class LoginControllerTest {
     @Test
     public void testLogin_whenAccountPinCorrect_thenReturnTransactionMenuPage() throws Exception {
         Mockito.when(loginService.isAuthenticated(Mockito.any())).thenReturn(false);
-        Mockito.when(loginService.login(Mockito.anyString(), Mockito.anyString())).thenReturn(Mockito.mock(Account.class));
+        Mockito.when(loginService.login(Mockito.anyString(), Mockito.anyString())).thenReturn(Mockito.mock(AccountDto.class));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/login")
                         .param("account", "112233")

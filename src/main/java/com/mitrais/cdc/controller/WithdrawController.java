@@ -1,8 +1,8 @@
 package com.mitrais.cdc.controller;
 
-import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
-import com.mitrais.cdc.model.Transaction;
+import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.service.TransactionAmountValidatorService;
@@ -38,14 +38,14 @@ public class WithdrawController {
     @PostMapping("")
     public String processWithdraw(HttpServletRequest request, Model model) {
         try {
-            Account userAccount = searchAccountService.get(request);
+            AccountDto userAccount = searchAccountService.get(request);
             try {
                 Double amount = Integer.parseInt(request.getParameter("amount")) * 1.0;
                 Dollar withdrawAmount = new Dollar(amount);
                 amountValidatorService.validateWithdrawAmount(withdrawAmount);
-                Transaction transaction = accountTransactionService.withdraw(userAccount, withdrawAmount);
+                TransactionDto transaction = accountTransactionService.withdraw(userAccount, withdrawAmount);
                 model.addAttribute("withdraw", transaction.getAmount());
-                model.addAttribute("balance", userAccount.getStringBalance());
+                model.addAttribute("balance", userAccount.getBalance().toString());
                 model.addAttribute("transactionDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                 return "WithdrawSummary";
             } catch (Exception exception) {

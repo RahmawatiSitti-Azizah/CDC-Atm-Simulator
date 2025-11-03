@@ -13,10 +13,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne
-    @JoinColumn(name = "source_account", referencedColumnName = "accountNumber", nullable = true)
+    @JoinColumn(name = "source_account", referencedColumnName = "accountNumber", nullable = true, unique = false)
     private Account sourceAccount;
     @OneToOne
-    @JoinColumn(name = "destination_account", referencedColumnName = "accountNumber", nullable = true)
+    @JoinColumn(name = "destination_account", referencedColumnName = "accountNumber", nullable = true, unique = false)
     private Account destinationAccount;
     @Convert(converter = MoneyConverter.class)
     private Money amount;

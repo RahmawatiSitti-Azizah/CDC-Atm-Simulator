@@ -22,7 +22,7 @@ public class Account implements Loginable {
     public Account() {
     }
 
-    public Account(Money balance, String accountHolderName, String accountNumber, String pin) {
+    public Account(String accountNumber, String accountHolderName, String pin, Money balance) {
         this.accountHolderName = accountHolderName;
         this.accountNumber = accountNumber;
         this.pin = pin;
