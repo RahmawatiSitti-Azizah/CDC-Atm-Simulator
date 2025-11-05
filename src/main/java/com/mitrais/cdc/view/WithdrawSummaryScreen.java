@@ -22,7 +22,6 @@ public class WithdrawSummaryScreen implements Screen {
     private final SessionContext sessionContext;
     private final ScreenManager screenManager;
     private Scanner userInputScanner;
-    private Screen previousScreen;
     private AccountDto userAccount;
     private Money amount;
 
@@ -56,10 +55,6 @@ public class WithdrawSummaryScreen implements Screen {
 
     public void setTransactionAmount(Money amount) {
         this.amount = amount;
-    }
-
-    public void setPreviousScreen(Screen previousScreen) {
-        this.previousScreen = previousScreen;
     }
 
     @Override

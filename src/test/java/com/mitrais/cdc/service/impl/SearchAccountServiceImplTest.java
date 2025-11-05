@@ -3,6 +3,7 @@ package com.mitrais.cdc.service.impl;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.dto.AccountDto;
+import com.mitrais.cdc.model.mapper.AccountMapper;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
@@ -120,7 +121,7 @@ public class SearchAccountServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("account")).thenReturn(account);
+        when(session.getAttribute("account")).thenReturn(AccountMapper.toAccountDto(account));
         when(repository.findAccountByAccountNumber(anyString())).thenReturn(account);
 
         AccountDto result = serviceInTest.get(request);
@@ -133,7 +134,6 @@ public class SearchAccountServiceImplTest {
 
     @Test
     public void testGetHttpServletRequest_whenSessionAccountNotFound_thenReturnAccount() throws Exception {
-        Account account = getAccount(null, "Jane Doe", ACCOUNT_NUMBER, null);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);

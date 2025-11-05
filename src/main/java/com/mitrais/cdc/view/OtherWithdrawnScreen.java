@@ -57,7 +57,6 @@ public class OtherWithdrawnScreen implements Screen {
         try {
             amount = userInputService.toValidatedMoney(input);
             summaryScreen.setTransactionAmount(amount);
-            summaryScreen.setPreviousScreen(previousScreen);
             return summaryScreen;
         } catch (Exception e) {
             System.out.println(e.getMessage());

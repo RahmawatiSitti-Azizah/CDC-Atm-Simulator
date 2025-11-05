@@ -1,6 +1,7 @@
 package com.mitrais.cdc.service.impl;
 
 import com.mitrais.cdc.model.Money;
+import com.mitrais.cdc.service.TransactionAmountValidatorService;
 import com.mitrais.cdc.util.ErrorConstant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,10 @@ import static org.mockito.Mockito.*;
 
 public class TransactionAmountValidatorServiceImplTest {
     private TransactionAmountValidatorServiceImpl serviceInTest;
+
+    public static TransactionAmountValidatorService getTransactionAmountValidatorService() {
+        return new TransactionAmountValidatorServiceImpl();
+    }
 
     @BeforeEach
     public void setUp() throws Exception {

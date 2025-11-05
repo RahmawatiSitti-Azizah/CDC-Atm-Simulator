@@ -6,6 +6,7 @@ import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.model.mapper.AccountMapper;
 import com.mitrais.cdc.repository.AccountRepository;
 import com.mitrais.cdc.repository.TransactionRepository;
+import com.mitrais.cdc.service.AccountTransactionService;
 import com.mitrais.cdc.util.ErrorConstant;
 import com.mitrais.cdc.util.ReferenceNumberGenerator;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +22,10 @@ public class AccountTransactionServiceImplTest {
     private AccountTransactionServiceImpl serviceInTest;
     private TransactionRepository transactionRepo = Mockito.mock(TransactionRepository.class);
     private AccountRepository accountRepo = Mockito.mock(AccountRepository.class);
+
+    public static AccountTransactionService getAccountTransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+        return new AccountTransactionServiceImpl(transactionRepository, accountRepository);
+    }
 
     @BeforeEach
     public void setUp() throws Exception {

@@ -37,7 +37,7 @@ public class UserInputServiceImplTest {
     public void testToValidatedMoney_whenInputValidLongValue_thenReturnMoneyCorrectly() throws Exception {
         mockStringMatcherUtil.when(() -> StringMatcherUtil.checkStringIsNumberOnly(anyString())).thenReturn(true);
         Money money = serviceInTest.toValidatedMoney("10");
-        Assertions.assertTrue(money.toString().equals("$10"));
+        Assertions.assertTrue(money.toString().equals("$10.0"));
     }
 
     @Test
