@@ -42,11 +42,12 @@ public class HistoryTransactionScreenTest {
 
     @Test
     public void testDisplayWithTransactionHistoryThenShouldPrintTransactionAndGoToTransactionScreen() {
-        Account account = new Account("Jane Doe", "111111", null, new Dollar(BALANCE_AMOUNT));
+        Account account = new Account("112288", "TEST 02", null, new Dollar(BALANCE_AMOUNT));
         Account destination = new Account("111111", "John Doe", null, new Dollar(250.0));
         Transaction transferTransaction = new Transaction(null, account, destination, new Dollar(20.0), "123sads", "Transfer", LocalDateTime.now());
         Transaction withdrawTransaction = new Transaction(null, account, null, new Dollar(20.0), "", "Withdraw", LocalDateTime.now());
-        Mockito.doReturn(List.of(TransactionMapper.toTransactionDto(transferTransaction), TransactionMapper.toTransactionDto(withdrawTransaction))).when(transactionService).getTransactionHistoryAccount(Mockito.anyString(), Mockito.anyInt());
+        Transaction incomingTransferTransaction = new Transaction(null, destination, account, new Dollar(20.0), "123sads", "Transfer", LocalDateTime.now());
+        Mockito.doReturn(List.of(TransactionMapper.toTransactionDto(transferTransaction), TransactionMapper.toTransactionDto(withdrawTransaction), TransactionMapper.toTransactionDto(incomingTransferTransaction))).when(transactionService).getTransactionHistoryAccount(Mockito.anyString(), Mockito.anyInt());
         Assertions.assertTrue(historyTransactionScreen.display() instanceof TransactionScreen);
         String outputString = outputStreamCaptor.toString();
         Assertions.assertTrue(outputString.contains("Withdraw") || outputString.contains("Transfer"));
