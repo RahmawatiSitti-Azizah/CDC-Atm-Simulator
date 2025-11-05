@@ -41,4 +41,10 @@ class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactionList = page.getContent();
         return transactionList.size() != 0 ? transactionList.stream().map(transaction -> TransactionMapper.toTransactionDto(transaction)).toList() : List.of();
     }
+
+    @Override
+    public TransactionDto getTransactionByReferenceNumber(String referenceNumber) {
+        Transaction result = transactionRepository.findByReferenceNumber(referenceNumber);
+        return result != null ? TransactionMapper.toTransactionDto(result) : null;
+    }
 }

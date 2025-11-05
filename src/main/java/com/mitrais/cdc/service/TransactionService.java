@@ -28,4 +28,13 @@ public interface TransactionService {
      * (not null, may be empty if no transactions found)
      */
     public List<TransactionDto> getTransactionHistoryAccount(String accountNumber, int size);
+
+    /**
+     * Service to get transaction by reference number.
+     *
+     * @param referenceNumber transaction reference number (not null)
+     * @return a transactions associated with the reference number
+     * (not null, may be empty if no transactions found)
+     */
+    public TransactionDto getTransactionByReferenceNumber(String referenceNumber);
 }

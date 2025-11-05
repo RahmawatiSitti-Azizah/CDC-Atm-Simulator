@@ -1,5 +1,6 @@
 package com.mitrais.cdc.service.impl;
 
+import com.mitrais.cdc.service.AccountValidatorService;
 import com.mitrais.cdc.util.StringMatcherUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +12,10 @@ import org.mockito.Mockito;
 public class AccountValidatorServiceImplTest {
     private AccountValidatorServiceImpl serviceInTest = new AccountValidatorServiceImpl();
     private MockedStatic<StringMatcherUtil> mockStringMatcherUtil;
+
+    public static AccountValidatorService getAccountValidatorServiceImpl() {
+        return new AccountValidatorServiceImpl();
+    }
 
     @BeforeEach
     public void setUp() throws Exception {

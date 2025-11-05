@@ -4,6 +4,7 @@ import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.repository.AccountRepository;
+import com.mitrais.cdc.service.SearchAccountService;
 import com.mitrais.cdc.util.ErrorConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +25,10 @@ public class SearchAccountServiceImplTest {
     private SearchAccountServiceImpl serviceInTest;
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+
+    public static SearchAccountService getSearchAccountService(AccountRepository accountRepository) {
+        return new SearchAccountServiceImpl(accountRepository);
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
