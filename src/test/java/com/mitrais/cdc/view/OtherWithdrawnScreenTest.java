@@ -13,8 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 public class OtherWithdrawnScreenTest {
     private static final double BALANCE_AMOUNT = 100.0;
@@ -22,7 +21,7 @@ public class OtherWithdrawnScreenTest {
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private OtherWithdrawnScreen otherWithdrawnScreen;
     private SessionContext sessionContext = spy(SessionContext.class);
-    private WithdrawSummaryScreen withdrawSummaryScreen = mock(WithdrawSummaryScreen.class);
+    private ScreenManager screenManager = mock(ScreenManager.class);
     private UserInputService userInputService = UserInputServiceImplTest.getUserInputService();
 
     private void setUpSystemOutCapturer() {
@@ -41,8 +40,7 @@ public class OtherWithdrawnScreenTest {
     private void setUserInput(String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        otherWithdrawnScreen = new OtherWithdrawnScreen(withdrawSummaryScreen, userInputService, new Scanner(System.in), sessionContext);
-        otherWithdrawnScreen.setPreviousScreen(mock(WithdrawScreen.class));
+        otherWithdrawnScreen = new OtherWithdrawnScreen(screenManager, userInputService, new Scanner(System.in), sessionContext);
     }
 
     @Test
@@ -50,6 +48,7 @@ public class OtherWithdrawnScreenTest {
         AccountDto account = createAccount(BALANCE_AMOUNT);
         sessionContext.setSession(account);
         setUserInput("20\n");
+        doReturn(mock(WithdrawSummaryScreen.class)).when(screenManager).getScreen(ScreenEnum.WITHDRAW_SUMMARY_SCREEN);
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawSummaryScreen);
     }
 
@@ -59,6 +58,7 @@ public class OtherWithdrawnScreenTest {
         sessionContext.setSession(account);
         setUserInput("10s\n");
         setUpSystemOutCapturer();
+        doReturn(mock(WithdrawScreen.class)).when(screenManager).getScreen(ScreenEnum.WITHDRAW_SCREEN);
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         Assertions.assertTrue(account.getBalance().toString().equals("$100.0"));
@@ -71,6 +71,7 @@ public class OtherWithdrawnScreenTest {
         sessionContext.setSession(account);
         setUserInput("-10\n");
         setUpSystemOutCapturer();
+        doReturn(mock(WithdrawScreen.class)).when(screenManager).getScreen(ScreenEnum.WITHDRAW_SCREEN);
         Assertions.assertTrue(otherWithdrawnScreen.display() instanceof WithdrawScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         Assertions.assertTrue(account.getBalance().toString().equals("$100.0"));

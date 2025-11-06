@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Component
 public class HistoryTransactionScreen implements Screen {
-    private static HistoryTransactionScreen INSTANCE;
     private final SessionContext sessionContext;
     private final ScreenManager screenManager;
     private final TransactionService transactionService;
@@ -22,19 +20,6 @@ public class HistoryTransactionScreen implements Screen {
         this.sessionContext = sessionContext;
         this.screenManager = screenManager;
         this.transactionService = transactionService;
-    }
-
-    private HistoryTransactionScreen(TransactionService transactionService) {
-        this.transactionService = transactionService;
-        this.sessionContext = null;
-        this.screenManager = null;
-    }
-
-    public static HistoryTransactionScreen getInstance(AccountDto account, Scanner aUserInputScanner, TransactionService transactionService) {
-        if (INSTANCE == null) {
-            INSTANCE = new HistoryTransactionScreen(transactionService);
-        }
-        return INSTANCE;
     }
 
     @Override

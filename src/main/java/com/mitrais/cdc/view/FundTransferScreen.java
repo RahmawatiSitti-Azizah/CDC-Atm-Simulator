@@ -13,62 +13,36 @@ import java.util.Scanner;
 
 @Component
 public class FundTransferScreen implements Screen {
-    private static FundTransferScreen INSTANCE;
     private final SessionContext sessionContext;
     private final AccountTransactionService accountTransactionService;
     private final AccountValidatorService accountService;
     private final UserInputService userInput;
     private final TransactionAmountValidatorService transactionValidate;
     private final SearchAccountService searchService;
-    private final FundTransferSummaryScreen summaryScreen;
+    private final ScreenManager screenManager;
     private Scanner userInputScanner;
-    private Screen previousScreen;
     private Money transferAmount;
-    private AccountDto userAccount;
     private AccountDto destinationAccount;
     private String referenceNumber;
 
     @Autowired
-    public FundTransferScreen(AccountValidatorService accountService, SessionContext sessionContext, AccountTransactionService accountTransactionService, UserInputService userInput, TransactionAmountValidatorService transactionValidate, SearchAccountService searchService, FundTransferSummaryScreen summaryScreen, Scanner userInputScanner) {
+    public FundTransferScreen(AccountValidatorService accountService, SessionContext sessionContext, AccountTransactionService accountTransactionService, UserInputService userInput, TransactionAmountValidatorService transactionValidate, SearchAccountService searchService, ScreenManager screenManager, Scanner userInputScanner) {
         this.accountService = accountService;
         this.sessionContext = sessionContext;
         this.accountTransactionService = accountTransactionService;
         this.userInput = userInput;
         this.transactionValidate = transactionValidate;
         this.searchService = searchService;
-        this.summaryScreen = summaryScreen;
+        this.screenManager = screenManager;
         this.userInputScanner = userInputScanner;
-    }
-
-    public void setPreviousScreen(Screen previousScreen) {
-        this.previousScreen = previousScreen;
-    }
-
-    public static FundTransferScreen getInstance(AccountDto account, Scanner aUserInputScanner, AccountTransactionService accountTransactionService, AccountValidatorService accountValidatorService, UserInputService userInputService, TransactionAmountValidatorService transactionAmountValidatorService, SearchAccountService searchAccountService) {
-        if (INSTANCE == null) {
-            INSTANCE = new FundTransferScreen(accountTransactionService, accountValidatorService, userInputService, transactionAmountValidatorService, searchAccountService);
-        }
-        INSTANCE.userAccount = account;
-        INSTANCE.userInputScanner = aUserInputScanner;
-        INSTANCE.referenceNumber = ReferenceNumberGenerator.generateTransferRefnumber(new Random());
-        return INSTANCE;
-    }
-
-    private FundTransferScreen(AccountTransactionService accountTransactionService, AccountValidatorService accountValidatorService, UserInputService userInputService, TransactionAmountValidatorService transactionAmountValidatorService, SearchAccountService searchAccountService) {
-        this.accountTransactionService = accountTransactionService;
-        this.accountService = accountValidatorService;
-        this.userInput = userInputService;
-        this.transactionValidate = transactionAmountValidatorService;
-        this.searchService = searchAccountService;
-        this.summaryScreen = null;
-        this.sessionContext = null;
     }
 
     @Override
     public Screen display() {
         if (!sessionContext.isAuthenticated()) {
             System.out.println("Unauthenticated user. Please login.");
-            return previousScreen;
+            sessionContext.clearSession();
+            return screenManager.getScreen(ScreenEnum.WELCOME_SCREEN);
         }
         try {
             setDestinationAccountFromUserInput();
@@ -79,7 +53,7 @@ public class FundTransferScreen implements Screen {
             return transferConfirmationProcessAndGetNextScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return previousScreen;
+            return screenManager.getScreen(ScreenEnum.TRANSACTION_SCREEN);
         }
     }
 
@@ -131,15 +105,16 @@ public class FundTransferScreen implements Screen {
                 try {
                     AccountDto session = sessionContext.getSession();
                     accountTransactionService.transfer(session, destinationAccount, transferAmount, referenceNumber);
+                    FundTransferSummaryScreen summaryScreen = (FundTransferSummaryScreen) screenManager.getScreen(ScreenEnum.FUND_TRANSFER_SUMMARY);
                     summaryScreen.setReferenceNumber(referenceNumber);
                     return summaryScreen;
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
-                    return previousScreen;
+                    return screenManager.getScreen(ScreenEnum.TRANSACTION_SCREEN);
                 }
             }
             default: {
-                return previousScreen;
+                return screenManager.getScreen(ScreenEnum.TRANSACTION_SCREEN);
             }
         }
     }

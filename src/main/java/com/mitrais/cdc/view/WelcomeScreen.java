@@ -11,36 +11,19 @@ import java.util.Scanner;
 
 @Component
 public class WelcomeScreen implements Screen {
-    private static WelcomeScreen INSTANCE;
+    private final AccountValidatorService validatorService;
+    private final SearchAccountService searchAccountService;
+    private final ScreenManager screenManager;
     private Scanner userInputScanner;
     private final SessionContext sessionContext;
     private AccountDto userAccount;
-    private final AccountValidatorService validatorService;
-    private final SearchAccountService searchAccountService;
-    private final TransactionScreen transactionScreen;
-
-    public static WelcomeScreen getInstance(AccountDto userAccount, Scanner userInputScanner, SearchAccountService searchAccountService, AccountValidatorService accountValidatorService) {
-        if (INSTANCE == null) {
-            INSTANCE = new WelcomeScreen(searchAccountService, accountValidatorService);
-        }
-        INSTANCE.userAccount = userAccount;
-        INSTANCE.userInputScanner = userInputScanner;
-        return INSTANCE;
-    }
-
-    private WelcomeScreen(SearchAccountService searchAccountService, AccountValidatorService validatorService) {
-        this.searchAccountService = searchAccountService;
-        this.validatorService = validatorService;
-        this.sessionContext = null;
-        this.transactionScreen = null;
-    }
 
     @Autowired
-    public WelcomeScreen(SearchAccountService searchAccountService, SessionContext sessionContext, AccountValidatorService validatorService, TransactionScreen transactionScreen, Scanner userInputScanner) {
+    public WelcomeScreen(SearchAccountService searchAccountService, SessionContext sessionContext, AccountValidatorService validatorService, ScreenManager screenManager, Scanner userInputScanner) {
         this.searchAccountService = searchAccountService;
         this.sessionContext = sessionContext;
         this.validatorService = validatorService;
-        this.transactionScreen = transactionScreen;
+        this.screenManager = screenManager;
         this.userInputScanner = userInputScanner;
     }
 
@@ -51,8 +34,7 @@ public class WelcomeScreen implements Screen {
             String inputPin = getPinFromUserInput();
             userAccount = searchAccountService.get(accountNumber, inputPin);
             sessionContext.setSession(userAccount);
-            transactionScreen.setPreviousScreen(this);
-            return transactionScreen;
+            return screenManager.getScreen(ScreenEnum.TRANSACTION_SCREEN);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return this;

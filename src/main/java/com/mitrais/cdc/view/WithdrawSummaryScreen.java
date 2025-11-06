@@ -15,7 +15,6 @@ import java.util.Scanner;
 
 @Component
 public class WithdrawSummaryScreen implements Screen {
-    private static WithdrawSummaryScreen INSTANCE;
     private final AccountTransactionService accountTransaction;
     private final TransactionAmountValidatorService transactionValidate;
     private final UserInputService userInput;
@@ -35,24 +34,6 @@ public class WithdrawSummaryScreen implements Screen {
         this.screenManager = screenManager;
     }
 
-    public static WithdrawSummaryScreen getInstance(Money amount, AccountDto account, Scanner aUserInputScanner, UserInputService userInputService, AccountTransactionService accountTransactionService, TransactionAmountValidatorService transactionAmountValidatorService) {
-        if (INSTANCE == null) {
-            INSTANCE = new WithdrawSummaryScreen(userInputService, accountTransactionService, transactionAmountValidatorService);
-        }
-        INSTANCE.userAccount = account;
-        INSTANCE.userInputScanner = aUserInputScanner;
-        INSTANCE.amount = amount;
-        return INSTANCE;
-    }
-
-    private WithdrawSummaryScreen(UserInputService userInputService, AccountTransactionService accountTransactionService, TransactionAmountValidatorService transactionAmountValidatorService) {
-        userInput = userInputService;
-        accountTransaction = accountTransactionService;
-        transactionValidate = transactionAmountValidatorService;
-        sessionContext = null;
-        screenManager = null;
-    }
-
     public void setTransactionAmount(Money amount) {
         this.amount = amount;
     }
@@ -70,7 +51,7 @@ public class WithdrawSummaryScreen implements Screen {
             return printMenuAndGetScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return WithdrawScreen.getInstance(userAccount, userInputScanner, userInput);
+            return screenManager.getScreen(ScreenEnum.WITHDRAW_SCREEN);
         }
     }
 

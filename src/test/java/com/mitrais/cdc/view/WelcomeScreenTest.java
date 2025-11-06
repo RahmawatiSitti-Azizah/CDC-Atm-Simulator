@@ -19,8 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles(value = "test")
 @DataJpaTest
@@ -31,7 +30,7 @@ public class WelcomeScreenTest {
     private SessionContext sessionContext = spy(SessionContext.class);
     private AccountValidatorService validatorService = spy(AccountValidatorServiceImplTest.getAccountValidatorServiceImpl());
     private SearchAccountService searchAccountService;
-    private TransactionScreen transactionScreen = mock(TransactionScreen.class);
+    private ScreenManager screenManager = mock(ScreenManager.class);
 
     @Autowired
     private AccountRepository accountRepository;
@@ -52,7 +51,8 @@ public class WelcomeScreenTest {
     public void setUserInput(String input) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(input.getBytes());
         System.setIn(userInput);
-        screenInTest = new WelcomeScreen(searchAccountService, sessionContext, validatorService, transactionScreen, new Scanner(System.in));
+        screenInTest = new WelcomeScreen(searchAccountService, sessionContext, validatorService, screenManager, new Scanner(System.in));
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
     }
 
     @Test

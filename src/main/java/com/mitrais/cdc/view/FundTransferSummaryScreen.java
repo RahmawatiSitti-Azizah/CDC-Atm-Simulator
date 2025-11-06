@@ -1,6 +1,5 @@
 package com.mitrais.cdc.view;
 
-import com.mitrais.cdc.model.Money;
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.service.SearchAccountService;
@@ -15,7 +14,6 @@ import java.util.Scanner;
 
 @Component
 public class FundTransferSummaryScreen implements Screen {
-    private static FundTransferSummaryScreen INSTANCE;
     private final SessionContext sessionContext;
     private final ScreenManager screenManager;
     private final UserInputService userInput;
@@ -33,24 +31,6 @@ public class FundTransferSummaryScreen implements Screen {
         this.userInputScanner = userInputScanner;
         this.transactionService = transactionService;
         this.searchAccountService = searchAccountService;
-    }
-
-    public static FundTransferSummaryScreen getInstance(Money transferAmount, AccountDto userAccount, Scanner userInputScanner, AccountDto destinationAccount, String referenceNumber, UserInputService userInputService) {
-        if (INSTANCE == null) {
-            INSTANCE = new FundTransferSummaryScreen(userInputService);
-        }
-        INSTANCE.userAccount = userAccount;
-        INSTANCE.userInputScanner = userInputScanner;
-        INSTANCE.referenceNumber = referenceNumber;
-        return INSTANCE;
-    }
-
-    private FundTransferSummaryScreen(UserInputService userInputService) {
-        userInput = userInputService;
-        sessionContext = null;
-        screenManager = null;
-        transactionService = null;
-        this.searchAccountService = null;
     }
 
     public void setReferenceNumber(String referenceNumber) {
