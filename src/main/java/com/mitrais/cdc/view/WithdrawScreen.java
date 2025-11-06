@@ -1,5 +1,6 @@
 package com.mitrais.cdc.view;
 
+import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.util.SessionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,9 @@ public class WithdrawScreen implements Screen {
             case 1:
             case 2:
             case 3: {
-                return screenManager.getScreen(ScreenEnum.WITHDRAW_SUMMARY_SCREEN);
+                WithdrawSummaryScreen summaryScreen = (WithdrawSummaryScreen) screenManager.getScreen(ScreenEnum.WITHDRAW_SUMMARY_SCREEN);
+                summaryScreen.setTransactionAmount(new Dollar(arrayWithdrawAmount[menu - 1]));
+                return summaryScreen;
             }
             case 4: {
                 return screenManager.getScreen(ScreenEnum.OTHER_WITHDRAW_SCREEN);
