@@ -23,6 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+
 @ActiveProfiles("test")
 @DataJpaTest
 public class FundTransferScreenTest {
@@ -37,7 +40,7 @@ public class FundTransferScreenTest {
     private UserInputService userInputService = UserInputServiceImplTest.getUserInputService();
     private TransactionAmountValidatorService transactionAmountValidatorService = TransactionAmountValidatorServiceImplTest.getTransactionAmountValidatorService();
     private SearchAccountService searchAccountService;
-    private FundTransferSummaryScreen fundTransferSummaryScreen = Mockito.mock(FundTransferSummaryScreen.class);
+    private ScreenManager screenManager = Mockito.mock(ScreenManager.class);
 
 
     @Autowired
@@ -74,15 +77,15 @@ public class FundTransferScreenTest {
     private void setUserInput(AccountDto sourceAccount, String menuInput) {
         ByteArrayInputStream userInput = new ByteArrayInputStream(menuInput.getBytes());
         System.setIn(userInput);
-        fundTransferScreen = new FundTransferScreen(accountValidatorService, sessionContext, accountTransactionService, userInputService, transactionAmountValidatorService, searchAccountService, fundTransferSummaryScreen, new Scanner(System.in));
+        fundTransferScreen = new FundTransferScreen(accountValidatorService, sessionContext, accountTransactionService, userInputService, transactionAmountValidatorService, searchAccountService, screenManager, new Scanner(System.in));
         sessionContext.setSession(sourceAccount);
-        fundTransferScreen.setPreviousScreen(Mockito.mock(TransactionScreen.class));
     }
 
     @Test
     public void testDisplayWithValidInputToFundTransferSummaryScreen() {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n50\n\n1\n");
+        doReturn(mock(FundTransferSummaryScreen.class)).when(screenManager).getScreen(ScreenEnum.FUND_TRANSFER_SUMMARY);
         Screen nextScreen = fundTransferScreen.display();
         Assertions.assertTrue(nextScreen instanceof FundTransferSummaryScreen);
     }
@@ -91,6 +94,7 @@ public class FundTransferScreenTest {
     public void testDisplayWithEscForAccountNumberInput() {
         AccountDto account = createAccount();
         setUserInput(account, "Esc\n");
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
     }
 
@@ -98,6 +102,7 @@ public class FundTransferScreenTest {
     public void testWithEmptyAccountNumberGotoTransactionScreen() {
         AccountDto account = createAccount();
         setUserInput(account, "\n");
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
     }
 
@@ -106,6 +111,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "dsda\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
         closeSystemOutCapturer();
@@ -116,6 +122,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "1231\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Account Number should have 6 digits length"));
         closeSystemOutCapturer();
@@ -126,6 +133,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "123111\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid Account"));
         closeSystemOutCapturer();
@@ -136,6 +144,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(!outputStreamCaptor.toString().contains("Invalid"));
         closeSystemOutCapturer();
@@ -146,6 +155,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "112244\nss\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Invalid amount"));
         closeSystemOutCapturer();
@@ -156,6 +166,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n0\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Minimum amount to transfer is $1"));
         closeSystemOutCapturer();
@@ -166,6 +177,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n110\n\n1\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Insufficient balance $110"));
         closeSystemOutCapturer();
@@ -176,6 +188,7 @@ public class FundTransferScreenTest {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n1001\n");
         setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
         Assertions.assertTrue(outputStreamCaptor.toString().contains("Maximum amount to transfer is $1000"));
         closeSystemOutCapturer();
@@ -185,6 +198,7 @@ public class FundTransferScreenTest {
     public void testSuccessTransferCorrectSourceAndDestinationAccountBalance() throws Exception {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n50\n\n1\n");
+        doReturn(mock(FundTransferSummaryScreen.class)).when(screenManager).getScreen(ScreenEnum.FUND_TRANSFER_SUMMARY);
         fundTransferScreen.display();
 
         Account sourceAccount = accountRepository.findAccountByAccountNumber("112233");
@@ -198,6 +212,7 @@ public class FundTransferScreenTest {
     public void testInputNonEmptyStringOnReferencePromptSceenAngGotoTransactionScreen() {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n50\nss\n");
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Screen nextScreen = fundTransferScreen.display();
         Assertions.assertTrue(nextScreen instanceof TransactionScreen);
     }
@@ -206,8 +221,7 @@ public class FundTransferScreenTest {
     public void testCancelTrxAtConfirmationScreenGoToTransaction() {
         AccountDto account = createAccount();
         setUserInput(account, "112244\n10\n\n2\n");
-        setUpSystemOutCapturer();
+        doReturn(mock(TransactionScreen.class)).when(screenManager).getScreen(ScreenEnum.TRANSACTION_SCREEN);
         Assertions.assertTrue(fundTransferScreen.display() instanceof TransactionScreen);
-        closeSystemOutCapturer();
     }
 }
