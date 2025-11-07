@@ -1,5 +1,7 @@
 package com.mitrais.cdc.view;
 
+import com.mitrais.cdc.cli.SessionContext;
+import com.mitrais.cdc.cli.view.*;
 import com.mitrais.cdc.model.Account;
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Transaction;
@@ -11,7 +13,6 @@ import com.mitrais.cdc.service.TransactionService;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.SearchAccountServiceImplTest;
 import com.mitrais.cdc.service.impl.UserInputServiceImplTest;
-import com.mitrais.cdc.util.SessionContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,6 +3,7 @@ package com.mitrais.cdc.controller;
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.service.LoginService;
 import com.mitrais.cdc.util.ErrorConstant;
+import com.mitrais.cdc.web.controller.LoginController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

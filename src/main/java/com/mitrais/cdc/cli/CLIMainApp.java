@@ -1,8 +1,8 @@
-package com.mitrais.cdc;
+package com.mitrais.cdc.cli;
 
+import com.mitrais.cdc.cli.view.Screen;
+import com.mitrais.cdc.cli.view.WelcomeScreen;
 import com.mitrais.cdc.service.FileService;
-import com.mitrais.cdc.view.Screen;
-import com.mitrais.cdc.view.WelcomeScreen;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

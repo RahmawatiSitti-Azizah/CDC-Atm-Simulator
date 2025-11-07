@@ -1,4 +1,4 @@
-package com.mitrais.cdc.view;
+package com.mitrais.cdc.cli.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

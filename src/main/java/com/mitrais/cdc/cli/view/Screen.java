@@ -1,4 +1,4 @@
-package com.mitrais.cdc.view;
+package com.mitrais.cdc.cli.view;
 
 public interface Screen {
     public Screen display();

@@ -1,4 +1,4 @@
-package com.mitrais.cdc.config;
+package com.mitrais.cdc.cli.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

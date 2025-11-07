@@ -1,4 +1,4 @@
-package com.mitrais.cdc.util;
+package com.mitrais.cdc.cli;
 
 import com.mitrais.cdc.model.dto.AccountDto;
 import org.springframework.stereotype.Component;

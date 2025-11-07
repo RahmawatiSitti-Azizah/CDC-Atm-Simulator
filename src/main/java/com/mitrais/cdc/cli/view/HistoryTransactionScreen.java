@@ -1,9 +1,9 @@
-package com.mitrais.cdc.view;
+package com.mitrais.cdc.cli.view;
 
+import com.mitrais.cdc.cli.SessionContext;
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.model.dto.TransactionDto;
 import com.mitrais.cdc.service.TransactionService;
-import com.mitrais.cdc.util.SessionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

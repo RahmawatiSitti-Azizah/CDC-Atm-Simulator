@@ -1,9 +1,10 @@
 package com.mitrais.cdc.view;
 
+import com.mitrais.cdc.cli.SessionContext;
+import com.mitrais.cdc.cli.view.*;
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.service.UserInputService;
 import com.mitrais.cdc.service.impl.UserInputServiceImplTest;
-import com.mitrais.cdc.util.SessionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

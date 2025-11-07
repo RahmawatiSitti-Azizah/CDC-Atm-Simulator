@@ -1,4 +1,4 @@
-package com.mitrais.cdc.controller;
+package com.mitrais.cdc.web.controller;
 
 import com.mitrais.cdc.model.dto.AccountDto;
 import com.mitrais.cdc.model.dto.TransactionDto;

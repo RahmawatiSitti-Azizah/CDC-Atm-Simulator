@@ -1,4 +1,4 @@
-package com.mitrais.cdc.controller;
+package com.mitrais.cdc.web.controller;
 
 import com.mitrais.cdc.model.Dollar;
 import com.mitrais.cdc.model.Money;

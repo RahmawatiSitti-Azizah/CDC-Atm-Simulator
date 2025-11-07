@@ -1,4 +1,4 @@
-package com.mitrais.cdc.view;
+package com.mitrais.cdc.cli.view;
 
 public enum ScreenEnum {
     WELCOME_SCREEN(WelcomeScreen.class),

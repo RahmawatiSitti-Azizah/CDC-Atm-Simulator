@@ -1,4 +1,4 @@
-package com.mitrais.cdc.filter;
+package com.mitrais.cdc.web.filter;
 
 import com.mitrais.cdc.service.LoginService;
 import jakarta.servlet.FilterChain;
